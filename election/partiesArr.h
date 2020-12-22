@@ -1,4 +1,6 @@
 #pragma once
+#include <iostream>
+using namespace std;
 
 namespace Elections {
 
@@ -20,11 +22,15 @@ namespace Elections {
 			PartiesArr(Party* party);
 			~PartiesArr();
 			PartiesArr(const Party& party) = delete;
+			void operator=(const PartiesArr& partyArr);
+			Party* operator[](int idx) { return _parties[idx]; }
+			Party* operator[](int idx) const { return _parties[idx]; }
+			friend ostream& operator<<(ostream& os, const PartiesArr& partyArr);
 
 		//GETTERS
 		public:
-			Party** getParties() { return _parties; }
-			int getLogSize() { return _logSize; }
+			Party** getParties() const { return _parties; }
+			int getLogSize() const { return _logSize; }
 			//get party from array by given id
 			Party* getParty(int id);
 			//returns the party with most electors

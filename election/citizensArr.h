@@ -1,4 +1,6 @@
 #pragma once
+#include <iostream>
+using namespace std;
 
 namespace Elections {
 
@@ -21,6 +23,11 @@ namespace Elections {
 			CitizensArr(Citizen* cit);
 			~CitizensArr();
 			CitizensArr(const Citizen& cit) = delete;
+			void operator=(const CitizensArr& citArr);
+			Citizen* operator[](int idx) { return _citizens[idx]; }
+			Citizen* operator[](int idx) const { return _citizens[idx]; }
+			friend std::ostream& operator<<(std::ostream& os, const CitizensArr& citArr);
+			
 
 		//GETTERS
 		public:

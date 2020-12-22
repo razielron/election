@@ -23,6 +23,31 @@ namespace Elections
 		delete[] _parties;
 	}
 
+	void PartiesArr::operator=(const PartiesArr& partyArr) {
+		if (&partyArr != this) {
+			delete[] _parties;
+			_logSize = _phySize = partyArr.getLogSize();
+			_parties = new Party * [_logSize];
+			for (int i = 0; i < _logSize; i++) {
+				_parties[i] = partyArr[i];
+			}
+		}
+	}
+
+	ostream& operator<<(ostream& os, const PartiesArr& partyArr) {
+		for (int i = 0; i < partyArr.getLogSize(); i++) {
+			cout << "-----------PARTY-START-----------" << endl;
+			cout << "Party ID: " << partyArr[i]->getId() << endl;
+			cout << "Name of Party: " << partyArr[i]->getName() << endl;
+			cout << "Party candidate: " << endl;
+			partyArr[i]->getCandidate()->printCit();
+			cout << "Represetetives of district: " << endl;
+			partyArr[i]->getPartyCandidates()->printPartyCandidates();
+			cout << "------------PARTY-END-----------" << endl;
+		}
+		return os;
+	}
+
 	void PartiesArr::increasePartiesArr() {
 		_phySize *= 2;
 		Party** temp = new Party*[_phySize];

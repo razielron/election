@@ -20,6 +20,28 @@ namespace Elections
 		delete[] _districts;
 	}
 
+	void DistrictsArr::operator=(const DistrictsArr& disArr) {
+		if (&disArr != this) {
+			delete[] _districts;
+			_logSize = _phySize = disArr.getLogSize();
+			_districts = new District * [_logSize];
+			for (int i = 0; i < _logSize; i++) {
+				_districts[i] = disArr[i];
+			}
+		}
+	}
+
+	ostream& operator<<(ostream& os, const DistrictsArr& disArr) {
+		for (int i = 0; i < disArr.getLogSize(); i++) {
+			cout << "-------------DISTRICT-START------------" << endl;
+			cout << "District ID: " << disArr[i]->getDistrictNumber() << endl;
+			cout << "Name of district: " << disArr[i]->getName() << endl;
+			cout << "Number of representetive: " << disArr[i]->getNumOfRepresentatives() << endl;
+			cout << "--------------DISTRICT-END-------------" << endl;
+		}
+		return os;
+	}
+
 	void DistrictsArr::increaseDistrictsArr() {
 		_phySize *=2;
 		District** temp = new District*[_phySize];

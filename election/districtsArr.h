@@ -1,4 +1,6 @@
 #pragma once
+#include <iostream>
+using namespace std;
 
 namespace Elections {
 
@@ -21,11 +23,15 @@ namespace Elections {
 			DistrictsArr(District* dis);
 			~DistrictsArr();
 			DistrictsArr(const District& dis) = delete;
+			void operator=(const DistrictsArr& disArr);
+			District* operator[](int idx) { return _districts[idx]; }
+			District* operator[](int idx) const { return _districts[idx]; }
+			friend ostream& operator<<(ostream& os, const DistrictsArr& disArr);
 
 		//GETTERS
 		public:
-			District** getDistricts() { return _districts; }
-			int getLogSize() { return _logSize; }
+			District** getDistricts() const { return _districts; }
+			int getLogSize() const { return _logSize; }
 			//returns district by given districd id
 			District* getDistrict(int districtId) const;
 
