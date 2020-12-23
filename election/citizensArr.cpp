@@ -22,16 +22,30 @@ namespace Elections
 		delete[] _citizens;
 	}
 
-	/*void CitizensArr::operator=(const CitizensArr& citArr) {
+	void CitizensArr::operator=(const CitizensArr& citArr) {
 		if (&citArr != this) {
 			delete[] _citizens;
 			_logSize = _phySize = citArr.getLogSize();
 			_citizens = new Citizen * [_logSize];
 			for (int i = 0;i < _logSize;i++) {
-				_citizens[i]= citArr.getCitizens()[i];
+				_citizens[i] = citArr[i];
 			}
 		}
-	}*/
+	}
+
+	ostream& operator<<(ostream& os,const CitizensArr& citArr) {
+		for (int i = 0; i < citArr.getLogSize(); i++) {
+			os << "--------CITIZEN-START-----------" << endl;
+			os << "Name: " << citArr[i]->getName() << endl;
+			os << "ID: " << citArr[i]->getId() << endl;
+			os << "Year of birth: " << citArr[i]->getYearOfBirth() << endl;
+			os << "District: " << citArr[i]->getDistrict() << endl;
+			os << "---------CITIZEN-END------------" << endl;
+		}
+		return os;
+	}
+
+
 
 	void CitizensArr::increaseCitizensArr() {
 		_phySize *= 2;
