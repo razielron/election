@@ -2,8 +2,6 @@
 #include "citizen.h"
 #include "district.h"
 #include "citizensArr.h"
-#include <iostream>
-using namespace std;
 
 namespace Elections
 {
