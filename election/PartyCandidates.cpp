@@ -1,4 +1,7 @@
 #include "partyCandidates.h"
+#include "uniformDis.h"
+#include "devidedDis.h"
+#include <typeinfo>
 #include "district.h"
 #include <string.h>
 #include <iostream>
@@ -135,11 +138,13 @@ namespace Elections
 		return true;
 	}
 
+
+
 	int PartyCandidates::getPartyTotalElectors(Party* party) { //HW2
 		ListItem* temp = _head;
 		int sumOfRep = 0;
 		while (temp) {
-			if (!temp->dis->getType()) {
+			if (typeid(*(temp->dis)) == typeid(UniformDis)) {
 				if (temp->dis->getWinnerParty() == party) {
 					sumOfRep += temp->dis->getNumOfRepresentatives();
 				}
@@ -183,7 +188,8 @@ namespace Elections
 		ListItem* temp = _head;
 		while (temp && (temp->dis != dis))
 			temp = temp->next;
-		cout << "Party voters percentage in district: " << (float)((temp->numOfVotes) / (float)(temp->dis->getTotalVotes())) * (float)(100) << "%" << endl;
+		cout << "Party voters percentage in district: " << (float)((temp->numOfVotes) /
+			(float)(temp->dis->getTotalVotes())) * (float)(100) << "%" << endl;
 		cout << "Number of votes for party: " << temp->numOfVotes << endl;
 		cout << endl;
 	}

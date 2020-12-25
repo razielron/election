@@ -6,6 +6,16 @@ using namespace std;
 namespace Elections
 {
 
+	Citizen::Citizen(): _yearOfBirth(0) {
+		for (int i = 0; i < 9;i++)
+			_id[i] = 0;
+		_id[9] = '\0';
+		_name = nullptr;
+		_dis = nullptr;
+		_dis->appendToVoters(this);
+		_vote = nullptr;
+	}
+
 	Citizen::Citizen(char id[10], int yearOfBirth, char* name, District* dis)
 		: _yearOfBirth(yearOfBirth) {
 		for (int i = 0; i < 9;i++)

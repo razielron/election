@@ -1,6 +1,8 @@
 #pragma once 
 #include "party.h"
 #include "district.h"
+#include "devidedDis.h"
+#include "UniformDis.h"
 #include "election.h"
 #include "citizen.h"
 #include <string.h>
@@ -29,11 +31,12 @@ namespace Elections {
 
 	//get input from user to add new sitrict
 	void addNewDistrict(Election* election) {
+		District* dis;
 		char name[256];
 		int numOfRep = 0;
 		int type;
 
-		cout << "Enter type of district (0/1): ";
+		cout << "Enter type of district: for Uniform press 0, for Devided press 1 (0/1): ";
 		cin >> type;
 		while (type != 0 && type != 1) {
 			cout << "Enter valid type of district (0/1): ";
@@ -50,7 +53,10 @@ namespace Elections {
 			cin >> numOfRep;
 		}
 
-		District* dis = new District(type, name, numOfRep);
+		if (!type)
+			dis = new UniformDis(name, numOfRep);
+		else
+			dis = new DevidedDis(name, numOfRep);
 		election->appendDistrict(dis);
 	}
 
@@ -222,11 +228,13 @@ namespace Elections {
 
 }
 
-
+enum class Menu { Exit, addNewDistrict, addNewCitizen, addNewParty,
+	addNewCandidate, printDistricts, printCitizens, printParties, vote, printElectionResults};
 
 
 void main() {
 	int input=1, day=1, month=1, year=2020;
+
 	
 	cout << "Enter election date:" << endl << "Day: ";
 	cin >> day;
@@ -243,34 +251,34 @@ void main() {
 		cin >> input;
 		switch (input)
 		{
-		case 1:
+		case static_cast<int>(Menu::addNewDistrict):
 			addNewDistrict(election);
 			break;
-		case 2:
+		case static_cast<int>(Menu::addNewCitizen):
 			addNewCitizen(election);
 			break;
-		case 3:
+		case static_cast<int>(Menu::addNewParty):
 			addNewParty(election);
 			break;
-		case 4:
+		case static_cast<int>(Menu::addNewCandidate):
 			addNewCandidate(election);
 			break;
-		case 5:
+		case static_cast<int>(Menu::printDistricts):
 			printDistricts(election);
 			break;
-		case 6:
+		case static_cast<int>(Menu::printCitizens):
 			printCitizens(election);
 			break;
-		case 7:
+		case static_cast<int>(Menu::printParties):
 			printParties(election);
 			break;
-		case 8:
+		case static_cast<int>(Menu::vote):
 			vote(election);
 			break;
-		case 9:
+		case static_cast<int>(Menu::printElectionResults):
 			printElectionResults(election);
 			break;
-		case 0:
+		case static_cast<int>(Menu::Exit):
 			input = 0;
 			break;
 		default:

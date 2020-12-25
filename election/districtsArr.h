@@ -22,7 +22,7 @@ namespace Elections {
 			DistrictsArr();
 			DistrictsArr(District* dis);
 			~DistrictsArr();
-			DistrictsArr(const District& dis) = delete;
+			//DistrictsArr(const District& dis) = delete;
 			void operator=(const DistrictsArr& disArr);
 			District* operator[](int idx) { return _districts[idx]; }
 			District* operator[](int idx) const { return _districts[idx]; }
@@ -40,8 +40,7 @@ namespace Elections {
 			void appendDistrict(District* dis);
 			//prints all districts and their data
 			void printDistricts() const;
-			//print election results by district
-			void printResults() const;
+
 
 	};
 

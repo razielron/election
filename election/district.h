@@ -8,34 +8,36 @@ namespace Elections
 	class District
 	{
 		private:
-			static int _districtSerialNumber;
-			int _type;
+			static int _districtSerialNumber;			
+			int _totalVotes;
+			int _winnerVotes;
+			
+			CitizensArr* _representatives;
+			CitizensArr* _voters;
+
+		protected:
 			char* _name;
 			int _districtId;
 			int _numOfRepresentatives;
-			int _totalVotes;
-			int _winnerVotes;
 			Party* _winner;
-			CitizensArr* _representatives;
-			CitizensArr* _voters;
 
 		//Constructors + Distructors
 		public:
 			District() {}
-			District(int type, char* name, int numOfRepresentatives);
-			~District();
+			District(char* name, int numOfRepresentatives);
+			virtual ~District();
 
 		//GETTERS
 		public:
-			inline const int getType() const { return _type; }
+			
 			inline const char* getName() const { return _name; }
-			inline const int getDistrictNumber() { return _districtId; }
-			inline const int getNumOfRepresentatives() { return _numOfRepresentatives; }
-			inline const int getTotalVotes() { return _totalVotes; }
-			inline const int getWinnerVotes() { return _winnerVotes; }
-			inline const Party* getWinnerParty() { return _winner; }
-			inline const CitizensArr* getVoters() { return _voters; }
-			inline const CitizensArr* getRepresentetives() { return _representatives; }
+			inline const int getDistrictNumber() const { return _districtId; }
+			inline const int getNumOfRepresentatives() const { return _numOfRepresentatives; }
+			inline const int getTotalVotes() const { return _totalVotes; }
+			inline const int getWinnerVotes() const { return _winnerVotes; }
+			inline const Party* getWinnerParty() const { return _winner; }
+			inline const CitizensArr* getVoters() const { return _voters; }
+			inline const CitizensArr* getRepresentetives() const { return _representatives; }
 			//returns didtrict's vote precentage
 			inline const float getVotersPresentage() { return ((float)(_totalVotes)/(float)(_voters->getLogSize())*(float)(100)); }
 			
@@ -54,13 +56,7 @@ namespace Elections
 			void appendToVoters(Citizen* cit);
 			//add a citizen to array of representetives
 			void appendToRepresentetives(Citizen* cit);
-			//prints district's data
-			void printDistrict() const;
-			//prints election results for that district
-			void printResults();
-
-			
-
+			friend std::ostream& operator<<(std::ostream& os, const District& dis);
 
 	};
 

@@ -17,7 +17,7 @@ namespace Elections
 
 		//Constructors + Distructors
 		public:
-			Citizen() {};
+			Citizen();
 			Citizen(char id[10], int yearOfBirth, char* name, District* dis);
 			~Citizen();
 			friend ostream& operator<<(ostream& os, const Citizen& cit);

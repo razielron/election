@@ -56,6 +56,12 @@ namespace Elections
 		_partyCandidates->addVote(dis);
 	}	
 	
+	void Party::printDistrictPartyDetails(District* dis) const {
+		cout << "Party: " << _name << endl;
+		cout << "Candidate: " << _candidate->getName()<< endl;
+		cout << "Electors: " << _partyCandidates->getPartyNumOfElectors(dis) << endl << endl;
+	}
+	
 	void Party::printResults() const {
 		cout << "-----------PARTY-RESULTS-START-----------" << endl;
 		cout << "Name of Party: " << _name << endl;
