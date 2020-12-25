@@ -45,15 +45,15 @@ namespace Elections
 	}
 
 	void Election::printCitizens() const {
-		cout << _citizens;
+		cout << (*_citizens);
 	}
 
 	void Election::printDistricts() const {
-		_districts->printDistricts();
+		cout << (*_districts);
 	}
 
 	void Election::printParties() const {
-		cout << _parties;
+		cout << (*_parties);
 	}
 
 	void Election::printResults() const {

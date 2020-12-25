@@ -36,7 +36,10 @@ namespace Elections
 
 	ostream& operator<<(ostream& os, const DistrictsArr& disArr) {
 		for (int i = 0; i < disArr.getLogSize(); i++) {
-			os << *(disArr[i]);
+			if (typeid(*(disArr[i])) == typeid(UniformDis))
+				cout << *(static_cast<UniformDis*>(disArr[i])) << endl;
+			else
+				cout << *(static_cast<DevidedDis*>(disArr[i])) << endl;
 		}
 		return os;
 	}
@@ -58,7 +61,7 @@ namespace Elections
 		_districts[_logSize++] = dis;
 	}
 
-
+	/*
 	void DistrictsArr::printDistricts() const {
 		for (int i = 0; i < _logSize; i++) {
 			if (typeid(*(_districts[i])) == typeid(UniformDis))
@@ -67,6 +70,7 @@ namespace Elections
 				cout << *(static_cast<DevidedDis*>(_districts[i])) << endl;
 		}
 	}
+	*/ 
 
 	District* DistrictsArr::getDistrict(int districtId) const {
 		for (int i = 0;i < _logSize;i++) {
