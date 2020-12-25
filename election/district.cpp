@@ -9,8 +9,8 @@ namespace Elections
 {
 	int District::_districtSerialNumber = 0;
 
-	District::District(int type, char* name, int numOfRepresentatives):
-		_type(type), _numOfRepresentatives(numOfRepresentatives), _winnerVotes(0),
+	District::District(char* name, int numOfRepresentatives):
+		_numOfRepresentatives(numOfRepresentatives), _winnerVotes(0),
 		_totalVotes(0){
 		_name = new char[strlen(name) + 1];
 		_winner = nullptr;
@@ -59,21 +59,12 @@ namespace Elections
 		_representatives->appendCitizen(cit);
 	}
 
-	void District::printDistrict() const {
-		cout << "-------------DISTRICT-START------------" << endl;
-		cout << "District ID: " << _districtId << endl;
-		cout << "Name of district: " << _name << endl;
-		cout << "Number of representetive: " << _numOfRepresentatives << endl;
-		cout << "--------------DISTRICT-END-------------" << endl;
+	ostream& operator<<(ostream& os, const District& dis) {
+		os << "-------------DISTRICT-START------------" << endl;
+		os << "District ID: " << dis.getDistrictNumber() << endl;
+		os << "Name of district: " << dis.getDistrictNumber() << endl;
+		os << "Number of representetive: " << dis.getNumOfRepresentatives() << endl;
+		os << "--------------DISTRICT-END-------------" << endl;
+		return os;
 	}
-
-	void District::printResults() {
-		cout << "-------------DISTRICT-RESULTS-START------------" << endl;
-		cout << "Name of district: " << _name << endl;
-		cout << "Number of representetive: " << _numOfRepresentatives << endl;
-		cout << "District candidate winner: " << _winner->getCandidate()->getName() << endl;
-		cout << "District voters Percentage: " << getVotersPresentage() << "%" << endl;
-		cout << "--------------DISTRICT-RESULTS-END-------------" << endl;
-	}
-
 }

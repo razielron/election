@@ -1,3 +1,4 @@
+#include "district.h"
 #include "partiesArr.h"
 #include "PartyCandidates.h"
 #include "party.h"
@@ -100,6 +101,10 @@ namespace Elections
 		}
 	}
 
+	void PartiesArr::printDistrictPartyDetails(int& i, District* dis) {
+		_parties[i]->printDistrictPartyDetails(dis);
+	}
+
 	void PartiesArr::printResults() const {
 		cout << "------------PARTIES-RESULTS-START---------" << endl;
 		for (int i = 0; i < _logSize; i++) {
@@ -123,6 +128,21 @@ namespace Elections
 			}
 		}
 	}
+
+	void PartiesArr::sortByNumOfElectorsInDistrict(District* dis) {
+		Party* temp;
+		for (int i = 0; i < _logSize; i++) {
+			for (int j = i + 1; j < _logSize; j++) {
+				if (_parties[i]->getPartyCandidates()->getPartyNumOfElectors(dis) <
+					_parties[j]->getPartyCandidates()->getPartyNumOfElectors(dis)) {
+					temp = _parties[i];
+					_parties[i] = _parties[j];
+					_parties[j] = temp;
+				}
+			}
+		}
+	}
+
 
 	void PartiesArr::addRepresentetives() {
 		for (int i = 0; i < _logSize; i++) {

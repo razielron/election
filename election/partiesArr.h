@@ -4,6 +4,7 @@ using namespace std;
 
 namespace Elections {
 
+	class District;
 	class Party;
 	class PartiesArr
 	{
@@ -52,6 +53,10 @@ namespace Elections {
 			void addRepresentetives();
 			//sorts the parites from the most electors to few
 			void sortByNumOfElectors() const;
+			//sorts the parites from the most electors to few in specific district
+			void sortByNumOfElectorsInDistrict(District* dis);
+			//prints party's data in a specific district
+			void printDistrictPartyDetails(int& i, District* dis);
 			//go over all parties and prints thier results
 			void printResults() const;
 	};

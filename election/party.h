@@ -54,6 +54,8 @@ namespace Elections
 			void addRepresentetives();
 			//prints party's data
 			void printParty() const;
+			//prints party's data in a specific district
+			void printDistrictPartyDetails(District* dis) const;
 			//prints the election's results of the party
 			void printResults() const;
 	};

@@ -1,5 +1,8 @@
 #include "districtsArr.h"
+#include "devidedDis.h"
+#include "uniformDis.h"
 #include "district.h"
+#include <typeinfo>
 #include <string.h>
 
 namespace Elections
@@ -33,11 +36,7 @@ namespace Elections
 
 	ostream& operator<<(ostream& os, const DistrictsArr& disArr) {
 		for (int i = 0; i < disArr.getLogSize(); i++) {
-			cout << "-------------DISTRICT-START------------" << endl;
-			cout << "District ID: " << disArr[i]->getDistrictNumber() << endl;
-			cout << "Name of district: " << disArr[i]->getName() << endl;
-			cout << "Number of representetive: " << disArr[i]->getNumOfRepresentatives() << endl;
-			cout << "--------------DISTRICT-END-------------" << endl;
+			os << *(disArr[i]);
 		}
 		return os;
 	}
@@ -59,15 +58,13 @@ namespace Elections
 		_districts[_logSize++] = dis;
 	}
 
+
 	void DistrictsArr::printDistricts() const {
 		for (int i = 0; i < _logSize; i++) {
-			_districts[i]->printDistrict();
-		}
-	}
-
-	void DistrictsArr::printResults() const {
-		for (int i = 0; i < _logSize; i++) {
-			_districts[i]->printResults();
+			if (typeid(*(_districts[i])) == typeid(UniformDis))
+				cout << *(static_cast<UniformDis*>(_districts[i])) << endl;
+			else
+				cout << *(static_cast<DevidedDis*>(_districts[i])) << endl;
 		}
 	}
 
