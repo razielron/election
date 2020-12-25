@@ -36,14 +36,7 @@ namespace Elections
 
 	ostream& operator<<(ostream& os, const PartiesArr& partyArr) {
 		for (int i = 0; i < partyArr.getLogSize(); i++) {
-			cout << "-----------PARTY-START-----------" << endl;
-			cout << "Party ID: " << partyArr[i]->getId() << endl;
-			cout << "Name of Party: " << partyArr[i]->getName() << endl;
-			cout << "Party candidate: " << endl;
-			partyArr[i]->getCandidate()->printCit();
-			cout << "Represetetives of district: " << endl;
-			partyArr[i]->getPartyCandidates()->printPartyCandidates();
-			cout << "------------PARTY-END-----------" << endl;
+			cout << partyArr[i];
 		}
 		return os;
 	}
@@ -104,12 +97,6 @@ namespace Elections
 	void PartiesArr::appendElectedRep() {
 		for (int i = 0;i < _logSize;i++) {
 			_parties[i]->getPartyCandidates()->addRepresentetives();
-		}
-	}
-
-	void PartiesArr::printParties() const {
-		for (int i = 0; i < _logSize; i++) {
-			_parties[i]->printParty();
 		}
 	}
 

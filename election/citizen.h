@@ -1,4 +1,6 @@
-#pragma once 
+#pragma once
+#include <iostream>
+using namespace std;
 
 namespace Elections
 {
@@ -18,14 +20,15 @@ namespace Elections
 			Citizen() {};
 			Citizen(char id[10], int yearOfBirth, char* name, District* dis);
 			~Citizen();
+			friend ostream& operator<<(ostream& os, const Citizen& cit);
 			
 		//GETTERS
 		public:
 			inline const char* getName() const { return _name; }
-			inline const char* getId() { return _id; }
-			inline const int getYearOfBirth() { return _yearOfBirth; }
-			inline const District* getDistrict() { return _dis; }
-			inline const Party* getVote() { return _vote; }
+			inline const char* getId() const { return _id; }
+			inline const int getYearOfBirth() const { return _yearOfBirth; }
+			inline const District* getDistrict() const { return _dis; }
+			inline const Party* getVote() const { return _vote; }
 
 		public:
 			//set the citizen's district

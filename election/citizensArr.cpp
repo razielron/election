@@ -35,17 +35,10 @@ namespace Elections
 
 	ostream& operator<<(ostream& os,const CitizensArr& citArr) {
 		for (int i = 0; i < citArr.getLogSize(); i++) {
-			os << "--------CITIZEN-START-----------" << endl;
-			os << "Name: " << citArr[i]->getName() << endl;
-			os << "ID: " << citArr[i]->getId() << endl;
-			os << "Year of birth: " << citArr[i]->getYearOfBirth() << endl;
-			os << "District: " << citArr[i]->getDistrict() << endl;
-			os << "---------CITIZEN-END------------" << endl;
+			os << citArr[i];
 		}
 		return os;
 	}
-
-
 
 	void CitizensArr::increaseCitizensArr() {
 		_phySize *= 2;
@@ -80,11 +73,5 @@ namespace Elections
 
 	Citizen* CitizensArr::getCit(int position) {
 		return _citizens[position];
-	}
-	
-	void CitizensArr::printCitizens() const {
-		for (int i = 0; i < _logSize; i++) {
-			_citizens[i]->printCit();
-		}
 	}
 }

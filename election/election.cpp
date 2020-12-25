@@ -42,7 +42,7 @@ namespace Elections
 	}
 
 	void Election::printCitizens() const {
-		_citizens->printCitizens();
+		cout << _citizens;
 	}
 
 	void Election::printDistricts() const {
@@ -50,7 +50,7 @@ namespace Elections
 	}
 
 	void Election::printParties() const {
-		_parties->printParties();
+		cout << _parties;
 	}
 
 	void Election::printResults() const {
@@ -67,7 +67,7 @@ namespace Elections
 				if (partyRep) {
 					cout << "Party elected representetives: " << endl;
 					for (int k = 0; k < partyRep; k++)
-						_parties->getParties()[j]->getPartyCandidates()->getDistrictPartyCandidates(i)->getCit(k)->printCit();
+						 cout << _parties->getParties()[j]->getPartyCandidates()->getDistrictPartyCandidates(i)->getCit(k);
 				}
 				else {
 					cout << "Party elected representetives: NO REPRESENTETIVES" << endl;

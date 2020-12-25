@@ -1,6 +1,7 @@
 #pragma once
 #include "citizen.h"
-//#include "partyCandidates.h"
+#include <iostream>
+using namespace std;
 
 namespace Elections
 {
@@ -23,6 +24,7 @@ namespace Elections
 		public:
 			Party() {}
 			Party(char* name, Citizen* cit);
+			friend ostream& operator<<(ostream& os, const Party& party);
 
 		//GETTERS
 		public:
@@ -30,7 +32,7 @@ namespace Elections
 			inline const int getId() const { return _partyId; }
 			inline const int getTotalElectors() const { return _totalElectors; }
 			inline const Citizen* getCandidate() const { return _candidate; }
-			inline PartyCandidates* getPartyCandidates() { return _partyCandidates; }
+			inline PartyCandidates* getPartyCandidates() const { return _partyCandidates; }
 		
 		//SETTERS
 		public:

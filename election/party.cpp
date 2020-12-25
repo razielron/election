@@ -17,6 +17,18 @@ namespace Elections
 		_partyCandidates = new PartyCandidates;
 	}
 
+	ostream& operator<<(ostream& os, const Party& party) {
+		os << "-----------PARTY-START-----------" << endl;
+		os << "Party ID: " << party.getId() << endl;
+		os << "Name of Party: " << party.getName() << endl;
+		os << "Party candidate: " << endl;
+		os << party.getCandidate();
+		os << "Represetetives of district: " << endl;
+		party.getPartyCandidates()->printPartyCandidates();
+		os << "------------PARTY-END-----------" << endl;
+		return os;
+	}
+
 	bool Party::setCandidate(Citizen* cit) {
 		_candidate = cit;
 		return true;
@@ -42,20 +54,7 @@ namespace Elections
 
 	void Party::addVote(District* dis){
 		_partyCandidates->addVote(dis);
-	}
-
-
-	void Party::printParty() const {
-		cout << "-----------PARTY-START-----------" << endl;
-		cout << "Party ID: " << _partyId << endl;
-		cout << "Name of Party: " << _name << endl;
-		cout << "Party candidate: " << endl;
-		_candidate->printCit();
-		cout << "Represetetives of district: " << endl;
-		_partyCandidates->printPartyCandidates();
-		cout << "------------PARTY-END-----------" << endl;
-	}
-	
+	}	
 	
 	void Party::printResults() const {
 		cout << "-----------PARTY-RESULTS-START-----------" << endl;

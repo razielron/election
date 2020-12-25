@@ -52,8 +52,6 @@ namespace Elections {
 			void addRepresentetives();
 			//sorts the parites from the most electors to few
 			void sortByNumOfElectors() const;
-			//go over all parties and prints all party's data
-			void printParties() const;
 			//go over all parties and prints thier results
 			void printResults() const;
 	};
