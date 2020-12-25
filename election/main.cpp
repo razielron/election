@@ -197,17 +197,17 @@ namespace Elections {
 
 	//Prints all created districts
 	void printDistricts(Election* election) {
-		election->getDistricts()->printDistricts();
+		election->printDistricts();
 	}
 
 	//Prints all created citizens
 	void printCitizens(Election* election) {
-		election->getCitizens()->printCitizens();
+		election->printCitizens();
 	}
 	
 	//Prints all created parties
 	void printParties(Election* election) {
-		election->getParties()->printParties();
+		election->printParties();
 	}
 
 	//Prints all election's results

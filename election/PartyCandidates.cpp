@@ -174,7 +174,7 @@ namespace Elections
 		ListItem* temp = _head;
 		while (temp) {
 			cout << "Name of District:" << temp->dis->getName() << endl;
-			temp->partyCandidates->printCitizens();
+			cout << temp->partyCandidates;
 			temp = temp->next;
 		}
 	}

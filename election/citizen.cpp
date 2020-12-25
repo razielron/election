@@ -18,9 +18,18 @@ namespace Elections
 		_vote = nullptr;
 	}
 
-	
 	Citizen::~Citizen(){
 		delete[] _name;
+	}
+
+	ostream& operator<<(ostream& os, const Citizen& cit) {
+		os << "--------CITIZEN-START-----------" << endl;
+		os << "Name: " << cit.getName() << endl;
+		os << "ID: " << cit.getId() << endl;
+		os << "Year of birth: " << cit.getYearOfBirth() << endl;
+		os << "District: " << cit.getDistrict()->getName() << endl;
+		os << "---------CITIZEN-END------------" << endl;
+		return os;
 	}
 	
 	bool Citizen::setDistict(District* dis){
@@ -32,14 +41,5 @@ namespace Elections
 		_vote = party;
 		_dis->addVote();
 		party->addVote(_dis);
-	}
-
-	void Citizen::printCit() const {
-		cout << "--------CITIZEN-START-----------" << endl;
-		cout << "Name: " << _name << endl;
-		cout << "ID: " << _id << endl;
-		cout << "Year of birth: " << _yearOfBirth << endl;
-		cout << "District: " << _dis->getName() << endl;
-		cout << "---------CITIZEN-END------------" << endl;
 	}
 }

@@ -64,7 +64,6 @@ namespace Elections
 			//prints all uniform district's election results
 			void printResults() const;
 			//prints all divided district's election results
-
 		
 	};
 }
