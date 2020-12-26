@@ -1,8 +1,12 @@
+#include "districtsArr.h"
+#include "partiesArr.h"
 #include "citizensArr.h"
 #include "citizen.h"
 #include <string.h>
 #include <iostream>
 using namespace std;
+#define rcastcc reinterpret_cast<const char*>
+#define rcastc reinterpret_cast<char*>
 
 namespace Elections
 {
@@ -13,6 +17,11 @@ namespace Elections
 	CitizensArr::CitizensArr(Citizen* cit) : _logSize(1), _phySize(2) {
 		_citizens = new Citizen*[_phySize];
 		_citizens[0] = cit;
+	}
+
+	CitizensArr::CitizensArr(istream& in, DistrictsArr* districts, PartiesArr* parties) :
+		_logSize(0), _phySize(1), _citizens(nullptr) {
+		load(in, districts, parties);
 	}
 
 	CitizensArr::~CitizensArr() {
@@ -67,5 +76,32 @@ namespace Elections
 
 	Citizen* CitizensArr::getCit(int position) {
 		return _citizens[position];
+	}
+
+	void CitizensArr::save(ostream& out) const {
+		out.write(rcastcc(_logSize), sizeof(int));
+		for (int i = 0; i < _logSize; i++) {
+			_citizens[i]->save(out);
+		}
+
+		//next ex we will implament try&catch
+		if (!out.good()) {
+			cout << "Citizen Save issue" << endl;
+			exit(-1);
+		}
+	}
+
+	void CitizensArr::load(istream& in, DistrictsArr* districts, PartiesArr* parties) {
+		in.read(rcastc(_phySize), sizeof(int));
+		_citizens = new Citizen* [_phySize];
+		for (int i = 0; i < _logSize; i++) {
+			this->appendCitizen(new Citizen(in, districts, parties));
+		}
+
+		//next ex we will implament try&catch
+		if (!in.good()) {
+			cout << "Citizen load issue" << endl;
+			exit(-1);
+		}
 	}
 }

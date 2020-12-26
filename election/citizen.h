@@ -1,11 +1,14 @@
 #pragma once
-#include <iostream>
+#include <istream>
+#include <ostream>
 using namespace std;
 
 namespace Elections
 {
 	class District;
+	class DistrictsArr;
 	class Party;
+	class PartiesArr;
 	class Citizen
 	{
 		private:
@@ -19,6 +22,7 @@ namespace Elections
 		public:
 			Citizen();
 			Citizen(char* id, int yearOfBirth, char* name, District* dis);
+			Citizen(istream& in, DistrictsArr* districts, PartiesArr* parties);
 			~Citizen();
 			friend ostream& operator<<(ostream& os, const Citizen& cit);
 			
@@ -35,5 +39,11 @@ namespace Elections
 			bool setDistict(District* dis);
 			//add vote for this citizen by given party
 			void vote(Party* party);
+
+		//Load and Save
+		public:
+			void save(ostream& out) const;
+			void load(istream& in, DistrictsArr* districts, PartiesArr* parties);
+
 	};
 }
