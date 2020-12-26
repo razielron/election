@@ -1,9 +1,12 @@
 #pragma once
-#include <iostream>
+#include <istream>
+#include <ostream>
 using namespace std;
 
 namespace Elections {
 
+	class DistrictsArr;
+	class PartiesArr;
 	class Citizen;
 
 	class CitizensArr
@@ -21,6 +24,7 @@ namespace Elections {
 		public:
 			CitizensArr();
 			CitizensArr(Citizen* cit);
+			CitizensArr(istream& in, DistrictsArr* districts, PartiesArr* parties);
 			~CitizensArr();
 			CitizensArr(const Citizen& cit) = delete;
 			void operator=(const CitizensArr& citArr);
@@ -41,8 +45,11 @@ namespace Elections {
 		public:
 			//adding citizen to the arr
 			void appendCitizen(Citizen* cit);
-			//prints all citizens
-			void printCitizens() const;
+
+		//Load and Save
+		public:
+			void save(ostream& out) const;
+			void load(istream& in, DistrictsArr* districts, PartiesArr* parties);
 	};
 
 }

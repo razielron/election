@@ -1,8 +1,13 @@
 #include "citizen.h"
 #include "district.h"
-#include <string.h>
+#include "districtsArr.h"
+#include "partiesArr.h"
+#include <string>
 #include <iostream>
 using namespace std;
+#define rcastcc reinterpret_cast<const char*>
+#define rcastc reinterpret_cast<char*>
+
 namespace Elections
 {
 
@@ -12,6 +17,11 @@ namespace Elections
 		_dis = nullptr;
 		_dis->appendToVoters(this);
 		_vote = nullptr;
+	}
+
+	Citizen::Citizen(istream& in, DistrictsArr* districts, PartiesArr* parties):
+		_name(nullptr), _id(nullptr), _dis(nullptr), _vote(nullptr), _yearOfBirth(0) {
+		load(in, districts, parties);
 	}
 
 	Citizen::Citizen(char* id, int yearOfBirth, char* name, District* dis)
@@ -49,5 +59,50 @@ namespace Elections
 		_vote = party;
 		_dis->addVote();
 		party->addVote(_dis);
+	}
+
+	void Citizen::save(ostream& out) const {
+		out.write(rcastcc(strlen(_name)), sizeof(int));
+		out.write(rcastcc(_name), sizeof(_name));
+		out.write(rcastcc(strlen(_id)), sizeof(int));
+		out.write(rcastcc(_id), sizeof(_id));
+		out.write(rcastcc(_yearOfBirth), sizeof(int));
+		out.write(rcastcc(_dis->getDistrictNumber()), sizeof(int));
+		if (_vote) {
+			out.write(rcastcc(_vote->getId()), sizeof(int));
+		}
+		else {
+			out.write(rcastcc(-1), sizeof(int));
+		}
+
+		//next ex we will implament try&catch
+		if (!out.good()) {
+			cout << "Citizen Save issue" << endl;
+			exit(-1);
+		}
+	}
+
+	void Citizen::load(istream& in, DistrictsArr* districts, PartiesArr* parties) {
+		int idTemp = -1, lengthTemp = 0;
+
+		in.read(rcastc(lengthTemp), sizeof(int));
+		_name = new char[lengthTemp + 1];
+		in.read(rcastc(_name), sizeof(_name));
+		in.read(rcastc(lengthTemp), sizeof(int));
+		_id = new char[lengthTemp + 1];
+		in.read(rcastc(_id), sizeof(_id));
+		in.read(rcastc(_yearOfBirth), sizeof(int));
+		in.read(rcastc(idTemp), sizeof(int));
+		_dis = districts->getDistrict(idTemp);
+		in.read(rcastc(idTemp), sizeof(int));
+		if (idTemp != -1) {
+			_vote = parties->getParty(idTemp);
+		}
+
+		//next ex we will implament try&catch
+		if (!in.good()) {
+			cout << "Citizen load issue" << endl;
+			exit(-1);
+		}
 	}
 }
