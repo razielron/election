@@ -57,15 +57,9 @@ namespace Elections
 		_citizens[_logSize++] = cit;
 	}
 
-	Citizen* CitizensArr::getCit(char id[10]) {
-		bool flag;
+	Citizen* CitizensArr::getCit(char* id) {
 		for (int i = 0; i < _logSize; i++) {
-			flag = true;
-			for (int j = 0; j < 9 && flag; j++) {
-				if (_citizens[i]->getId()[j] != id[j])
-					flag = false;
-			}
-			if (flag)
+			if (strcmp(_citizens[i]->getId(), id) == 0)
 				return _citizens[i];
 		}
 		return nullptr;

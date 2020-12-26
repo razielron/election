@@ -10,7 +10,7 @@ namespace Elections
 	{
 		private:
 			char* _name;
-			char _id[10];
+			char* _id;
 			int _yearOfBirth;
 			District* _dis;
 			Party* _vote;
@@ -18,7 +18,7 @@ namespace Elections
 		//Constructors + Distructors
 		public:
 			Citizen();
-			Citizen(char id[10], int yearOfBirth, char* name, District* dis);
+			Citizen(char* id, int yearOfBirth, char* name, District* dis);
 			~Citizen();
 			friend ostream& operator<<(ostream& os, const Citizen& cit);
 			
@@ -33,8 +33,6 @@ namespace Elections
 		public:
 			//set the citizen's district
 			bool setDistict(District* dis);
-			//print the citizen's data
-			void printCit() const;
 			//add vote for this citizen by given party
 			void vote(Party* party);
 	};

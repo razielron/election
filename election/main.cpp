@@ -60,6 +60,7 @@ namespace Elections {
 		election->appendDistrict(dis);
 	}
 
+	/*
 	//returns true if the id is valid else false
 	bool isValidId(char id[10]) {
 		for (int i = 0;i < 9;i++)
@@ -68,12 +69,13 @@ namespace Elections {
 			}
 		return true;
 	}
+	*/
 
 	//get input from user to add new citizen
 	void addNewCitizen(Election* election) {
 		int yearOfBirth, districtId;
 		char name[256];
-		char id[10];
+		char id[256];
 		District* dis;
 
 		if (!(election->getDistricts()->getLogSize())) {
@@ -86,11 +88,6 @@ namespace Elections {
 
 		cout << "Enter ID: ";
 		cin >> id;
-		while (!(isValidId(id))) {
-			cout << "Enter correct ID" << endl;
-			cin >> id;
-		}
-		id[9] = '\0';
 
 		cout << "Enter year of birth: ";
 		cin >> yearOfBirth;
@@ -114,7 +111,7 @@ namespace Elections {
 	//get input from user to add new party
 	void addNewParty(Election* election) {
 		char name[256];
-		char id[10];
+		char id[256];
 		Citizen* temp = nullptr;
 		
 		if (!(election->getCitizens()->getLogSize())) {
@@ -128,8 +125,8 @@ namespace Elections {
 
 		cout << "Enter ID of prime minister candidate: ";
 		cin >> id;
-		while (!(isValidId(id) && (temp = election->getCitizens()->getCit(id)))) {
-			cout << "Enter correct ID / There is no citizen with this ID" << endl;
+		while (!(temp = election->getCitizens()->getCit(id))) {
+			cout << "There is no citizen with this ID" << endl;
 			cin >> id;
 		}
 		id[9] = '\0';
@@ -148,8 +145,8 @@ namespace Elections {
 
 		cout << "Enter citizen ID: ";
 		cin >> id;
-		while (!(isValidId(id) && (citTemp = election->getCitizens()->getCit(id)))) {
-			cout << "Enter correct ID / There is no citizen with this ID" << endl;
+		while (!(citTemp = election->getCitizens()->getCit(id))) {
+			cout << "There is no citizen with this ID" << endl;
 			cin >> id;
 		}
 		id[9] = '\0';
@@ -180,7 +177,7 @@ namespace Elections {
 
 		cout << "Enter citizen ID: ";
 		cin >> id;
-		while (!(isValidId(id) && (citTemp = election->getCitizens()->getCit(id)))) {
+		while (!(citTemp = election->getCitizens()->getCit(id))) {
 			cout << "Enter correct ID / There is no citizen with this ID" << endl;
 			cin >> id;
 		}
