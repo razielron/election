@@ -43,8 +43,7 @@ namespace Elections
 		return true;
 	}
 
-	int Party::getPartyNumOfVotes() {
-		int sumOfVotes = 0;
+	int Party::getPartyNumOfVotes() const {
 		return _partyCandidates->getPartyNumOfVotes();
 	}
 
@@ -67,7 +66,7 @@ namespace Elections
 		cout << "Name of Party: " << _name << endl;
 		cout << "Name of Prime Minister Candidate: " << _candidate << endl;
 		cout << "Total Electors: " << _totalElectors << endl;
-		cout << "Total Votes: " << _partyCandidates->getPartyNumOfVotes() << endl;
+		cout << "Total Votes: " << this->getPartyNumOfVotes() << endl;
 		cout << "------------PARTY-RESULTS-END-----------" << endl;
 	}
 

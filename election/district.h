@@ -40,6 +40,8 @@ namespace Elections
 			inline const CitizensArr* getRepresentetives() const { return _representatives; }
 			//returns didtrict's vote precentage
 			inline const float getVotersPresentage() { return ((float)(_totalVotes)/(float)(_voters->getLogSize())*(float)(100)); }
+			//returns voters precentage by given votes
+			const float getVotersPresentage(int votes) { return ((float)(votes)/(float)(_totalVotes)*(float)(100)); }
 			
 		//SETTERS
 		public:

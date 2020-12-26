@@ -3,16 +3,18 @@
 #include "district.h"
 #include "devidedDis.h"
 #include "UniformDis.h"
-#include "election.h"
+#include "simpleElection.h"
+#include "normalElection.h"
 #include "citizen.h"
 #include <string.h>
 #include <iostream>
+#include <typeinfo>
 using namespace std;
 using namespace Elections;
 
 namespace Elections {
 	//Prints the menu
-	void menu() {
+	void printMenu() {
 		cout << endl << endl << endl;
 		cout << "------------------------------------------------------" << endl;
 		cout << "Press 1 for adding a district" << endl;
@@ -35,6 +37,11 @@ namespace Elections {
 		char name[256];
 		int numOfRep = 0;
 		int type;
+
+		if ((typeid(*election)) == (typeid(SimpleElection))) {
+			cout << "can't create district for simple election" << endl;
+			return;
+		}
 
 		cout << "Enter type of district: for Uniform press 0, for Devided press 1 (0/1): ";
 		cin >> type;
@@ -59,17 +66,6 @@ namespace Elections {
 			dis = new DevidedDis(name, numOfRep);
 		election->appendDistrict(dis);
 	}
-
-	/*
-	//returns true if the id is valid else false
-	bool isValidId(char id[10]) {
-		for (int i = 0;i < 9;i++)
-			if (!(id[i] && id[i] <= '9' && id[i] >= '0')) {
-				return false;
-			}
-		return true;
-	}
-	*/
 
 	//get input from user to add new citizen
 	void addNewCitizen(Election* election) {
@@ -96,12 +92,16 @@ namespace Elections {
 			cin >> yearOfBirth;
 		}
 
-		cout << "Enter district ID: ";
-		cin >> districtId;
-
-		while (!(dis = election->getDistricts()->getDistrict(districtId))) {
-			cout << "Enter valid district ID" << endl;
+		if (typeid(*election) == typeid(NormalElection)) {
+			cout << "Enter district ID: ";
 			cin >> districtId;
+			while (!(dis = election->getDistricts()->getDistrict(districtId))) {
+				cout << "Enter valid district ID" << endl;
+				cin >> districtId;
+			}
+		}
+		else {
+			dis = (*(election->getDistricts()))[0];
 		}
 
 		Citizen* cit = new Citizen(id, yearOfBirth, name, dis);
@@ -158,11 +158,16 @@ namespace Elections {
 			cin >> partyId;
 		}
 
-		cout << "Enter district ID: ";
-		cin >> districtId;
-		while (!(disTemp = election->getDistricts()->getDistrict(districtId))) {
-			cout << "Enter valid district ID" << endl;
+		if (typeid(*election) == typeid(NormalElection)) {
+			cout << "Enter district ID: ";
 			cin >> districtId;
+			while (!(disTemp = election->getDistricts()->getDistrict(districtId))) {
+				cout << "Enter valid district ID" << endl;
+				cin >> districtId;
+			}
+		}
+		else {
+			disTemp = (*(election->getDistricts()))[0];
 		}
 
 		partyTemp->appendCandidateToList(disTemp, citTemp);
@@ -217,12 +222,57 @@ namespace Elections {
 	void printElectionResults(Election* election) {
 		cout << "------------------ELECTION-RESULTS-START----------------" << endl;
 		election->electionSummery();
-		election->sortPartiesByElectors();
-		election->printResults();
-		election->getParties()->printResults();
+		
+		if (typeid(*election) == typeid(NormalElection)) {
+			election->sortPartiesByElectors();
+			static_cast<NormalElection*>(election)->printResults();
+			election->getParties()->printResults();
+		}
+		else {
+			election->sortPartiesByTotalVotes();
+			static_cast<SimpleElection*>(election)->printResults();
+		}
 		cout << "-------------------ELECTION-RESULTS-END----------------" << endl;
 	}
 
+	Election* createElection() {
+		int day = 1, month = 1, year = 2020, numOfRep = 0, type = -1;
+		District* dis;
+		Election* election;
+		char name[256] = "DISTRICT ONE";
+
+		cout << "Enter election date:" << endl << "Day: ";
+		cin >> day;
+		cout << "Month: ";
+		cin >> month;
+		cout << "Year: ";
+		cin >> year;
+
+		cout << "Election Type (0 - normal, 1 - simple): ";
+		cin >> type;
+		while (type != 0 && type != 1) {
+			cout << "Wrong type selected, please choose again (0 - normal, 1 - simple): ";
+			cin >> type;
+		}
+
+		if (type) {
+			cout << "Enter Number of representetives: ";
+			cin >> numOfRep;
+			while (numOfRep <= 0) {
+				cout << "Enter Valid number Of Rep" << endl;
+				cin >> numOfRep;
+			}
+
+			election = new SimpleElection(day, month, year);
+			dis = new DevidedDis(name, numOfRep);
+			election->appendDistrict(dis);
+		}
+		else {
+			election = new NormalElection(day, month, year);
+		}
+
+		return election;
+	}
 }
 
 enum class Menu { Exit, addNewDistrict, addNewCitizen, addNewParty,
@@ -230,21 +280,12 @@ enum class Menu { Exit, addNewDistrict, addNewCitizen, addNewParty,
 
 
 void main() {
-	int input=1, day=1, month=1, year=2020;
-
-	
-	cout << "Enter election date:" << endl << "Day: ";
-	cin >> day;
-	cout << "Month: ";
-	cin >> month;
-	cout << "Year: ";
-	cin >> year;
-	
-	Election* election = new Election(day,month,year);
-
+	int input = 1;
+	Election* election = createElection();
 
 	while (input) {
-		menu();
+		printMenu();
+
 		cin >> input;
 		switch (input)
 		{

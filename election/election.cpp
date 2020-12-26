@@ -56,34 +56,6 @@ namespace Elections
 		cout << (*_parties);
 	}
 
-	void Election::printResults() const {
-		District* dis = nullptr;
-		int partyRep = 0;
-		for (int i = 0;i < _districts->getLogSize();i++) {
-			dis = (*_districts)[i];
-			if ((typeid(*dis)) == (typeid(UniformDis)))
-				static_cast<UniformDis*>(dis)->printResults();
-			else 
-				static_cast<DevidedDis*>(dis)->printResults(_parties);
-			for (int j = 0; j < _parties->getLogSize(); j++) {
-				cout << "----------PARTY-in-district-RESULTS-START----------" << endl;
-				cout << "Party: " << (*_parties)[j]->getName() << endl;
-				(*_parties)[j]->getPartyCandidates()->printResults(dis);
-				partyRep = (*_parties)[j]->getPartyCandidates()->getPartyNumOfElectors(dis);
-				if (partyRep) {
-					cout << "Party elected representetives: " << endl;
-					for (int k = 0; k < partyRep; k++)
-						 cout << (*_parties)[j]->getPartyCandidates()->getDistrictPartyCandidates(i)->getCit(k);
-				}
-				else {
-					cout << "Party elected representetives: NO REPRESENTETIVES" << endl;
-				}
-				cout << "-----------PARTY-in-district-RESULTS-END----------" << endl;
-			}
-			cout << endl;
-		}
-	}
-
 	void Election::electionSummery() const {
 		_parties->addRepresentetives();
 		_parties->setDistrictWinner();

@@ -38,9 +38,10 @@ namespace Elections
 		//GETTERS
 		public:
 			CitizensArr* getDistrictPartyCandidates(int position);
+			CitizensArr* getDistrictPartyCandidates(District* dis);
 			int getNumOfElectors(ListItem* listItem);
 			int setNumOfElectors(ListItem* listItem);
-			int getPartyNumOfVotes();
+			int getPartyNumOfVotes() const;
 			int getPartyNumOfElectors(District* dis);
 			int getPartyTotalElectors(Party* party);
 

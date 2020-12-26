@@ -48,6 +48,12 @@
     <ClCompile Include="devidedDis.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="normalElection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="simpleElection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="citizen.h">
@@ -78,6 +84,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="devidedDis.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="normalElection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="simpleElection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
