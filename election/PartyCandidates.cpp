@@ -1,11 +1,11 @@
 #include "partyCandidates.h"
 #include "uniformDis.h"
 #include "devidedDis.h"
-#include <typeinfo>
 #include "district.h"
 #include <string.h>
 #include <iostream>
 #include <cmath>
+#include <typeinfo>
 using namespace std;
 
 namespace Elections

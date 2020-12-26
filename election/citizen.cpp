@@ -7,20 +7,17 @@ namespace Elections
 {
 
 	Citizen::Citizen(): _yearOfBirth(0) {
-		for (int i = 0; i < 9;i++)
-			_id[i] = 0;
-		_id[9] = '\0';
+		_id = nullptr;
 		_name = nullptr;
 		_dis = nullptr;
 		_dis->appendToVoters(this);
 		_vote = nullptr;
 	}
 
-	Citizen::Citizen(char id[10], int yearOfBirth, char* name, District* dis)
+	Citizen::Citizen(char* id, int yearOfBirth, char* name, District* dis)
 		: _yearOfBirth(yearOfBirth) {
-		for (int i = 0; i < 9;i++)
-			_id[i] = id[i];
-		id[9] = '\0';
+		_id = new char[strlen(id) + 1];
+		memcpy(_id, id, strlen(id) + 1);
 		_name = new char[strlen(name) + 1];
 		memcpy(_name, name, strlen(name)+1);
 		_dis = dis;
