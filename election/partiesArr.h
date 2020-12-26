@@ -55,6 +55,8 @@ namespace Elections {
 			void sortByNumOfElectors() const;
 			//sorts the parites from the most electors to few in specific district
 			void sortByNumOfElectorsInDistrict(District* dis);
+			//sorts the parites from the most total votes to few
+			void sortByTotalVotes();
 			//prints party's data in a specific district
 			void printDistrictPartyDetails(int& i, District* dis);
 			//go over all parties and prints thier results

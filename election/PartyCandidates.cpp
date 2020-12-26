@@ -96,6 +96,14 @@ namespace Elections
 		return temp->partyCandidates;
 	}
 
+	CitizensArr* PartyCandidates::getDistrictPartyCandidates(District* dis) {
+		ListItem* temp = _head;
+		while (temp->dis != dis) {
+			temp = temp->next;
+		}
+		return temp->partyCandidates;
+	}
+
 	int PartyCandidates::getNumOfElectors(ListItem* listItem) {
 		return listItem->numOfElectors;
 	}
@@ -157,7 +165,7 @@ namespace Elections
 		return sumOfRep;
 	}
 
-	int PartyCandidates::getPartyNumOfVotes() {
+	int PartyCandidates::getPartyNumOfVotes() const {
 		ListItem* temp = _head;
 		int sumOfVotes = 0;
 		while (temp) {

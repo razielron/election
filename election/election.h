@@ -10,14 +10,14 @@ using namespace std;
 
 namespace Elections
 {
-
-
 	class Election
 	{
 		private:
 			int _day;
 			int _year;
 			int _month;
+
+		protected:
 			CitizensArr* _citizens;
 			PartiesArr* _parties;
 			DistrictsArr* _districts;
@@ -25,7 +25,7 @@ namespace Elections
 		//Constructors + Distructors
 		public:
 			Election(int day, int month, int year);
-			~Election();
+			virtual ~Election();
 
 		//GETTERS
 		public:
@@ -49,6 +49,8 @@ namespace Elections
 			void appendDistrictRep(District* dis, Citizen* cit);
 			//sort parties array by the number of electors
 			void sortPartiesByElectors() { _parties->sortByNumOfElectors(); }
+			//sort parties array by total of votes
+			void sortPartiesByTotalVotes() { _parties->sortByTotalVotes(); }
 
 		public:
 			//prints the date of the election
@@ -61,9 +63,5 @@ namespace Elections
 			void printDistricts() const;
 			//prints the list of parties
 			void printParties() const;
-			//prints all uniform district's election results
-			void printResults() const;
-			//prints all divided district's election results
-		
 	};
 }

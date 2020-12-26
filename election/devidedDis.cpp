@@ -30,18 +30,14 @@ namespace Elections
 		cout << "Name of district: " << _name << endl;
 		cout << "District type: DEVIDED" << endl;
 		cout << "Number of representetive: " << _numOfRepresentatives << endl << endl;
-
+		cout << "District voters Percentage: " << getVotersPresentage() << "%" << endl;
 		partiesArr->sortByNumOfElectorsInDistrict(this);
-
 		cout << "-------------Votes Summery------------" << endl << endl;
-
 		for (int i = 0;i < partiesArr->getLogSize() &&
 			((*partiesArr)[i]->getPartyCandidates()->getPartyNumOfElectors(this) > 0);i++) {
 			partiesArr->printDistrictPartyDetails(i, this);
 		}
-
 		cout << "--------------------------------------" << endl << endl;
-		cout << "District voters Percentage: " << getVotersPresentage() << "%" << endl;
 		cout << "--------------DISTRICT-RESULTS-END-------------" << endl;
 	}
 }

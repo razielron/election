@@ -143,6 +143,19 @@ namespace Elections
 		}
 	}
 
+	void PartiesArr::sortByTotalVotes() {
+		Party* temp;
+		for (int i = 0; i < _logSize; i++) {
+			for (int j = i + 1; j < _logSize; j++) {
+				if (_parties[i]->getPartyCandidates()->getPartyNumOfVotes() <
+					_parties[j]->getPartyCandidates()->getPartyNumOfVotes()) {
+					temp = _parties[i];
+					_parties[i] = _parties[j];
+					_parties[j] = temp;
+				}
+			}
+		}
+	}
 
 	void PartiesArr::addRepresentetives() {
 		for (int i = 0; i < _logSize; i++) {

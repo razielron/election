@@ -45,7 +45,7 @@ namespace Elections
 
 		public:
 			//calculated in PartyCandidates and returns the total votes of this party
-			int getPartyNumOfVotes();
+			int getPartyNumOfVotes() const;
 			//passes a district and a citizen candidate to add to PartyCadidates
 			void appendCandidateToList(District* dis, Citizen* cit);
 			//add vote to for this party by given district
