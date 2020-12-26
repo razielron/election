@@ -26,6 +26,7 @@ namespace Elections
 	}
 
 	Citizen::~Citizen(){
+		delete[] _id;
 		delete[] _name;
 	}
 
