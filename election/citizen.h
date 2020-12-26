@@ -33,8 +33,6 @@ namespace Elections
 		public:
 			//set the citizen's district
 			bool setDistict(District* dis);
-			//print the citizen's data
-			//void printCit() const;
 			//add vote for this citizen by given party
 			void vote(Party* party);
 	};
