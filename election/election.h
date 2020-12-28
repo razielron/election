@@ -10,6 +10,7 @@ using namespace std;
 
 namespace Elections
 {
+
 	class Election
 	{
 		private:
@@ -25,6 +26,7 @@ namespace Elections
 		//Constructors + Distructors
 		public:
 			Election(int day, int month, int year);
+			Election(istream& in);
 			virtual ~Election();
 
 		//GETTERS
@@ -63,5 +65,12 @@ namespace Elections
 			void printDistricts() const;
 			//prints the list of parties
 			void printParties() const;
+
+		//Load and Save
+		public:
+			void save(ostream& out) const;
+			void load(istream& in);
+			void saveResults(ostream& out) const;
+			void loadResults(istream& in);
 	};
 }

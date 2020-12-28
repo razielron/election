@@ -2,7 +2,7 @@
 #include "partiesArr.h"
 #include "citizensArr.h"
 #include "citizen.h"
-#include <string.h>
+#include <string>
 #include <iostream>
 using namespace std;
 #define rcastcc reinterpret_cast<const char*>
@@ -19,9 +19,13 @@ namespace Elections
 		_citizens[0] = cit;
 	}
 
-	CitizensArr::CitizensArr(istream& in, DistrictsArr* districts, PartiesArr* parties) :
-		_logSize(0), _phySize(1), _citizens(nullptr) {
-		load(in, districts, parties);
+	CitizensArr::CitizensArr(istream& in, DistrictsArr* districts) {
+		load(in, districts);
+	}
+
+	CitizensArr::CitizensArr(istream& in, int size, CitizensArr* citizens) : _logSize(size), _phySize(size) {
+		_citizens = new Citizen * [_phySize];
+		loadById(in, citizens);
 	}
 
 	CitizensArr::~CitizensArr() {
@@ -91,11 +95,68 @@ namespace Elections
 		}
 	}
 
-	void CitizensArr::load(istream& in, DistrictsArr* districts, PartiesArr* parties) {
+	void CitizensArr::load(istream& in, DistrictsArr* districts) {
 		in.read(rcastc(_phySize), sizeof(int));
+		_logSize = _phySize;
 		_citizens = new Citizen* [_phySize];
 		for (int i = 0; i < _logSize; i++) {
-			this->appendCitizen(new Citizen(in, districts, parties));
+			this->appendCitizen(new Citizen(in, districts));
+		}
+
+		//next ex we will implament try&catch
+		if (!in.good()) {
+			cout << "Citizen load issue" << endl;
+			exit(-1);
+		}
+	}
+
+	void CitizensArr::saveId(ostream& out) const {
+		out.write(rcastcc(_logSize), sizeof(int));
+		for (int i = 0; i < _logSize; i++) {
+			_citizens[i]->saveId(out);
+		}
+
+		//next ex we will implament try&catch
+		if (!out.good()) {
+			cout << "Citizen Save issue" << endl;
+			exit(-1);
+		}
+	}
+
+	Citizen* CitizensArr::loadById(istream& in, CitizensArr* citizens) {
+		int tempSize = 0;
+		char* tempCitId;
+		
+		for (int i = 0; i < _logSize; i++) {
+			in.read(rcastc(tempSize), sizeof(int));
+			tempCitId = new char[tempSize];
+			in.read(rcastc(tempCitId), sizeof(tempCitId));
+			_citizens[i] = citizens->getCit(tempCitId);
+			delete[] tempCitId;
+
+			//next ex we will implament try&catch
+			if (!in.good()) {
+				cout << "Citizen load issue" << endl;
+				exit(-1);
+			}
+		}
+	}
+
+	void CitizensArr::saveResults(ostream& out) const {
+		for (int i = 0; i < _logSize; i++) {
+			_citizens[i]->saveResults(out);
+		}
+
+		//next ex we will implament try&catch
+		if (!out.good()) {
+			cout << "Citizen Save issue" << endl;
+			exit(-1);
+		}
+	}
+
+	void CitizensArr::loadResults(istream& in, PartiesArr* parties) {
+		for (int i = 0; i < _logSize; i++) {
+			_citizens[i]->loadResults(in, parties);
 		}
 
 		//next ex we will implament try&catch

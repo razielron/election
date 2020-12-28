@@ -9,6 +9,7 @@ namespace Elections
 	{
 	public:
 		NormalElection(int day, int month, int year) : Election(day, month, year) {}
+		NormalElection(istream& in) : Election(in) {}
 
 	public:
 		//prints all uniform district's election results

@@ -6,7 +6,7 @@
 #include "simpleElection.h"
 #include "normalElection.h"
 #include "citizen.h"
-#include <string.h>
+#include <string>
 #include <iostream>
 #include <typeinfo>
 using namespace std;

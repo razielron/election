@@ -24,7 +24,8 @@ namespace Elections {
 		public:
 			CitizensArr();
 			CitizensArr(Citizen* cit);
-			CitizensArr(istream& in, DistrictsArr* districts, PartiesArr* parties);
+			CitizensArr(istream& in, DistrictsArr* districts);
+			CitizensArr(istream& in, int size, CitizensArr* citizens);
 			~CitizensArr();
 			CitizensArr(const Citizen& cit) = delete;
 			void operator=(const CitizensArr& citArr);
@@ -36,7 +37,7 @@ namespace Elections {
 		//GETTERS
 		public:
 			//returns a citizen by given id
-			Citizen* getCit(char id[10]);
+			Citizen* getCit(char* id);
 			//returns cirtizen by given position
 			Citizen* getCit(int position);
 			//returns the number of zitizens in the array
@@ -48,8 +49,12 @@ namespace Elections {
 
 		//Load and Save
 		public:
+			void saveId(ostream& out) const;
+			Citizen* loadById(istream& in, CitizensArr* citizens);
 			void save(ostream& out) const;
-			void load(istream& in, DistrictsArr* districts, PartiesArr* parties);
+			void load(istream& in, DistrictsArr* districts);
+			void saveResults(ostream& out) const;
+			void loadResults(istream& in, PartiesArr* parties);
 	};
 
 }
