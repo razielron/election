@@ -11,6 +11,9 @@ namespace Elections
 
 	UniformDis::UniformDis(char* name, int numOfRepresentatives) : District(name, numOfRepresentatives) {}
 
+	UniformDis::UniformDis(istream& in): District(in) {}
+
+
 	ostream& operator<<(ostream& os, const UniformDis& uniDis) {
 		os << "-------------DISTRICT-START------------" << endl;
 		os << "District ID: " << uniDis.getDistrictNumber() << endl;

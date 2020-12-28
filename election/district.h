@@ -25,8 +25,9 @@ namespace Elections
 		public:
 			District() {}
 			District(char* name, int numOfRepresentatives);
+			District(istream& in);
 			virtual ~District();
-
+			
 		//GETTERS
 		public:
 			
@@ -60,6 +61,12 @@ namespace Elections
 			void appendToRepresentetives(Citizen* cit);
 			friend std::ostream& operator<<(std::ostream& os, const District& dis);
 
+			//Load and Save
+		public:
+			virtual void save(ostream& out) const;
+			virtual void load(istream& in);
+			virtual void saveResults(ostream& out) const;
+			virtual void loadResults(istream& in, CitizensArr* citizens);
 	};
 
 }

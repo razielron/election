@@ -5,6 +5,10 @@
 #include <iostream>
 using namespace std;
 
+#define rcastcc reinterpret_cast<const char*>
+#define rcastc reinterpret_cast<char*>
+
+
 namespace Elections
 {
 	int District::_districtSerialNumber = 0;
@@ -18,6 +22,11 @@ namespace Elections
 		_representatives = new CitizensArr;
 		_voters = new CitizensArr;
 		_districtId = _districtSerialNumber++;
+	}
+
+	District::District(istream& in) :_totalVotes(0), _winnerVotes(0), _winner(nullptr),
+		_representatives(nullptr), _voters(nullptr) {
+		load(in);
 	}
 
 	District::~District() {
@@ -67,4 +76,67 @@ namespace Elections
 		os << "--------------DISTRICT-END-------------" << endl;
 		return os;
 	}
+
+
+	void District::save(ostream& out) const {
+		out.write(rcastcc(_districtSerialNumber), sizeof(int));
+		out.write(rcastcc(strlen(_name)), sizeof(int));
+		out.write(rcastcc(_name), sizeof(_name));
+		out.write(rcastcc(_districtId), sizeof(int));		
+		out.write(rcastcc(_numOfRepresentatives), sizeof(int));
+		//next ex we will implament try&catch
+		if (!out.good()) {
+			cout << "Citizen Save issue" << endl;
+			exit(-1);
+		}
+	}
+
+	void District::load(istream& in) {
+		int tempSize = 0, tempSerial=0;
+		
+		in.read(rcastc(tempSerial), sizeof(int));
+		if (tempSerial > _districtSerialNumber)
+			_districtSerialNumber = tempSerial;
+
+		in.read(rcastc(tempSize), sizeof(int));
+		_name = new char[tempSize + 1];
+		in.read(rcastc(_name), sizeof(_name));
+		in.read(rcastc(_districtId), sizeof(int));
+		in.read(rcastc(_numOfRepresentatives), sizeof(int));
+		//next ex we will implament try&catch
+		if (!in.good()) {
+			cout << "Citizen load issue" << endl;
+			exit(-1);
+		}
+	}
+
+	void District::saveResults(ostream& out) const {
+		out.write(rcastcc(_totalVotes), sizeof(int));
+		out.write(rcastcc(_winnerVotes), sizeof(int));
+		//_representatives->saveId(out);
+		out.write(rcastcc(_voters->getLogSize()), sizeof(int));
+		//_voters->saveId(out);
+		out.write(rcastcc(_winner->getId()), sizeof(int));
+
+		if (!out.good()) {
+			cout << "Citizen Save issue" << endl;
+			exit(-1);
+		}
+	}
+
+	void District::loadResults(istream& in, CitizensArr* citizens) {
+		int tempSize = 0;
+		in.read(rcastc(_totalVotes), sizeof(int));
+		in.read(rcastc(_winnerVotes), sizeof(int));
+		in.read(rcastc(_numOfRepresentatives), sizeof(int));
+		//_representatives = new CitizensArr(in, _numOfRepresentatives, citizens);
+		in.read(rcastc(tempSize), sizeof(int));
+		//_voters = new CitizensArr(in, tempSize, citizens);
+		in.read(rcastc(_winner->getId()), sizeof(int));
+		if (!in.good()) {
+			cout << "Citizen load issue" << endl;
+			exit(-1);
+		}
+	}
 }
+

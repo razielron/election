@@ -41,6 +41,11 @@ namespace Elections {
 			//prints all districts and their data
 			void printDistricts() const;
 
+			//Load and Save
+		public:
+			void save(ostream& out) const;
+			void load(istream& in);
+
 
 	};
 
