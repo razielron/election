@@ -11,6 +11,7 @@ namespace Elections
 	public:
 		UniformDis();
 		UniformDis(char* name, int numOfRepresentatives);
+		UniformDis(istream& in);
 	
 
 	public:

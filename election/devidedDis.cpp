@@ -6,11 +6,16 @@
 #include <iostream>
 using namespace std;
 
+#define rcastcc reinterpret_cast<const char*>
+#define rcastc reinterpret_cast<char*>
+
 namespace Elections
 {
 	DevidedDis::DevidedDis() {}
 
 	DevidedDis::DevidedDis(char* name, int numOfRepresentatives) : District(name, numOfRepresentatives){}
+
+	DevidedDis::DevidedDis(istream& in): District(in) {	}
 
 
 	ostream& operator<<(ostream& os, const DevidedDis& devDis) {
@@ -40,4 +45,5 @@ namespace Elections
 		cout << "--------------------------------------" << endl << endl;
 		cout << "--------------DISTRICT-RESULTS-END-------------" << endl;
 	}
+
 }
