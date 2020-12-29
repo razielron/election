@@ -40,6 +40,8 @@ namespace Elections
 				return new DevidedDis(in);
 				break;
 			}
+			default:
+				return nullptr;
 		}
 
 		//next ex we will implament try&catch

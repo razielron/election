@@ -66,7 +66,7 @@ namespace Elections
 			virtual void save(ostream& out) const;
 			virtual void load(istream& in);
 			virtual void saveResults(ostream& out) const;
-			virtual void loadResults(istream& in, CitizensArr* citizens);
+			virtual void loadResults(istream& in, CitizensArr* citizens, PartiesArr* parties);
 	};
 
 }

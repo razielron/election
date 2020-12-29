@@ -1,5 +1,6 @@
 #include "district.h"
 #include "party.h"
+#include "partiesArr.h"
 #include <string.h>
 #include <cmath>
 #include <iostream>
@@ -97,7 +98,7 @@ namespace Elections
 		in.read(rcastc(tempSerial), sizeof(int));
 		if (tempSerial > _districtSerialNumber)
 			_districtSerialNumber = tempSerial;
-
+	
 		in.read(rcastc(tempSize), sizeof(int));
 		_name = new char[tempSize + 1];
 		in.read(rcastc(_name), sizeof(_name));
@@ -124,15 +125,16 @@ namespace Elections
 		}
 	}
 
-	void District::loadResults(istream& in, CitizensArr* citizens) {
-		int tempSize = 0;
+	void District::loadResults(istream& in, CitizensArr* citizens, PartiesArr* parties) {
+		int tempSize = 0, tempId=0;
 		in.read(rcastc(_totalVotes), sizeof(int));
 		in.read(rcastc(_winnerVotes), sizeof(int));
 		in.read(rcastc(_numOfRepresentatives), sizeof(int));
-		//_representatives = new CitizensArr(in, _numOfRepresentatives, citizens);
+		_representatives = new CitizensArr(in, _numOfRepresentatives, citizens);
 		in.read(rcastc(tempSize), sizeof(int));
-		//_voters = new CitizensArr(in, tempSize, citizens);
-		in.read(rcastc(_winner->getId()), sizeof(int));
+		_voters = new CitizensArr(in, tempSize, citizens);
+		in.read(rcastc(tempId), sizeof(int));
+		_winner = parties->getParty(tempId);
 		if (!in.good()) {
 			cout << "Citizen load issue" << endl;
 			exit(-1);

@@ -1,5 +1,6 @@
 #include "districtsArr.h"
 #include "districtLoader.h"
+#include "citizensArr.h"
 #include "devidedDis.h"
 #include "uniformDis.h"
 #include "district.h"
@@ -19,6 +20,11 @@ namespace Elections
 		_districts = new District*[_phySize];
 		_districts[0] = dis;
 	}
+
+	DistrictsArr::DistrictsArr(istream& in) {
+		load(in);
+	}
+
 
 	DistrictsArr::~DistrictsArr() {
 		for (int i = 0;i < _logSize;i++) {
@@ -103,4 +109,28 @@ namespace Elections
 			exit(-1);
 		}
 	}
+
+	void DistrictsArr::saveResults(ostream& out) const {
+		for (int i = 0; i < _logSize; i++) {
+			_districts[i]->saveResults(out);
+		}
+
+		//next ex we will implament try&catch
+		if (!out.good()) {
+			cout << "DistrictsArr Save issue" << endl;
+			exit(-1);
+		}
+	}
+
+	void DistrictsArr::loadResults(istream& in, CitizensArr* citArr) {
+		for (int i = 0; i < _logSize; i++) {
+			_districts[i]->loadResults(in, citArr);
+		}
+
+		//next ex we will implament try&catch
+		if (!in.good()) {
+			cout << "DistrictsArr Load issue" << endl;
+			exit(-1);
+		}
+	}	
 }

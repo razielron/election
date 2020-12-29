@@ -5,7 +5,7 @@ using namespace std;
 namespace Elections {
 
 	class District;
-
+	class CitizensArr;
 	class DistrictsArr
 	{
 		private:
@@ -21,6 +21,7 @@ namespace Elections {
 		public:
 			DistrictsArr();
 			DistrictsArr(District* dis);
+			DistrictsArr(istream& in);
 			~DistrictsArr();
 			//DistrictsArr(const District& dis) = delete;
 			void operator=(const DistrictsArr& disArr);
@@ -45,6 +46,8 @@ namespace Elections {
 		public:
 			void save(ostream& out) const;
 			void load(istream& in);
+			void saveResults(ostream& out) const;
+			void loadResults(istream& in, CitizensArr* citArr);
 
 
 	};
