@@ -1,4 +1,4 @@
-#include <string.h>
+#include <string>
 #include <typeinfo>
 #include "election.h"
 #include "district.h"
@@ -8,6 +8,8 @@
 #include "Party.h"
 #include "partiesArr.h"
 #include "partyCandidates.h"
+#define rcastcc reinterpret_cast<const char*>
+#define rcastc reinterpret_cast<char*>
 
 namespace Elections
 {
@@ -16,6 +18,10 @@ namespace Elections
 		_districts = new DistrictsArr;
 		_parties = new PartiesArr;
 		_citizens = new CitizensArr;
+	}
+
+	Election::Election(istream& in) {
+		load(in);
 	}
 
 	Election::~Election() {
@@ -60,6 +66,50 @@ namespace Elections
 		_parties->addRepresentetives();
 		_parties->setDistrictWinner();
 		_parties->setPartyTotalElectors();
+	}
+
+	void Election::save(ostream& out) const {
+		out.write(rcastcc(_day), sizeof(int));
+		out.write(rcastcc(_month), sizeof(int));
+		out.write(rcastcc(_year), sizeof(int));
+
+		//next ex we will implament try&catch
+		if (!out.good()) {
+			cout << "Election Save issue" << endl;
+			exit(-1);
+		}
+
+		_districts->save(out);
+		_citizens->save(out);
+		_parties->save(out);
+	}
+
+	void Election::load(istream& in) {
+		in.read(rcastc(_day), sizeof(int));
+		in.read(rcastc(_month), sizeof(int));
+		in.read(rcastc(_year), sizeof(int));
+
+		//next ex we will implament try&catch
+		if (!in.good()) {
+			cout << "Election load issue" << endl;
+			exit(-1);
+		}
+
+		_districts = new DistrictsArr(in);
+		_citizens = new CitizensArr(in, _districts);
+		_parties = new PartiesArr(in, _districts, _parties);
+	}
+
+	void Election::saveResults(ostream& out) const {
+		_districts->saveResults(out);
+		_citizens->saveResults(out);
+		_parties->saveResults(out);
+	}
+
+	void Election::loadResults(istream& in) {
+		_districts->loadResults(in, _citizens, _parties);
+		_citizens->loadResults(in, _parties);
+		_parties->loadResults(in, _districts, _citizens);
 	}
 
 }

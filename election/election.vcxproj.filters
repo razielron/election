@@ -55,6 +55,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="districtLoader.cpp">
+    <ClCompile Include="electionLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -96,6 +97,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="districtLoader.h">
+    <ClInclude Include="electionLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

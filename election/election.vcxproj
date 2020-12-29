@@ -146,6 +146,7 @@
     <ClCompile Include="districtLoader.cpp" />
     <ClCompile Include="districtsArr.cpp" />
     <ClCompile Include="election.cpp" />
+    <ClCompile Include="electionLoader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="normalElection.cpp" />
     <ClCompile Include="partiesArr.cpp" />
@@ -162,6 +163,7 @@
     <ClInclude Include="districtLoader.h" />
     <ClInclude Include="districtsArr.h" />
     <ClInclude Include="election.h" />
+    <ClInclude Include="electionLoader.h" />
     <ClInclude Include="normalElection.h" />
     <ClInclude Include="partiesArr.h" />
     <ClInclude Include="party.h" />

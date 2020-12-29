@@ -7,9 +7,7 @@
 #include "partiesArr.h"
 #include "partyCandidates.h"
 #include <typeinfo>
-#include <string.h>
-#include <typeinfo>
-#include <string.h>
+#include <string>
 
 namespace Elections
 {

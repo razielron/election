@@ -22,7 +22,7 @@ namespace Elections
 		public:
 			Citizen();
 			Citizen(char* id, int yearOfBirth, char* name, District* dis);
-			Citizen(istream& in, DistrictsArr* districts, PartiesArr* parties);
+			Citizen(istream& in, DistrictsArr* districts);
 			~Citizen();
 			friend ostream& operator<<(ostream& os, const Citizen& cit);
 			
@@ -42,8 +42,10 @@ namespace Elections
 
 		//Load and Save
 		public:
+			void saveId(ostream& out) const;
 			void save(ostream& out) const;
-			void load(istream& in, DistrictsArr* districts, PartiesArr* parties);
-
+			void load(istream& in, DistrictsArr* districts);
+			void saveResults(ostream& out) const;
+			void loadResults(istream& in, PartiesArr* parties);
 	};
 }
