@@ -8,15 +8,32 @@
 #include "citizen.h"
 #include <string>
 #include <iostream>
+#include <fstream>
 #include <typeinfo>
 using namespace std;
 using namespace Elections;
 
+enum class Menu {
+	Exit, addNewDistrict, addNewCitizen, addNewParty, addNewCandidate,
+	printDistricts, printCitizens, printParties, vote, printElectionResults,
+	createElection, loadElection, saveElection
+};
+
 namespace Elections {
-	//Prints the menu
-	void printMenu() {
-		cout << endl << endl << endl;
+
+	//Prints first menu
+	void printFistMenu() {
 		cout << "------------------------------------------------------" << endl;
+		cout << "Press 1 to create new Election Round" << endl;
+		cout << "Press 2 to load an old Election Round" << endl;
+		cout << "Press 3 to Exit" << endl;
+		cout << "------------------------------------------------------" << endl;
+	}
+
+	//Prints main menu
+	void printMainMenu() {
+		cout << endl << endl << endl;
+		cout << "--------------------------MAIN-MENU----------------------------" << endl;
 		cout << "Press 1 for adding a district" << endl;
 		cout << "Press 2 for adding a citizen" << endl;
 		cout << "Press 3 for adding a party" << endl;
@@ -27,7 +44,7 @@ namespace Elections {
 		cout << "Press 8 to vote" << endl;
 		cout << "Press 9 to display election results" << endl;
 		cout << "Press 0 to exit programe" << endl;
-		cout << "------------------------------------------------------" << endl;
+		cout << "---------------------------------------------------------------" << endl;
 		cout << endl << endl << endl;
 	}
 
@@ -235,10 +252,10 @@ namespace Elections {
 		cout << "-------------------ELECTION-RESULTS-END----------------" << endl;
 	}
 
-	Election* createElection() {
+	//creates new election round
+	void createElection(Election* election) {
 		int day = 1, month = 1, year = 2020, numOfRep = 0, type = -1;
 		District* dis;
-		Election* election;
 		char name[256] = "DISTRICT ONE";
 
 		cout << "Enter election date:" << endl << "Day: ";
@@ -270,57 +287,133 @@ namespace Elections {
 		else {
 			election = new NormalElection(day, month, year);
 		}
+	}
 
-		return election;
+	//save an existing election round into binary file
+	void saveElection(Election* election) {
+		char name[256];
+
+		cout << "Enter File Name: ";
+		cin >> name;
+
+		ofstream outfile(name, ios::binary);
+		if (!outfile.good()) {
+			cout << "Error opening file for write" << endl;
+			exit(-1);
+		}
+
+		election->save(outfile);
+		election->saveResults(outfile);
+	}
+
+	//load election round from binary file
+	void loadElection(Election* election) {
+		char name[256];
+
+		cout << "Enter File Name: ";
+		cin >> name;
+
+		ifstream infile(name, ios::binary);
+		if (!infile.good()) {
+			cout << "Error opening file for read" << endl;
+			exit(-1);
+		}
+
+		if (election) {
+			election->~Election();
+		}
+
+		election = new Election(infile);
+		election->loadResults(infile);
+	}
+
+	//main menu
+	void mainMenu(Election* election) {
+		int input = 1;
+
+		while (input) {
+			printMainMenu();
+			cin >> input;
+
+			switch (input)
+			{
+				case static_cast<int>(Menu::addNewDistrict) :
+					addNewDistrict(election);
+					break;
+				case static_cast<int>(Menu::addNewCitizen) :
+					addNewCitizen(election);
+					break;
+				case static_cast<int>(Menu::addNewParty) :
+					addNewParty(election);
+					break;
+				case static_cast<int>(Menu::addNewCandidate) :
+					addNewCandidate(election);
+					break;
+				case static_cast<int>(Menu::printDistricts) :
+					printDistricts(election);
+					break;
+				case static_cast<int>(Menu::printCitizens) :
+					printCitizens(election);
+					break;
+				case static_cast<int>(Menu::printParties) :
+					printParties(election);
+					break;
+				case static_cast<int>(Menu::vote) :
+					vote(election);
+					break;
+				case static_cast<int>(Menu::printElectionResults) :
+					printElectionResults(election);
+					break;
+				case static_cast<int>(Menu::saveElection) :
+					saveElection(election);
+					break;
+				case static_cast<int>(Menu::loadElection) :
+					loadElection(election);
+					break;
+				case static_cast<int>(Menu::Exit) :
+					input = 0;
+					break;
+				default:
+					cout << "Please enter VALID menu number" << endl;
+					break;
+			}
+		}
+	}
+
+	//first menu
+	void firstMenu(Election* election) {
+		int input = 1;
+
+		while (input) {
+			printFistMenu();
+			cin >> input;
+
+			switch (input) {
+			case (static_cast<int>(Menu::createElection) - 9):
+				input = 0;
+				createElection(election);
+				break;
+			case (static_cast<int>(Menu::loadElection) - 9):
+				input = 0;
+				loadElection(election);
+				break;
+			case static_cast<int>(Menu::Exit) :
+				input = 0;
+				break;
+			default:
+				cout << "Please enter VALID menu number" << endl;
+				break;
+			}
+		}
 	}
 }
 
-enum class Menu { Exit, addNewDistrict, addNewCitizen, addNewParty,
-	addNewCandidate, printDistricts, printCitizens, printParties, vote, printElectionResults};
-
-
 void main() {
-	int input = 1;
-	Election* election = createElection();
+	Election* election = nullptr;
 
-	while (input) {
-		printMenu();
+	firstMenu(election);
 
-		cin >> input;
-		switch (input)
-		{
-		case static_cast<int>(Menu::addNewDistrict):
-			addNewDistrict(election);
-			break;
-		case static_cast<int>(Menu::addNewCitizen):
-			addNewCitizen(election);
-			break;
-		case static_cast<int>(Menu::addNewParty):
-			addNewParty(election);
-			break;
-		case static_cast<int>(Menu::addNewCandidate):
-			addNewCandidate(election);
-			break;
-		case static_cast<int>(Menu::printDistricts):
-			printDistricts(election);
-			break;
-		case static_cast<int>(Menu::printCitizens):
-			printCitizens(election);
-			break;
-		case static_cast<int>(Menu::printParties):
-			printParties(election);
-			break;
-		case static_cast<int>(Menu::vote):
-			vote(election);
-			break;
-		case static_cast<int>(Menu::printElectionResults):
-			printElectionResults(election);
-			break;
-		case static_cast<int>(Menu::Exit):
-			input = 0;
-			break;
-		default:
-			break;
-		}
+	if (election) {
+		mainMenu(election);
 	}
 }
