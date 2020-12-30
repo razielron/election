@@ -6,6 +6,7 @@ namespace Elections {
 
 	class District;
 	class CitizensArr;
+	class PartiesArr;
 	class DistrictsArr
 	{
 		private:
@@ -47,7 +48,7 @@ namespace Elections {
 			void save(ostream& out) const;
 			void load(istream& in);
 			void saveResults(ostream& out) const;
-			void loadResults(istream& in, CitizensArr* citArr);
+			void loadResults(istream& in, CitizensArr* citArr, PartiesArr* partiesArr);
 
 
 	};

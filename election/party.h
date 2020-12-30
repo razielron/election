@@ -7,6 +7,7 @@ namespace Elections
 {
 
 	class PartyCandidates;
+	class CitizensArr;
 	class Party
 	{
 		private:
@@ -23,6 +24,7 @@ namespace Elections
 		//Constructors + Distructors
 		public:
 			Party() {}
+			Party(istream& in, DistrictsArr* districts, CitizensArr* citArr);
 			Party(char* name, Citizen* cit);
 			friend ostream& operator<<(ostream& os, const Party& party);
 
@@ -58,5 +60,14 @@ namespace Elections
 			void printDistrictPartyDetails(District* dis) const;
 			//prints the election's results of the party
 			void printResults() const;
+
+
+			//Load and Save
+		public:
+			void save(ostream& out) const;
+			void load(istream& in, DistrictsArr* districts, CitizensArr* citArr);
+			void saveResults(ostream& out) const;
+			void loadResults(istream& in);
+			
 	};
 }

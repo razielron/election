@@ -2,18 +2,25 @@
 #include "uniformDis.h"
 #include "devidedDis.h"
 #include "district.h"
+#include "districtsArr.h"
+#include "citizensArr.h"
 #include <string.h>
 #include <iostream>
 #include <cmath>
 #include <typeinfo>
 using namespace std;
 
+#define rcastcc reinterpret_cast<const char*>
+#define rcastc reinterpret_cast<char*>
+
 namespace Elections
 {
-	PartyCandidates::PartyCandidates() {
-		_head = nullptr;
-		_tail = nullptr;
+
+	PartyCandidates::PartyCandidates(istream& in, DistrictsArr* districts, CitizensArr* citizens) : PartyCandidates() {
+		load(in, districts, citizens);
 	}
+
+
 
 	PartyCandidates::~PartyCandidates() {
 		ListItem* temp = _head;
@@ -39,7 +46,7 @@ namespace Elections
 		else {
 			_tail->next = temp;
 		}
-		
+
 		_tail = temp;
 	}
 
@@ -102,6 +109,16 @@ namespace Elections
 			temp = temp->next;
 		}
 		return temp->partyCandidates;
+	}
+
+	int PartyCandidates::getNumOfNodes() const {
+		int counter = 0;
+		ListItem* temp = _head;
+		while (temp) {
+			counter++;
+			temp = temp->next;
+		}
+		return counter++;
 	}
 
 	int PartyCandidates::getNumOfElectors(ListItem* listItem) {
@@ -177,7 +194,7 @@ namespace Elections
 
 	int PartyCandidates::getPartyNumOfElectors(District* dis) {
 		ListItem* temp = _head;
-		while (temp && (temp->dis != dis)){
+		while (temp && (temp->dis != dis)) {
 			temp = temp->next;
 		}
 		return temp->numOfElectors;
@@ -201,4 +218,52 @@ namespace Elections
 		cout << "Number of votes for party: " << temp->numOfVotes << endl;
 		cout << endl;
 	}
+
+	void PartyCandidates::save(ostream& out) const {
+		out.write(rcastcc(getNumOfNodes()), sizeof(int));
+		ListItem* temp = _head;
+		while (temp) {
+			out.write(rcastcc(temp->dis->getDistrictNumber()), sizeof(int));
+			temp->partyCandidates->saveId(out);
+			temp = temp->next;
+		}
+	}
+
+	void PartyCandidates::load(istream& in, DistrictsArr* districts, CitizensArr* citizens) {
+		int numOfNodes=0, temp=0;
+		District* dis;
+		CitizensArr* tempCit;
+
+		in.read(rcastc(numOfNodes), sizeof(int));
+		for (int i = 0;i < numOfNodes; i++) {
+			in.read(rcastc(temp), sizeof(int));
+			dis = districts->getDistrict(temp);
+			addTail(dis);
+			in.read(rcastc(temp), sizeof(int));
+			_tail->partyCandidates = new CitizensArr(in, temp, citizens);
+		}
+	}
+
+	void PartyCandidates::saveResults(ostream& out) const {
+		if (!_head)
+			return;
+		ListItem* temp = _head;
+		while(temp) {
+			//out.write(rcastcc(temp->dis->getDistrictNumber()), sizeof(int));
+			out.write(rcastcc(temp->numOfElectors), sizeof(int));
+			out.write(rcastcc(temp->numOfVotes), sizeof(int));
+		}
+	}
+
+
+	void PartyCandidates::loadResults(istream& in) {
+		ListItem* temp = _head;
+		int numOfNodes = getNumOfNodes();
+		for (int i = 0;i < numOfNodes; i++) {
+			in.read(rcastc(temp->numOfElectors), sizeof(int));
+			in.read(rcastc(temp->numOfVotes), sizeof(int));
+			temp = temp->next;
+		}
+	}
+
 }

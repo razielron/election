@@ -4,7 +4,9 @@ using namespace std;
 
 namespace Elections {
 
+	class CitizensArr;
 	class District;
+	class DistrictsArr;
 	class Party;
 	class PartiesArr
 	{
@@ -21,6 +23,7 @@ namespace Elections {
 		public:
 			PartiesArr();
 			PartiesArr(Party* party);
+			PartiesArr(istream& in, DistrictsArr* districts, CitizensArr* citizens);
 			~PartiesArr();
 			PartiesArr(const Party& party) = delete;
 			void operator=(const PartiesArr& partyArr);
@@ -61,6 +64,13 @@ namespace Elections {
 			void printDistrictPartyDetails(int& i, District* dis);
 			//go over all parties and prints thier results
 			void printResults() const;
+
+			//Load and Save
+		public:
+			void save(ostream& out) const;
+			void load(istream& in, DistrictsArr* districts, CitizensArr* citizens);
+			void saveResults(ostream& out) const;
+			void loadResults(istream& in);
 	};
 
 }

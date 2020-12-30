@@ -1,6 +1,7 @@
 #include "districtsArr.h"
 #include "districtLoader.h"
 #include "citizensArr.h"
+#include "partiesArr.h"
 #include "devidedDis.h"
 #include "uniformDis.h"
 #include "district.h"
@@ -122,9 +123,9 @@ namespace Elections
 		}
 	}
 
-	void DistrictsArr::loadResults(istream& in, CitizensArr* citArr) {
+	void DistrictsArr::loadResults(istream& in, CitizensArr* citArr, PartiesArr* partiesArr) {
 		for (int i = 0; i < _logSize; i++) {
-			_districts[i]->loadResults(in, citArr);
+			_districts[i]->loadResults(in, citArr, partiesArr);
 		}
 
 		//next ex we will implament try&catch

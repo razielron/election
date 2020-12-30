@@ -5,7 +5,7 @@
 
 namespace Elections
 {
-
+	class DistrictArr;
 	class PartyCandidates
 	{
 		private:
@@ -31,7 +31,8 @@ namespace Elections
 
 		//Constructors + Distructors
 		public:
-			PartyCandidates();
+			PartyCandidates() : _head(nullptr), _tail(nullptr) {}
+			PartyCandidates(istream& in, DistrictsArr* districts, CitizensArr* citizens);
 			~PartyCandidates();
 			void addVote(District* dis);
 
@@ -39,6 +40,7 @@ namespace Elections
 		public:
 			CitizensArr* getDistrictPartyCandidates(int position);
 			CitizensArr* getDistrictPartyCandidates(District* dis);
+			int getNumOfNodes() const;
 			int getNumOfElectors(ListItem* listItem);
 			int setNumOfElectors(ListItem* listItem);
 			int getPartyNumOfVotes() const;
@@ -56,5 +58,12 @@ namespace Elections
 			void printPartyCandidates() const;
 			//prints the party results in each district
 			void printResults(District* dis) const;
+
+			//Load and Save
+		public:
+			void save(ostream& out) const;
+			void load(istream& in, DistrictsArr* districts, CitizensArr* citizens);
+			void saveResults(ostream& out) const;
+			void loadResults(istream& in);
 	};
 }
