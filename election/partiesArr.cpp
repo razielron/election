@@ -1,15 +1,24 @@
+#include "citizensArr.h"
 #include "district.h"
+#include "districtsArr.h"
 #include "partiesArr.h"
 #include "PartyCandidates.h"
 #include "party.h"
-#include <string.h>
+#include <string>
 #include <iostream>
 using namespace std;
+
+#define rcastcc reinterpret_cast<const char*>
+#define rcastc reinterpret_cast<char*>
 
 namespace Elections
 {
 	PartiesArr::PartiesArr() : _logSize(0), _phySize(1) {
 		_parties = new Party*[_phySize];
+	}
+
+	PartiesArr::PartiesArr(istream& in, DistrictsArr* districts, CitizensArr* citizens) {
+		load(in, districts, citizens);
 	}
 
 	PartiesArr::PartiesArr(Party* party) : _logSize(1), _phySize(2) {
@@ -160,6 +169,57 @@ namespace Elections
 	void PartiesArr::addRepresentetives() {
 		for (int i = 0; i < _logSize; i++) {
 			_parties[i]->addRepresentetives();
+		}
+	}
+
+	void PartiesArr::save(ostream& out) const {
+		out.write(rcastcc(_logSize), sizeof(int));
+		for (int i = 0;i < _logSize;i++) {
+			_parties[i]->save(out);
+		}
+		//next ex we will implament try&catch
+		if (!out.good()) {
+			cout << "DistrictArr Save issue" << endl;
+			exit(-1);
+		}
+	}
+
+	void PartiesArr::load(istream& in, DistrictsArr* districts, CitizensArr* citizens) {
+		in.read(rcastc(_phySize), sizeof(int));
+		_logSize = _phySize;
+		_parties = new Party* [_logSize];
+		for (int i = 0; i < _logSize; i++) {
+			_parties[i]->load(in, districts, citizens);
+		}
+
+		//next ex we will implament try&catch
+		if (!in.good()) {
+			cout << "DistrictArr load issue" << endl;
+			exit(-1);
+		}
+	}
+
+	void PartiesArr::saveResults(ostream& out) const {
+		for (int i = 0; i < _logSize; i++) {
+			_parties[i]->saveResults(out);
+		}
+
+		//next ex we will implament try&catch
+		if (!out.good()) {
+			cout << "PartiesArr Save issue" << endl;
+			exit(-1);
+		}
+	}
+
+	void PartiesArr::loadResults(istream& in) {
+		for (int i = 0; i < _logSize; i++) {
+			_parties[i]->loadResults(in);
+		}
+
+		//next ex we will implament try&catch
+		if (!in.good()) {
+			cout << "PartiesArr Load issue" << endl;
+			exit(-1);
 		}
 	}
 

@@ -97,7 +97,7 @@ namespace Elections
 
 		_districts = new DistrictsArr(in);
 		_citizens = new CitizensArr(in, _districts);
-		_parties = new PartiesArr(in, _districts, _parties);
+		_parties = new PartiesArr(in, _districts, _citizens);
 	}
 
 	void Election::saveResults(ostream& out) const {
@@ -109,7 +109,7 @@ namespace Elections
 	void Election::loadResults(istream& in) {
 		_districts->loadResults(in, _citizens, _parties);
 		_citizens->loadResults(in, _parties);
-		_parties->loadResults(in, _districts, _citizens);
+		_parties->loadResults(in);
 	}
 
 }
