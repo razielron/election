@@ -233,9 +233,8 @@ namespace Elections
 		int numOfNodes=0, temp=0;
 		District* dis;
 		CitizensArr* tempCit;
+
 		in.read(rcastc(numOfNodes), sizeof(int));
-		if (!numOfNodes)
-			return;
 		for (int i = 0;i < numOfNodes; i++) {
 			in.read(rcastc(temp), sizeof(int));
 			dis = districts->getDistrict(temp);
@@ -259,15 +258,10 @@ namespace Elections
 
 	void PartyCandidates::loadResults(istream& in) {
 		ListItem* temp = _head;
-		int tempInfo = -1;
 		int numOfNodes = getNumOfNodes();
-		if (!numOfNodes)
-			return;
 		for (int i = 0;i < numOfNodes; i++) {
-			in.read(rcastc(temp), sizeof(int));
-			temp->numOfElectors = tempInfo;
-			in.read(rcastc(temp), sizeof(int));
-			temp->numOfVotes = tempInfo;
+			in.read(rcastc(temp->numOfElectors), sizeof(int));
+			in.read(rcastc(temp->numOfVotes), sizeof(int));
 			temp = temp->next;
 		}
 	}

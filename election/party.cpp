@@ -100,7 +100,7 @@ namespace Elections
 
 	void Party::load(istream& in,DistrictsArr* districts, CitizensArr* citArr) {
 		int temp = 0;
-		char* tempId;
+		char* canId;
 
 		in.read(rcastc(temp), sizeof(int));
 		if (temp > _partySerialNumber)
@@ -111,8 +111,8 @@ namespace Elections
 		in.read(rcastc(_name), sizeof(_name));
 		in.read(rcastc(_partyId), sizeof(int));
 		in.read(rcastc(temp), sizeof(int));
-		tempId = new char[temp + 1];
-		_candidate = citArr->getCit(tempId);
+		canId = new char[temp + 1];
+		_candidate = citArr->getCit(canId);
 		_partyCandidates->load(in, districts, citArr);
 
 		//next ex we will implament try&catch
