@@ -3,6 +3,7 @@
 #include "citizensArr.h"
 #include "citizen.h"
 #include <string>
+#include <string.h>
 #include <iostream>
 using namespace std;
 #define rcastcc reinterpret_cast<const char*>
@@ -23,8 +24,7 @@ namespace Elections
 		load(in, districts);
 	}
 
-	CitizensArr::CitizensArr(istream& in, int size, CitizensArr* citizens) : _logSize(size), _phySize(size) {
-		_citizens = new Citizen * [_phySize];
+	CitizensArr::CitizensArr(istream& in, CitizensArr* citizens) {
 		loadById(in, citizens);
 	}
 
@@ -63,11 +63,19 @@ namespace Elections
 		delete[] temp;
 	}
 
+	void CitizensArr::deleteArrPointer() {
+		delete[] _citizens;
+	}
+
 	void CitizensArr::appendCitizen(Citizen* cit) {
 		if (_phySize <= _logSize) {
-			CitizensArr::increaseCitizensArr();
+			increaseCitizensArr();
 		}
 		_citizens[_logSize++] = cit;
+	}
+
+	int CitizensArr::strCompare(char* str1, char* str2) {
+		return 1;
 	}
 
 	Citizen* CitizensArr::getCit(char* id) {
@@ -83,7 +91,7 @@ namespace Elections
 	}
 
 	void CitizensArr::save(ostream& out) const {
-		out.write(rcastcc(_logSize), sizeof(int));
+		out.write(rcastcc(&_logSize), sizeof(int));
 		for (int i = 0; i < _logSize; i++) {
 			_citizens[i]->save(out);
 		}
@@ -96,11 +104,11 @@ namespace Elections
 	}
 
 	void CitizensArr::load(istream& in, DistrictsArr* districts) {
-		in.read(rcastc(_phySize), sizeof(int));
+		in.read(rcastc(&_phySize), sizeof(int));
 		_logSize = _phySize;
 		_citizens = new Citizen* [_phySize];
-		for (int i = 0; i < _logSize; i++) {
-			this->appendCitizen(new Citizen(in, districts));
+		for (int i = 0; i < _phySize; i++) {
+			_citizens[i] = new Citizen(in, districts);
 		}
 
 		//next ex we will implament try&catch
@@ -111,7 +119,7 @@ namespace Elections
 	}
 
 	void CitizensArr::saveId(ostream& out) const {
-		out.write(rcastcc(_logSize), sizeof(int));
+		out.write(rcastcc(&_logSize), sizeof(int));
 		for (int i = 0; i < _logSize; i++) {
 			_citizens[i]->saveId(out);
 		}
@@ -123,14 +131,19 @@ namespace Elections
 		}
 	}
 
-	Citizen* CitizensArr::loadById(istream& in, CitizensArr* citizens) {
+	void CitizensArr::loadById(istream& in, CitizensArr* citizens) {
 		int tempSize = 0;
 		char* tempCitId;
 		
+		in.read(rcastc(&_phySize), sizeof(int));
+		_logSize = _phySize;
+		_citizens = new Citizen * [_phySize];
+
 		for (int i = 0; i < _logSize; i++) {
-			in.read(rcastc(tempSize), sizeof(int));
-			tempCitId = new char[tempSize];
-			in.read(rcastc(tempCitId), sizeof(tempCitId));
+			in.read(rcastc(&tempSize), sizeof(int));
+			tempCitId = new char[tempSize + 1];
+			in.read(rcastc(tempCitId), sizeof(char) * tempSize);
+			tempCitId[tempSize] = '\0';
 			_citizens[i] = citizens->getCit(tempCitId);
 			delete[] tempCitId;
 

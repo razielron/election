@@ -173,7 +173,7 @@ namespace Elections
 	}
 
 	void PartiesArr::save(ostream& out) const {
-		out.write(rcastcc(_logSize), sizeof(int));
+		out.write(rcastcc(&_logSize), sizeof(int));
 		for (int i = 0;i < _logSize;i++) {
 			_parties[i]->save(out);
 		}
@@ -185,11 +185,11 @@ namespace Elections
 	}
 
 	void PartiesArr::load(istream& in, DistrictsArr* districts, CitizensArr* citizens) {
-		in.read(rcastc(_phySize), sizeof(int));
+		in.read(rcastc(&_phySize), sizeof(int));
 		_logSize = _phySize;
-		_parties = new Party* [_logSize];
-		for (int i = 0; i < _logSize; i++) {
-			_parties[i]->load(in, districts, citizens);
+		_parties = new Party* [_phySize];
+		for (int i = 0; i < _phySize; i++) {
+			_parties[i] = new Party(in, districts, citizens);
 		}
 
 		//next ex we will implament try&catch

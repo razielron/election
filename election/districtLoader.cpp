@@ -12,12 +12,14 @@ using namespace std;
 namespace Elections
 {
 	void DistrictLoader::save(ostream& out, District* dis){
+		DistrictType type;
 		if ((typeid(*dis)) == (typeid(UniformDis))) {
-			out.write(rcastcc(DistrictType::UNIFORM), sizeof(DistrictType));
+			type = DistrictType::UNIFORM;
 		}	
 		else {
-			out.write(rcastcc(DistrictType::DEVIDED), sizeof(DistrictType));
+			type = DistrictType::DEVIDED;
 		}
+		out.write(rcastcc(&type), sizeof(DistrictType));
 		dis->save(out);
 
 		//next ex we will implament try&catch

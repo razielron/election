@@ -21,8 +21,13 @@ namespace Elections
 		_partyCandidates = new PartyCandidates;
 	}
 
-	Party::Party(istream& in, DistrictsArr* districts, CitizensArr* citArr): _totalElectors(0) {
+	Party::Party(istream& in, DistrictsArr* districts, CitizensArr* citArr) : _totalElectors(0) {
 		load(in, districts, citArr);
+	}
+
+	Party::~Party() {
+		delete[] _name;
+		_partyCandidates->~PartyCandidates();
 	}
 
 	ostream& operator<<(ostream& os, const Party& party) {
@@ -83,12 +88,18 @@ namespace Elections
 	}
 
 	void Party::save(ostream& out) const {
-		out.write(rcastcc(_partySerialNumber), sizeof(int));
-		out.write(rcastcc(strlen(_name)), sizeof(int));
-		out.write(rcastcc(_name), sizeof(_name));
-		out.write(rcastcc(_partyId), sizeof(int));
-		out.write(rcastcc(strlen(_candidate->getId())), sizeof(int));
-		out.write(rcastcc(_candidate->getId()), sizeof(_candidate->getId()));
+		int temp;
+		const char* tempId;
+
+		out.write(rcastcc(&_partySerialNumber), sizeof(int));
+		temp = strlen(_name);
+		out.write(rcastcc(&temp), sizeof(int));
+		out.write(rcastcc(_name), sizeof(char) * temp);
+		out.write(rcastcc(&_partyId), sizeof(int));
+		tempId = _candidate->getId();
+		temp = strlen(tempId);
+		out.write(rcastcc(&temp), sizeof(int));
+		out.write(rcastcc(tempId), sizeof(char) * temp);
 		_partyCandidates->save(out);
 
 		//next ex we will implament try&catch
@@ -98,22 +109,25 @@ namespace Elections
 		}
 	}
 
-	void Party::load(istream& in,DistrictsArr* districts, CitizensArr* citArr) {
+	void Party::load(istream& in, DistrictsArr* districts, CitizensArr* citArr) {
 		int temp = 0;
 		char* canId;
 
-		in.read(rcastc(temp), sizeof(int));
+		in.read(rcastc(&temp), sizeof(int));
 		if (temp > _partySerialNumber)
 			_partySerialNumber = temp;
 
-		in.read(rcastc(temp), sizeof(int));
+		in.read(rcastc(&temp), sizeof(int));
 		_name = new char[temp + 1];
-		in.read(rcastc(_name), sizeof(_name));
-		in.read(rcastc(_partyId), sizeof(int));
-		in.read(rcastc(temp), sizeof(int));
+		in.read(rcastc(_name), sizeof(char) * temp);
+		_name[temp] = '\0';
+		in.read(rcastc(&_partyId), sizeof(int));
+		in.read(rcastc(&temp), sizeof(int));
 		canId = new char[temp + 1];
+		in.read(rcastc(canId), sizeof(char) * temp);
+		canId[temp] = '\0';
 		_candidate = citArr->getCit(canId);
-		_partyCandidates->load(in, districts, citArr);
+		_partyCandidates = new PartyCandidates(in, districts, citArr);
 
 		//next ex we will implament try&catch
 		if (!in.good()) {
@@ -122,16 +136,12 @@ namespace Elections
 		}
 	}
 
-	void Party::saveResults(ostream& out) const{
-		out.write(rcastcc(_totalElectors), sizeof(int));
-		//out.write(rcastcc(_partyId), sizeof(int));
+	void Party::saveResults(ostream& out) const {
 		_partyCandidates->saveResults(out);
 	}
 
 
-	void Party::loadResults(istream& in){
-		in.read(rcastc(_totalElectors), sizeof(int));
+	void Party::loadResults(istream& in) {
 		_partyCandidates->loadResults(in);
 	}
 }
-	

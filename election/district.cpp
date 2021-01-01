@@ -25,15 +25,16 @@ namespace Elections
 		_districtId = _districtSerialNumber++;
 	}
 
-	District::District(istream& in) :_totalVotes(0), _winnerVotes(0), _winner(nullptr),
-		_representatives(nullptr), _voters(nullptr) {
+	District::District(istream& in) :_totalVotes(0), _winnerVotes(0), _winner(nullptr) {
+		_representatives = new CitizensArr;
+		_voters = new CitizensArr;
 		load(in);
 	}
 
 	District::~District() {
 		delete[] _name;
-		delete[] _representatives;
-		delete[] _voters;
+		_representatives->deleteArrPointer();
+		_voters->deleteArrPointer();
 	}
 
 	int District::getPartyRepNumber(int partyVote) {
@@ -80,11 +81,13 @@ namespace Elections
 
 
 	void District::save(ostream& out) const {
-		out.write(rcastcc(_districtSerialNumber), sizeof(int));
-		out.write(rcastcc(strlen(_name)), sizeof(int));
-		out.write(rcastcc(_name), sizeof(_name));
-		out.write(rcastcc(_districtId), sizeof(int));		
-		out.write(rcastcc(_numOfRepresentatives), sizeof(int));
+		out.write(rcastcc(&_districtSerialNumber), sizeof(int));
+		int temp = strlen(_name);
+		out.write(rcastcc(&temp), sizeof(int));
+		out.write(rcastcc(_name), sizeof(char) * temp);
+		out.write(rcastcc(&_districtId), sizeof(int));		
+		out.write(rcastcc(&_numOfRepresentatives), sizeof(int));
+		out.write(rcastcc(&_totalVotes), sizeof(int));
 		//next ex we will implament try&catch
 		if (!out.good()) {
 			cout << "Citizen Save issue" << endl;
@@ -95,15 +98,18 @@ namespace Elections
 	void District::load(istream& in) {
 		int tempSize = 0, tempSerial=0;
 		
-		in.read(rcastc(tempSerial), sizeof(int));
+		in.read(rcastc(&tempSerial), sizeof(int));
 		if (tempSerial > _districtSerialNumber)
 			_districtSerialNumber = tempSerial;
 	
-		in.read(rcastc(tempSize), sizeof(int));
+		in.read(rcastc(&tempSize), sizeof(int));
 		_name = new char[tempSize + 1];
-		in.read(rcastc(_name), sizeof(_name));
-		in.read(rcastc(_districtId), sizeof(int));
-		in.read(rcastc(_numOfRepresentatives), sizeof(int));
+		in.read(rcastc(_name), sizeof(char) * tempSize);
+		_name[tempSize] = '\0';
+		in.read(rcastc(&_districtId), sizeof(int));
+		in.read(rcastc(&_numOfRepresentatives), sizeof(int));
+		in.read(rcastc(&_totalVotes), sizeof(int));
+
 		//next ex we will implament try&catch
 		if (!in.good()) {
 			cout << "Citizen load issue" << endl;
@@ -112,12 +118,7 @@ namespace Elections
 	}
 
 	void District::saveResults(ostream& out) const {
-		out.write(rcastcc(_totalVotes), sizeof(int));
-		out.write(rcastcc(_winnerVotes), sizeof(int));
-		//_representatives->saveId(out);
-		out.write(rcastcc(_voters->getLogSize()), sizeof(int));
-		//_voters->saveId(out);
-		out.write(rcastcc(_winner->getId()), sizeof(int));
+		out.write(rcastcc(&_totalVotes), sizeof(int));
 
 		if (!out.good()) {
 			cout << "Citizen Save issue" << endl;
@@ -127,14 +128,8 @@ namespace Elections
 
 	void District::loadResults(istream& in, CitizensArr* citizens, PartiesArr* parties) {
 		int tempSize = 0, tempId=0;
-		in.read(rcastc(_totalVotes), sizeof(int));
-		in.read(rcastc(_winnerVotes), sizeof(int));
-		in.read(rcastc(_numOfRepresentatives), sizeof(int));
-		_representatives = new CitizensArr(in, _numOfRepresentatives, citizens);
-		in.read(rcastc(tempSize), sizeof(int));
-		_voters = new CitizensArr(in, tempSize, citizens);
-		in.read(rcastc(tempId), sizeof(int));
-		_winner = parties->getParty(tempId);
+		in.read(rcastc(&_totalVotes), sizeof(int));
+
 		if (!in.good()) {
 			cout << "Citizen load issue" << endl;
 			exit(-1);

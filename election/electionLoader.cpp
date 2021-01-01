@@ -9,12 +9,14 @@ using namespace std;
 namespace Elections
 {
 	void ElectionLoader::save(ostream& out, Election* election) {
+		ElectionType type;
 		if ((typeid(*election)) == (typeid(NormalElection))) {
-			out.write(rcastcc(ElectionType::normalElection), sizeof(ElectionType));
+			type = ElectionType::normalElection;
 		}
 		else {
-			out.write(rcastcc(ElectionType::simpleElection), sizeof(ElectionType));
+			type = ElectionType::simpleElection;
 		}
+		out.write(rcastcc(&type), sizeof(ElectionType));
 		election->save(out);
 
 		//next ex we will implament try&catch
