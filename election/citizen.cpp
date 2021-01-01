@@ -10,15 +10,6 @@ using namespace std;
 
 namespace Elections
 {
-
-	Citizen::Citizen(): _yearOfBirth(0) {
-		_id = nullptr;
-		_name = nullptr;
-		_dis = nullptr;
-		_dis->appendToVoters(this);
-		_vote = nullptr;
-	}
-
 	Citizen::Citizen(istream& in, DistrictsArr* districts): _vote(nullptr) {
 		load(in, districts);
 	}
@@ -113,15 +104,13 @@ namespace Elections
 		}
 	}
 
-	void Citizen::saveResults(ostream& out) const {
-		int temp=-1;
+	void Citizen::saveVote(ostream& out) const {
+		int temp = -1;
+
 		if (_vote) {
 			temp = _vote->getId();
-			out.write(rcastcc(&temp), sizeof(int));
 		}
-		else {
-			out.write(rcastcc(&temp), sizeof(int));
-		}
+		out.write(rcastcc(&temp), sizeof(int));
 
 		//next ex we will implament try&catch
 		if (!out.good()) {
@@ -130,7 +119,7 @@ namespace Elections
 		}
 	}
 
-	void Citizen::loadResults(istream& in, PartiesArr* parties) {
+	void Citizen::loadVote(istream& in, PartiesArr* parties) {
 		int idTemp = -1;
 
 		in.read(rcastc(&idTemp), sizeof(int));
