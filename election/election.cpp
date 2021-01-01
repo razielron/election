@@ -25,9 +25,9 @@ namespace Elections
 	}
 
 	Election::~Election() {
-		_districts->~DistrictsArr();
-		_parties->~PartiesArr();
-		_citizens->~CitizensArr();
+		delete _districts;
+		delete _parties;
+		delete _citizens;
 	}
 
 	void Election::appendParty(Party* party) {
@@ -69,9 +69,9 @@ namespace Elections
 	}
 
 	void Election::save(ostream& out) const {
-		out.write(rcastcc(_day), sizeof(int));
-		out.write(rcastcc(_month), sizeof(int));
-		out.write(rcastcc(_year), sizeof(int));
+		out.write(rcastcc(&_day), sizeof(int));
+		out.write(rcastcc(&_month), sizeof(int));
+		out.write(rcastcc(&_year), sizeof(int));
 
 		//next ex we will implament try&catch
 		if (!out.good()) {
@@ -85,9 +85,9 @@ namespace Elections
 	}
 
 	void Election::load(istream& in) {
-		in.read(rcastc(_day), sizeof(int));
-		in.read(rcastc(_month), sizeof(int));
-		in.read(rcastc(_year), sizeof(int));
+		in.read(rcastc(&_day), sizeof(int));
+		in.read(rcastc(&_month), sizeof(int));
+		in.read(rcastc(&_year), sizeof(int));
 
 		//next ex we will implament try&catch
 		if (!in.good()) {
@@ -101,15 +101,15 @@ namespace Elections
 	}
 
 	void Election::saveResults(ostream& out) const {
-		_districts->saveResults(out);
+		//_districts->saveResults(out);
 		_citizens->saveResults(out);
-		_parties->saveResults(out);
+		//_parties->saveResults(out);
 	}
 
 	void Election::loadResults(istream& in) {
-		_districts->loadResults(in, _citizens, _parties);
+		//_districts->loadResults(in, _citizens, _parties);
 		_citizens->loadResults(in, _parties);
-		_parties->loadResults(in);
+		//_parties->loadResults(in);
 	}
 
 }

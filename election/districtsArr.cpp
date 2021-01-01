@@ -82,7 +82,7 @@ namespace Elections
 
 
 	void DistrictsArr::save(ostream& out) const{
-		out.write(rcastcc(_logSize), sizeof(int));
+		out.write(rcastcc(&_logSize), sizeof(int));
 		for (int i = 0;i < _logSize;i++) {
 			DistrictLoader::save(out, _districts[i]);
 		}
@@ -96,11 +96,11 @@ namespace Elections
 
 
 	void DistrictsArr::load(istream& in){
-		in.read(rcastc(_phySize), sizeof(int));
+		in.read(rcastc(&_phySize), sizeof(int));
 		_logSize = _phySize;
-		_districts = new District*[_logSize];
+		_districts = new District*[_phySize];
 
-		for (int i = 0; i < _logSize; i++) {
+		for (int i = 0; i < _phySize; i++) {
 			_districts[i] = DistrictLoader::load(in);
 		}
 

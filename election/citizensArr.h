@@ -25,7 +25,7 @@ namespace Elections {
 			CitizensArr();
 			CitizensArr(Citizen* cit);
 			CitizensArr(istream& in, DistrictsArr* districts);
-			CitizensArr(istream& in, int size, CitizensArr* citizens);
+			CitizensArr(istream& in, CitizensArr* citizens);
 			~CitizensArr();
 			CitizensArr(const Citizen& cit) = delete;
 			void operator=(const CitizensArr& citArr);
@@ -36,6 +36,8 @@ namespace Elections {
 
 		//GETTERS
 		public:
+			//compare 2 strings
+			int strCompare(char* str1, char* str2);
 			//returns a citizen by given id
 			Citizen* getCit(char* id);
 			//returns cirtizen by given position
@@ -46,11 +48,12 @@ namespace Elections {
 		public:
 			//adding citizen to the arr
 			void appendCitizen(Citizen* cit);
+			void deleteArrPointer();
 
 		//Load and Save
 		public:
 			void saveId(ostream& out) const;
-			Citizen* loadById(istream& in, CitizensArr* citizens);
+			void loadById(istream& in, CitizensArr* citizens);
 			void save(ostream& out) const;
 			void load(istream& in, DistrictsArr* districts);
 			void saveResults(ostream& out) const;

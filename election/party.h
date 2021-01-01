@@ -26,6 +26,7 @@ namespace Elections
 			Party() {}
 			Party(istream& in, DistrictsArr* districts, CitizensArr* citArr);
 			Party(char* name, Citizen* cit);
+			~Party();
 			friend ostream& operator<<(ostream& os, const Party& party);
 
 		//GETTERS

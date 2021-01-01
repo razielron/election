@@ -6,6 +6,7 @@
 #include "simpleElection.h"
 #include "normalElection.h"
 #include "citizen.h"
+#include "electionLoader.h"
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -43,6 +44,8 @@ namespace Elections {
 		cout << "Press 7 to display all parties" << endl;
 		cout << "Press 8 to vote" << endl;
 		cout << "Press 9 to display election results" << endl;
+		cout << "Press 11 to load an old Election Round" << endl;
+		cout << "Press 12 save this Election Round" << endl;
 		cout << "Press 0 to exit programe" << endl;
 		cout << "---------------------------------------------------------------" << endl;
 		cout << endl << endl << endl;
@@ -140,13 +143,12 @@ namespace Elections {
 		cout << "Enter name of Party: ";
 		cin >> name;
 
-		cout << "Enter ID of prime minister candidate: ";
+		cout << "Enter ID of prime minister candidate: " << endl;
 		cin >> id;
 		while (!(temp = election->getCitizens()->getCit(id))) {
 			cout << "There is no citizen with this ID" << endl;
 			cin >> id;
 		}
-		id[9] = '\0';
 
 		Party* party = new Party(name, temp);
 		election->appendParty(party);
@@ -253,7 +255,8 @@ namespace Elections {
 	}
 
 	//creates new election round
-	void createElection(Election* election) {
+	Election* createElection() {
+		Election* election=nullptr;
 		int day = 1, month = 1, year = 2020, numOfRep = 0, type = -1;
 		District* dis;
 		char name[256] = "DISTRICT ONE";
@@ -287,6 +290,7 @@ namespace Elections {
 		else {
 			election = new NormalElection(day, month, year);
 		}
+		return election;
 	}
 
 	//save an existing election round into binary file
@@ -302,13 +306,14 @@ namespace Elections {
 			exit(-1);
 		}
 
-		election->save(outfile);
+		ElectionLoader::save(outfile, election);
 		election->saveResults(outfile);
 	}
 
 	//load election round from binary file
-	void loadElection(Election* election) {
+	Election* loadElection() {
 		char name[256];
+		Election* election;
 
 		cout << "Enter File Name: ";
 		cin >> name;
@@ -319,12 +324,9 @@ namespace Elections {
 			exit(-1);
 		}
 
-		if (election) {
-			election->~Election();
-		}
-
-		election = new Election(infile);
+		election = ElectionLoader::load(infile);
 		election->loadResults(infile);
+		return election;
 	}
 
 	//main menu
@@ -364,11 +366,14 @@ namespace Elections {
 				case static_cast<int>(Menu::printElectionResults) :
 					printElectionResults(election);
 					break;
+				case static_cast<int>(Menu::loadElection) :
+					if (election) {
+						delete election;
+					}
+					election = loadElection();
+					break;
 				case static_cast<int>(Menu::saveElection) :
 					saveElection(election);
-					break;
-				case static_cast<int>(Menu::loadElection) :
-					loadElection(election);
 					break;
 				case static_cast<int>(Menu::Exit) :
 					input = 0;
@@ -381,8 +386,9 @@ namespace Elections {
 	}
 
 	//first menu
-	void firstMenu(Election* election) {
+	Election* firstMenu() {
 		int input = 1;
+		Election* election = nullptr;
 
 		while (input) {
 			printFistMenu();
@@ -391,11 +397,11 @@ namespace Elections {
 			switch (input) {
 			case (static_cast<int>(Menu::createElection) - 9):
 				input = 0;
-				createElection(election);
+				election = createElection();
 				break;
 			case (static_cast<int>(Menu::loadElection) - 9):
 				input = 0;
-				loadElection(election);
+				election = loadElection();
 				break;
 			case static_cast<int>(Menu::Exit) :
 				input = 0;
@@ -405,13 +411,14 @@ namespace Elections {
 				break;
 			}
 		}
+		return election;
 	}
 }
 
 void main() {
 	Election* election = nullptr;
 
-	firstMenu(election);
+	election = firstMenu();
 
 	if (election) {
 		mainMenu(election);

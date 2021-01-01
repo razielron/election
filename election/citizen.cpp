@@ -59,10 +59,11 @@ namespace Elections
 		_dis->addVote();
 		party->addVote(_dis);
 	}
-
+	
 	void Citizen::saveId(ostream& out) const {
-		out.write(rcastcc(strlen(_id)), sizeof(int));
-		out.write(rcastcc(_id), sizeof(_id));
+		int temp = strlen(_id);
+		out.write(rcastcc(&temp), sizeof(int));
+		out.write(rcastcc(_id), sizeof(char) * temp);
 
 		//next ex we will implament try&catch
 		if (!out.good()) {
@@ -72,12 +73,15 @@ namespace Elections
 	}
 
 	void Citizen::save(ostream& out) const {
-		out.write(rcastcc(strlen(_name)), sizeof(int));
-		out.write(rcastcc(_name), sizeof(_name));
-		out.write(rcastcc(strlen(_id)), sizeof(int));
-		out.write(rcastcc(_id), sizeof(_id));
-		out.write(rcastcc(_yearOfBirth), sizeof(int));
-		out.write(rcastcc(_dis->getDistrictNumber()), sizeof(int));
+		int temp = strlen(_name);
+		out.write(rcastcc(&temp), sizeof(int));
+		out.write(rcastcc(_name), sizeof(char) * temp);
+		temp = strlen(_id);
+		out.write(rcastcc(&temp), sizeof(int));
+		out.write(rcastcc(_id), sizeof(char) * temp);
+		out.write(rcastcc(&_yearOfBirth), sizeof(int));
+		temp = _dis->getDistrictNumber();
+		out.write(rcastcc(&temp), sizeof(int));
 
 		//next ex we will implament try&catch
 		if (!out.good()) {
@@ -89,14 +93,16 @@ namespace Elections
 	void Citizen::load(istream& in, DistrictsArr* districts) {
 		int idTemp = -1, lengthTemp = 0;
 
-		in.read(rcastc(lengthTemp), sizeof(int));
+		in.read(rcastc(&lengthTemp), sizeof(int));
 		_name = new char[lengthTemp + 1];
-		in.read(rcastc(_name), sizeof(_name));
-		in.read(rcastc(lengthTemp), sizeof(int));
+		in.read(rcastc(_name), sizeof(char) * lengthTemp);
+		_name[lengthTemp] = '\0';
+		in.read(rcastc(&lengthTemp), sizeof(int));
 		_id = new char[lengthTemp + 1];
-		in.read(rcastc(_id), sizeof(_id));
-		in.read(rcastc(_yearOfBirth), sizeof(int));
-		in.read(rcastc(idTemp), sizeof(int));
+		in.read(rcastc(_id), sizeof(char) * lengthTemp);
+		_id[lengthTemp] = '\0';
+		in.read(rcastc(&_yearOfBirth), sizeof(int));
+		in.read(rcastc(&idTemp), sizeof(int));
 		_dis = districts->getDistrict(idTemp);
 		_dis->appendToVoters(this);
 
@@ -108,11 +114,13 @@ namespace Elections
 	}
 
 	void Citizen::saveResults(ostream& out) const {
+		int temp=-1;
 		if (_vote) {
-			out.write(rcastcc(_vote->getId()), sizeof(int));
+			temp = _vote->getId();
+			out.write(rcastcc(&temp), sizeof(int));
 		}
 		else {
-			out.write(rcastcc(-1), sizeof(int));
+			out.write(rcastcc(&temp), sizeof(int));
 		}
 
 		//next ex we will implament try&catch
@@ -125,7 +133,7 @@ namespace Elections
 	void Citizen::loadResults(istream& in, PartiesArr* parties) {
 		int idTemp = -1;
 
-		in.read(rcastc(idTemp), sizeof(int));
+		in.read(rcastc(&idTemp), sizeof(int));
 		if (idTemp != -1) {
 			_vote = parties->getParty(idTemp);
 		}
