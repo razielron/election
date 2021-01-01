@@ -199,28 +199,4 @@ namespace Elections
 		}
 	}
 
-	void PartiesArr::saveResults(ostream& out) const {
-		for (int i = 0; i < _logSize; i++) {
-			_parties[i]->saveResults(out);
-		}
-
-		//next ex we will implament try&catch
-		if (!out.good()) {
-			cout << "PartiesArr Save issue" << endl;
-			exit(-1);
-		}
-	}
-
-	void PartiesArr::loadResults(istream& in) {
-		for (int i = 0; i < _logSize; i++) {
-			_parties[i]->loadResults(in);
-		}
-
-		//next ex we will implament try&catch
-		if (!in.good()) {
-			cout << "PartiesArr Load issue" << endl;
-			exit(-1);
-		}
-	}
-
 }

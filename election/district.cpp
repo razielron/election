@@ -116,24 +116,5 @@ namespace Elections
 			exit(-1);
 		}
 	}
-
-	void District::saveResults(ostream& out) const {
-		out.write(rcastcc(&_totalVotes), sizeof(int));
-
-		if (!out.good()) {
-			cout << "Citizen Save issue" << endl;
-			exit(-1);
-		}
-	}
-
-	void District::loadResults(istream& in, CitizensArr* citizens, PartiesArr* parties) {
-		int tempSize = 0, tempId=0;
-		in.read(rcastc(&_totalVotes), sizeof(int));
-
-		if (!in.good()) {
-			cout << "Citizen load issue" << endl;
-			exit(-1);
-		}
-	}
 }
 

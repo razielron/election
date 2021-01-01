@@ -23,7 +23,7 @@ namespace Elections
 
 		//Constructors + Distructors
 		public:
-			Party() {}
+			Party():_name(nullptr), _partyId(0), _totalElectors(0), _candidate(nullptr), _partyCandidates(nullptr) {}
 			Party(istream& in, DistrictsArr* districts, CitizensArr* citArr);
 			Party(char* name, Citizen* cit);
 			~Party();
@@ -67,8 +67,6 @@ namespace Elections
 		public:
 			void save(ostream& out) const;
 			void load(istream& in, DistrictsArr* districts, CitizensArr* citArr);
-			void saveResults(ostream& out) const;
-			void loadResults(istream& in);
 			
 	};
 }
