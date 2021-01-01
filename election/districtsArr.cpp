@@ -110,28 +110,4 @@ namespace Elections
 			exit(-1);
 		}
 	}
-
-	void DistrictsArr::saveResults(ostream& out) const {
-		for (int i = 0; i < _logSize; i++) {
-			_districts[i]->saveResults(out);
-		}
-
-		//next ex we will implament try&catch
-		if (!out.good()) {
-			cout << "DistrictsArr Save issue" << endl;
-			exit(-1);
-		}
-	}
-
-	void DistrictsArr::loadResults(istream& in, CitizensArr* citArr, PartiesArr* partiesArr) {
-		for (int i = 0; i < _logSize; i++) {
-			_districts[i]->loadResults(in, citArr, partiesArr);
-		}
-
-		//next ex we will implament try&catch
-		if (!in.good()) {
-			cout << "DistrictsArr Load issue" << endl;
-			exit(-1);
-		}
-	}	
 }

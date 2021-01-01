@@ -23,7 +23,8 @@ namespace Elections
 
 		//Constructors + Distructors
 		public:
-			District() {}
+			District() :_totalVotes(0), _winnerVotes(0), _representatives(nullptr), _voters(nullptr),
+				_name(nullptr),_districtId(0), _numOfRepresentatives(0), _winner(nullptr) {}
 			District(char* name, int numOfRepresentatives);
 			District(istream& in);
 			virtual ~District();
@@ -65,8 +66,6 @@ namespace Elections
 		public:
 			virtual void save(ostream& out) const;
 			virtual void load(istream& in);
-			virtual void saveResults(ostream& out) const;
-			virtual void loadResults(istream& in, CitizensArr* citizens, PartiesArr* parties);
 	};
 
 }

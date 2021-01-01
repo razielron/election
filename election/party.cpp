@@ -135,13 +135,4 @@ namespace Elections
 			exit(-1);
 		}
 	}
-
-	void Party::saveResults(ostream& out) const {
-		_partyCandidates->saveResults(out);
-	}
-
-
-	void Party::loadResults(istream& in) {
-		_partyCandidates->loadResults(in);
-	}
 }
