@@ -155,9 +155,9 @@ namespace Elections
 		}
 	}
 
-	void CitizensArr::saveResults(ostream& out) const {
+	void CitizensArr::saveVotes(ostream& out) const {
 		for (int i = 0; i < _logSize; i++) {
-			_citizens[i]->saveResults(out);
+			_citizens[i]->saveVote(out);
 		}
 
 		//next ex we will implament try&catch
@@ -167,9 +167,9 @@ namespace Elections
 		}
 	}
 
-	void CitizensArr::loadResults(istream& in, PartiesArr* parties) {
+	void CitizensArr::loadVotes(istream& in, PartiesArr* parties) {
 		for (int i = 0; i < _logSize; i++) {
-			_citizens[i]->loadResults(in, parties);
+			_citizens[i]->loadVote(in, parties);
 		}
 
 		//next ex we will implament try&catch

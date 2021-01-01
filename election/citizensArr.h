@@ -56,8 +56,8 @@ namespace Elections {
 			void loadById(istream& in, CitizensArr* citizens);
 			void save(ostream& out) const;
 			void load(istream& in, DistrictsArr* districts);
-			void saveResults(ostream& out) const;
-			void loadResults(istream& in, PartiesArr* parties);
+			void saveVotes(ostream& out) const;
+			void loadVotes(istream& in, PartiesArr* parties);
 	};
 
 }

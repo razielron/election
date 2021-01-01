@@ -100,16 +100,12 @@ namespace Elections
 		_parties = new PartiesArr(in, _districts, _citizens);
 	}
 
-	void Election::saveResults(ostream& out) const {
-		//_districts->saveResults(out);
-		_citizens->saveResults(out);
-		//_parties->saveResults(out);
+	void Election::saveVotes(ostream& out) const {
+		_citizens->saveVotes(out);
 	}
 
-	void Election::loadResults(istream& in) {
-		//_districts->loadResults(in, _citizens, _parties);
-		_citizens->loadResults(in, _parties);
-		//_parties->loadResults(in);
+	void Election::loadVotes(istream& in) {
+		_citizens->loadVotes(in, _parties);
 	}
 
 }

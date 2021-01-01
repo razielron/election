@@ -20,7 +20,7 @@ namespace Elections
 
 		//Constructors + Distructors
 		public:
-			Citizen();
+			Citizen() : _name(nullptr), _id(nullptr), _yearOfBirth(0), _dis(nullptr), _vote(nullptr) {}
 			Citizen(char* id, int yearOfBirth, char* name, District* dis);
 			Citizen(istream& in, DistrictsArr* districts);
 			~Citizen();
@@ -45,7 +45,7 @@ namespace Elections
 			void saveId(ostream& out) const;
 			void save(ostream& out) const;
 			void load(istream& in, DistrictsArr* districts);
-			void saveResults(ostream& out) const;
-			void loadResults(istream& in, PartiesArr* parties);
+			void saveVote(ostream& out) const;
+			void loadVote(istream& in, PartiesArr* parties);
 	};
 }

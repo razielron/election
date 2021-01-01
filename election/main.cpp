@@ -139,7 +139,6 @@ namespace Elections {
 			return;
 		}
 
-
 		cout << "Enter name of Party: ";
 		cin >> name;
 
@@ -307,7 +306,7 @@ namespace Elections {
 		}
 
 		ElectionLoader::save(outfile, election);
-		election->saveResults(outfile);
+		election->saveVotes(outfile);
 	}
 
 	//load election round from binary file
@@ -325,7 +324,7 @@ namespace Elections {
 		}
 
 		election = ElectionLoader::load(infile);
-		election->loadResults(infile);
+		election->loadVotes(infile);
 		return election;
 	}
 
