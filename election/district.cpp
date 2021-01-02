@@ -79,7 +79,6 @@ namespace Elections
 		return os;
 	}
 
-
 	void District::save(ostream& out) const {
 		out.write(rcastcc(&_districtSerialNumber), sizeof(int));
 		int temp = strlen(_name);

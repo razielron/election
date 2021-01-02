@@ -26,10 +26,9 @@ namespace Elections
 		load(in);
 	}
 
-
 	DistrictsArr::~DistrictsArr() {
 		for (int i = 0;i < _logSize;i++) {
-			_districts[i]->~District();
+			delete _districts[i];
 		}
 		delete[] _districts;
 	}
@@ -93,7 +92,6 @@ namespace Elections
 			exit(-1);
 		}
 	}
-
 
 	void DistrictsArr::load(istream& in){
 		in.read(rcastc(&_phySize), sizeof(int));

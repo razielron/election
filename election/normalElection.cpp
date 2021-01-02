@@ -32,7 +32,7 @@ namespace Elections
 				os << "Party: " << (*parties)[j]->getName() << endl;
 				partyRep = (*parties)[j]->getPartyCandidates()->getPartyNumOfElectors(dis);
 				(*parties)[j]->getPartyCandidates()->printResults(dis);
-				os << "Prime Minister Candidate : " << *((*parties)[j]->getCandidate()) << endl;
+				os << "Prime Minister Candidate: " << endl << *((*parties)[j]->getCandidate()) << endl;
 				if (partyRep) {
 					os << "Party elected representetives: " << endl;
 					for (int k = 0; k < partyRep; k++)

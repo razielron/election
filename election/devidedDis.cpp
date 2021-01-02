@@ -11,12 +11,11 @@ using namespace std;
 
 namespace Elections
 {
-	DevidedDis::DevidedDis() {}
+	DevidedDis::DevidedDis() : District(){}
 
 	DevidedDis::DevidedDis(char* name, int numOfRepresentatives) : District(name, numOfRepresentatives){}
 
 	DevidedDis::DevidedDis(istream& in): District(in) {	}
-
 
 	ostream& operator<<(ostream& os, const DevidedDis& devDis) {
 		os << "-------------DISTRICT-START------------" << endl;
@@ -27,8 +26,6 @@ namespace Elections
 		os << "--------------DISTRICT-END-------------" << endl;
 		return os;
 	}
-
-
 
 	void DevidedDis::printResults(PartiesArr* partiesArr) {
 		cout << "-------------DISTRICT-RESULTS-START------------" << endl;

@@ -7,7 +7,7 @@ using namespace std;
 
 namespace Elections
 {
-	UniformDis::UniformDis() {}
+	UniformDis::UniformDis() : District() {}
 
 	UniformDis::UniformDis(char* name, int numOfRepresentatives) : District(name, numOfRepresentatives) {}
 

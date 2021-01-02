@@ -29,7 +29,6 @@ namespace Elections
 		}
 	}
 
-
 	District* DistrictLoader::load(istream& in) {
 		DistrictType type;
 		in.read(rcastc(&type), sizeof(type));

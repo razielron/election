@@ -30,7 +30,7 @@ namespace Elections
 
 	CitizensArr::~CitizensArr() {
 		for (int i = 0;i < _logSize;i++) {
-			_citizens[i]->~Citizen();
+			delete _citizens[i];
 		}
 		delete[] _citizens;
 	}

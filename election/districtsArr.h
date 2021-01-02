@@ -47,10 +47,6 @@ namespace Elections {
 		public:
 			void save(ostream& out) const;
 			void load(istream& in);
-			void saveResults(ostream& out) const;
-			void loadResults(istream& in, CitizensArr* citArr, PartiesArr* partiesArr);
-
-
 	};
 
 }

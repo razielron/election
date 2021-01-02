@@ -28,7 +28,7 @@ namespace Elections
 
 	PartiesArr::~PartiesArr() {
 		for (int i = 0; i < _logSize; i++) {
-			_parties[i]->~Party();
+			delete _parties[i];
 		}
 		delete[] _parties;
 	}
