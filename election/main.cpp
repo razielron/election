@@ -1,3 +1,10 @@
+/*
+Name:	Omer David
+ID:		308483437
+Name2:  Raziel Alron
+ID:		316061415
+*/
+
 #pragma once 
 #include "party.h"
 #include "district.h"
@@ -248,7 +255,7 @@ namespace Elections {
 		}
 		else {
 			election->sortPartiesByTotalVotes();
-			cout <<  *static_cast<SimpleElection*>(election);
+			cout << *static_cast<SimpleElection*>(election);
 		}
 		cout << "-------------------ELECTION-RESULTS-END----------------" << endl;
 	}
@@ -402,7 +409,7 @@ namespace Elections {
 				input = 0;
 				election = loadElection();
 				break;
-			case static_cast<int>(Menu::Exit) :
+			case (static_cast<int>(Menu::Exit) + 3) :
 				input = 0;
 				break;
 			default:
