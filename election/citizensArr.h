@@ -43,6 +43,8 @@ namespace Elections {
 			//returns the number of zitizens in the array
 			int getLogSize() const { return _logSize; }
 
+			
+
 		public:
 			//adding citizen to the arr
 			void appendCitizen(Citizen* cit);
