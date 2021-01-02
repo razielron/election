@@ -1,104 +1,38 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
+    <ClCompile Include="citizen.cpp" />
+    <ClCompile Include="citizensArr.cpp" />
+    <ClCompile Include="devidedDis.cpp" />
+    <ClCompile Include="district.cpp" />
+    <ClCompile Include="districtLoader.cpp" />
+    <ClCompile Include="districtsArr.cpp" />
+    <ClCompile Include="election.cpp" />
+    <ClCompile Include="electionLoader.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="normalElection.cpp" />
+    <ClCompile Include="partiesArr.cpp" />
+    <ClCompile Include="party.cpp" />
+    <ClCompile Include="PartyCandidates.cpp" />
+    <ClCompile Include="simpleElection.cpp" />
+    <ClCompile Include="uniformDis.cpp" />
+    <ClCompile Include="dynamicArr.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="citizen.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="citizensArr.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="district.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="districtsArr.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="election.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="partiesArr.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="party.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PartyCandidates.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="uniformDis.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="devidedDis.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="normalElection.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="simpleElection.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="districtLoader.cpp">
-    <ClCompile Include="electionLoader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="citizen.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="citizensArr.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="district.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="districtsArr.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="election.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="partiesArr.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="party.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="partyCandidates.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="uniformDis.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="devidedDis.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="normalElection.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="simpleElection.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="districtLoader.h">
-    <ClInclude Include="electionLoader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <ClInclude Include="citizen.h" />
+    <ClInclude Include="citizensArr.h" />
+    <ClInclude Include="devidedDis.h" />
+    <ClInclude Include="district.h" />
+    <ClInclude Include="districtLoader.h" />
+    <ClInclude Include="districtsArr.h" />
+    <ClInclude Include="election.h" />
+    <ClInclude Include="electionLoader.h" />
+    <ClInclude Include="normalElection.h" />
+    <ClInclude Include="partiesArr.h" />
+    <ClInclude Include="party.h" />
+    <ClInclude Include="partyCandidates.h" />
+    <ClInclude Include="simpleElection.h" />
+    <ClInclude Include="uniformDis.h" />
+    <ClInclude Include="dynamicArr.h" />
   </ItemGroup>
 </Project>

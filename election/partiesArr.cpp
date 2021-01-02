@@ -4,6 +4,7 @@
 #include "partiesArr.h"
 #include "PartyCandidates.h"
 #include "party.h"
+#include "election.h"
 #include <string>
 #include <iostream>
 using namespace std;
@@ -17,8 +18,8 @@ namespace Elections
 		_parties = new Party*[_phySize];
 	}
 
-	PartiesArr::PartiesArr(istream& in, DistrictsArr* districts, CitizensArr* citizens) {
-		load(in, districts, citizens);
+	PartiesArr::PartiesArr(istream& in, Election* election) {
+		load(in, election);
 	}
 
 	PartiesArr::PartiesArr(Party* party) : _logSize(1), _phySize(2) {
@@ -184,12 +185,12 @@ namespace Elections
 		}
 	}
 
-	void PartiesArr::load(istream& in, DistrictsArr* districts, CitizensArr* citizens) {
+	void PartiesArr::load(istream& in, Election* election) {
 		in.read(rcastc(&_phySize), sizeof(int));
 		_logSize = _phySize;
 		_parties = new Party* [_phySize];
 		for (int i = 0; i < _phySize; i++) {
-			_parties[i] = new Party(in, districts, citizens);
+			_parties[i] = new Party(in, election);
 		}
 
 		//next ex we will implament try&catch

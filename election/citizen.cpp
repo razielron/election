@@ -1,4 +1,5 @@
 #include "citizen.h"
+#include "election.h"
 #include "district.h"
 #include "districtsArr.h"
 #include "partiesArr.h"
@@ -10,8 +11,8 @@ using namespace std;
 
 namespace Elections
 {
-	Citizen::Citizen(istream& in, DistrictsArr* districts): _vote(nullptr) {
-		load(in, districts);
+	Citizen::Citizen(istream& in, Election* election): _vote(nullptr) {
+		load(in, election);
 	}
 
 	Citizen::Citizen(char* id, int yearOfBirth, char* name, District* dis)
@@ -71,7 +72,7 @@ namespace Elections
 		out.write(rcastcc(&temp), sizeof(int));
 		out.write(rcastcc(_id), sizeof(char) * temp);
 		out.write(rcastcc(&_yearOfBirth), sizeof(int));
-		temp = _dis->getDistrictNumber();
+		temp = _dis->getId();
 		out.write(rcastcc(&temp), sizeof(int));
 
 		//next ex we will implament try&catch
@@ -81,8 +82,9 @@ namespace Elections
 		}
 	}
 
-	void Citizen::load(istream& in, DistrictsArr* districts) {
+	void Citizen::load(istream& in, Election* election) {
 		int idTemp = -1, lengthTemp = 0;
+		DistrictsArr* districts = election->getDistricts();
 
 		in.read(rcastc(&lengthTemp), sizeof(int));
 		_name = new char[lengthTemp + 1];

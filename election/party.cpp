@@ -21,8 +21,8 @@ namespace Elections
 		_partyCandidates = new PartyCandidates;
 	}
 
-	Party::Party(istream& in, DistrictsArr* districts, CitizensArr* citArr) : _totalElectors(0) {
-		load(in, districts, citArr);
+	Party::Party(istream& in, Election* election) : _totalElectors(0) {
+		load(in, election);
 	}
 
 	Party::~Party() {
@@ -109,9 +109,12 @@ namespace Elections
 		}
 	}
 
-	void Party::load(istream& in, DistrictsArr* districts, CitizensArr* citArr) {
+	void Party::load(istream& in, Election* election) {
 		int temp = 0;
 		char* canId;
+		CitizensArr* citArr = election->getCitizens();
+		DistrictsArr* districts = election->getDistricts();
+
 
 		in.read(rcastc(&temp), sizeof(int));
 		if (temp > _partySerialNumber)

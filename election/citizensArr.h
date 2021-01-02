@@ -24,7 +24,7 @@ namespace Elections {
 		public:
 			CitizensArr();
 			CitizensArr(Citizen* cit);
-			CitizensArr(istream& in, DistrictsArr* districts);
+			CitizensArr(istream& in, Election* election);
 			CitizensArr(istream& in, CitizensArr* citizens);
 			~CitizensArr();
 			CitizensArr(const Citizen& cit) = delete;
@@ -53,7 +53,7 @@ namespace Elections {
 			void saveId(ostream& out) const;
 			void loadById(istream& in, CitizensArr* citizens);
 			void save(ostream& out) const;
-			void load(istream& in, DistrictsArr* districts);
+			void load(istream& in, Election* election);
 			void saveVotes(ostream& out) const;
 			void loadVotes(istream& in, PartiesArr* parties);
 	};

@@ -16,9 +16,9 @@ namespace Elections
 
 	ostream& operator<<(ostream& os, const UniformDis& uniDis) {
 		os << "-------------DISTRICT-START------------" << endl;
-		os << "District ID: " << uniDis.getDistrictNumber() << endl;
+		os << "District ID: " << uniDis.getId() << endl;
 		os << "District type: Uniform" << endl;
-		os << "Name of district: " << uniDis.getDistrictNumber() << endl;
+		os << "Name of district: " << uniDis.getId() << endl;
 		os << "Number of representetive: " << uniDis.getNumOfRepresentatives() << endl;
 		os << "--------------DISTRICT-END-------------" << endl;
 		return os;

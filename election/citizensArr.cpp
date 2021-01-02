@@ -20,8 +20,8 @@ namespace Elections
 		_citizens[0] = cit;
 	}
 
-	CitizensArr::CitizensArr(istream& in, DistrictsArr* districts) {
-		load(in, districts);
+	CitizensArr::CitizensArr(istream& in, Election* election) {
+		load(in, election);
 	}
 
 	CitizensArr::CitizensArr(istream& in, CitizensArr* citizens) {
@@ -99,12 +99,12 @@ namespace Elections
 		}
 	}
 
-	void CitizensArr::load(istream& in, DistrictsArr* districts) {
+	void CitizensArr::load(istream& in, Election* election) {
 		in.read(rcastc(&_phySize), sizeof(int));
 		_logSize = _phySize;
 		_citizens = new Citizen* [_phySize];
 		for (int i = 0; i < _phySize; i++) {
-			_citizens[i] = new Citizen(in, districts);
+			_citizens[i] = new Citizen(in, election);
 		}
 
 		//next ex we will implament try&catch
