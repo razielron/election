@@ -8,6 +8,7 @@
 #include "Party.h"
 #include "partiesArr.h"
 #include "partyCandidates.h"
+using namespace std;
 #define rcastcc reinterpret_cast<const char*>
 #define rcastc reinterpret_cast<char*>
 
@@ -28,6 +29,14 @@ namespace Elections
 		delete _districts;
 		delete _parties;
 		delete _citizens;
+	}
+
+	ostream& operator<<(ostream& os, const Election& election) {
+		os << "Election Date: ";
+		os << election.getDay() << "/";
+		os << election.getMonth() << "/";
+		os << election.getYear() << endl;
+		return os;
 	}
 
 	void Election::appendParty(Party* party) {

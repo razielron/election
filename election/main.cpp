@@ -243,12 +243,12 @@ namespace Elections {
 		
 		if (typeid(*election) == typeid(NormalElection)) {
 			election->sortPartiesByElectors();
-			static_cast<NormalElection*>(election)->printResults();
+			cout << *static_cast<NormalElection*>(election);
 			election->getParties()->printResults();
 		}
 		else {
 			election->sortPartiesByTotalVotes();
-			static_cast<SimpleElection*>(election)->printResults();
+			cout <<  *static_cast<SimpleElection*>(election);
 		}
 		cout << "-------------------ELECTION-RESULTS-END----------------" << endl;
 	}

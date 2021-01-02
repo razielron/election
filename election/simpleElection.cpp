@@ -8,35 +8,40 @@
 #include "partyCandidates.h"
 #include <typeinfo>
 #include <string>
+using namespace std;
 
 namespace Elections
 {
-	void SimpleElection::printResults() const {
-		DevidedDis* dis = static_cast<DevidedDis*>((*_districts)[0]);
+	ostream& operator<<(ostream& os, const SimpleElection& election) {
+		PartiesArr* parties = election.getParties();
+		DevidedDis* dis = static_cast<DevidedDis*>((*election.getDistricts())[0]);
 		int partyRep = 0, partyVotes = 0;
 
-		cout << "Voters Percentage: " << dis->getVotersPresentage() << "%" << endl;
-		cout << "Number of representetives: " << dis->getNumOfRepresentatives() << endl << endl;
-		cout << "--------------PARTIES-RESULTS-START--------------" << endl;
-		for (int j = 0; j < _parties->getLogSize(); j++) {
-			cout << "----------PARTY-RESULTS-START----------" << endl;
-			cout << "Party: " << (*_parties)[j]->getName() << endl;
-			partyRep = (*_parties)[j]->getPartyCandidates()->getPartyNumOfElectors(dis);
-			partyVotes = (*_parties)[j]->getPartyCandidates()->getPartyNumOfVotes();
-			cout << "Total Votes: " << partyVotes << endl;
-			cout << "Total Votes Presentage: " << dis->getVotersPresentage(partyVotes) << "%" << endl;
-			cout << "Party num of elected representetives: " << partyRep << endl;
+		os << static_cast<const Election&>(election);
+		os << "Voters Percentage: " << dis->getVotersPresentage() << "%" << endl;
+		os << "Number of representetives: " << dis->getNumOfRepresentatives() << endl << endl;
+		os << "--------------PARTIES-RESULTS-START--------------" << endl;
+		for (int j = 0; j < parties->getLogSize(); j++) {
+			os << "----------PARTY-RESULTS-START----------" << endl;
+			os << "Party: " << (*parties)[j]->getName() << endl;
+			partyRep = (*parties)[j]->getPartyCandidates()->getPartyNumOfElectors(dis);
+			partyVotes = (*parties)[j]->getPartyCandidates()->getPartyNumOfVotes();
+			os << "Total Votes: " << partyVotes << endl;
+			os << "Total Votes Presentage: " << dis->getVotersPresentage(partyVotes) << "%" << endl;
+			os << "Party num of elected representetives: " << partyRep << endl;
 			if (partyRep) {
-				cout << "Party elected representetives: " << endl;
+				os << "Party elected representetives: " << endl;
 				for (int k = 0; k < partyRep; k++)
-					cout << *((*_parties)[j]->getPartyCandidates()->getDistrictPartyCandidates(dis)->getCit(k));
+					os << *((*parties)[j]->getPartyCandidates()->getDistrictPartyCandidates(dis)->getCit(k));
 			}
 			else {
-				cout << "Party elected representetives: NO REPRESENTETIVES" << endl;
+				os << "Party elected representetives: NO REPRESENTETIVES" << endl;
 			}
-			cout << "-----------PARTY-RESULTS-END----------" << endl;
+			os << "-----------PARTY-RESULTS-END----------" << endl;
 		}
-		cout << "---------------PARTIES-RESULTS-END--------------" << endl;
-		cout << endl;
+		os << "---------------PARTIES-RESULTS-END--------------" << endl;
+		os << endl;
+
+		return os;
 	}
 }

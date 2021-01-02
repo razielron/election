@@ -11,32 +11,41 @@
 
 namespace Elections
 {
-	void NormalElection::printResults() const {
+	ostream& operator<<(ostream& os, const NormalElection& election) {
+		PartiesArr* parties = election.getParties();
+		DistrictsArr* districts = election.getDistricts();
 		District* dis = nullptr;
 		int partyRep = 0;
-		for (int i = 0; i < _districts->getLogSize(); i++) {
-			dis = (*_districts)[i];
+
+		os << static_cast<const Election&>(election);
+
+		for (int i = 0; i < districts->getLogSize(); i++) {
+			dis = (*districts)[i];
+
 			if ((typeid(*dis)) == (typeid(UniformDis)))
 				static_cast<UniformDis*>(dis)->printResults();
 			else
-				static_cast<DevidedDis*>(dis)->printResults(_parties);
-			for (int j = 0; j < _parties->getLogSize(); j++) {
-				cout << "----------PARTIES-in-district-RESULTS-START----------" << endl;
-				cout << "Party: " << (*_parties)[j]->getName() << endl;
-				partyRep = (*_parties)[j]->getPartyCandidates()->getPartyNumOfElectors(dis);
-				(*_parties)[j]->getPartyCandidates()->printResults(dis);
-				cout << "Prime Minister Candidate : " << *((*_parties)[j]->getCandidate()) << endl;
+				static_cast<DevidedDis*>(dis)->printResults(parties);
+
+			for (int j = 0; j < parties->getLogSize(); j++) {
+				os << "----------PARTIES-in-district-RESULTS-START----------" << endl;
+				os << "Party: " << (*parties)[j]->getName() << endl;
+				partyRep = (*parties)[j]->getPartyCandidates()->getPartyNumOfElectors(dis);
+				(*parties)[j]->getPartyCandidates()->printResults(dis);
+				os << "Prime Minister Candidate : " << *((*parties)[j]->getCandidate()) << endl;
 				if (partyRep) {
-					cout << "Party elected representetives: " << endl;
+					os << "Party elected representetives: " << endl;
 					for (int k = 0; k < partyRep; k++)
-						cout << *((*_parties)[j]->getPartyCandidates()->getDistrictPartyCandidates(i)->getCit(k));
+						os << *((*parties)[j]->getPartyCandidates()->getDistrictPartyCandidates(i)->getCit(k));
 				}
 				else {
-					cout << "Party elected representetives: NO REPRESENTETIVES" << endl;
+					os << "Party elected representetives: NO REPRESENTETIVES" << endl;
 				}
-				cout << "-----------PARTIES-in-district-RESULTS-END----------" << endl;
+				os << "-----------PARTIES-in-district-RESULTS-END----------" << endl;
 			}
-			cout << endl;
+			os << endl;
 		}
+
+		return os;
 	}
 }
