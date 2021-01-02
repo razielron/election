@@ -10,10 +10,7 @@ namespace Elections
 	public:
 		SimpleElection(int day, int month, int year) : Election(day, month, year) {}
 		SimpleElection(istream& in) : Election(in) {}
+		friend std::ostream& operator<<(std::ostream& os, const SimpleElection& election);
 
-	public:
-		//prints all uniform district's election results
-		//AND prints all divided district's election results
-		void printResults() const;
 	};
 }

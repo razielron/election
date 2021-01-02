@@ -74,10 +74,6 @@ namespace Elections
 		_citizens[_logSize++] = cit;
 	}
 
-	int CitizensArr::strCompare(char* str1, char* str2) {
-		return 1;
-	}
-
 	Citizen* CitizensArr::getCit(char* id) {
 		for (int i = 0; i < _logSize; i++) {
 			if (strcmp(_citizens[i]->getId(), id) == 0)

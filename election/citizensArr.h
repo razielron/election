@@ -36,8 +36,6 @@ namespace Elections {
 
 		//GETTERS
 		public:
-			//compare 2 strings
-			int strCompare(char* str1, char* str2);
 			//returns a citizen by given id
 			Citizen* getCit(char* id);
 			//returns cirtizen by given position
