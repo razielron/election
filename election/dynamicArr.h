@@ -14,19 +14,17 @@ namespace Elections
 {
 	class Election;
 	class District;
-	template<class T>  
+	template<class T>
 	class DynamicArr {
 	private:
 		T* _array;
-		const int GROTH_FACTOR = 2; 
+		const int GROTH_FACTOR = 2;
 		int _logSize;
 		int _phySize;
 
 	public:
 		DynamicArr() :_logSize(0), _phySize(1), _array(new T[_phySize]) {};
 		DynamicArr(T);
-		DynamicArr(istream& in, Election* election);
-		DynamicArr(istream& in, DynamicArr<T> citizens);
 		~DynamicArr();
 
 	public:
@@ -39,7 +37,7 @@ namespace Elections
 		// return true if the array is empty
 		bool empty() const { return _logSize == 0; }
 		// returns the physical size
-		int capacity() const { return _phySize;  }
+		int capacity() const { return _phySize; }
 		//clears the array
 		void clear() { _logSize = 0; }
 
@@ -65,24 +63,19 @@ namespace Elections
 		T find(string id);
 		//returns an element by given parameter
 		T find(int id);
-		//returns the party with most electors
-		T getElectionWinner();
+		//Swaps elements
+		void swap(T al1, T el2);
 
-	public:
-		void save(ostream& out) const;
-		void load(istream& in);
-		void load(istream& in, Election* election);
-		void saveId(ostream& out) const;
-		void loadById(istream& in, DynamicArr<T> citizens);
-		void saveVotes(ostream& out) const;
-		void loadVotes(istream& in, DynamicArr<T> parties);
+
+		/*------------------------Iterator Class------------------------*/
+
 
 		template <bool is_const>
 		class base_iterator
 		{
 		private:
 			ds_type* _da;
-			int			_i;
+			int	_i;
 
 		public:
 			using ds_type = std::conditional_t<is_const, const DynamicArray, DynamicArray>;
@@ -138,40 +131,52 @@ namespace Elections
 				--_i;
 				return temp;
 			}
-		
+
 		};
+
+		/*------------------------End of Iterator Class------------------------*/
 
 		using iterator = base_iterator<false>;
 		using const_iterator = base_iterator<true>;
 
-		public: 
-			//inserts a value in a given position
-			void insert(const iterator& pos, const T& val);
-			//earases the values in a given pos
-			const iterator& erase(const iterator& pos);
-			//earases the values in a given range and returns iterator the one step before
-			const iterator& erase(const iterator& first, const iterator& last);
-			//returns iterator at the beginning of the array
-			iterator begin() { return iterator(*this, 0); }
-			//returns iterator at the end of the array
-			iterator end() { return iterator(*this, _logSize); }
+	public:
+		//inserts a value in a given position
+		void insert(const iterator& pos, const T& val);
+		//earases the values in a given pos
+		const iterator& erase(const iterator& pos);
+		//earases the values in a given range and returns iterator the one step before
+		const iterator& erase(const iterator& first, const iterator& last);
+		//returns iterator at the beginning of the array
+		iterator begin() { return iterator(*this, 0); }
+		//returns iterator at the end of the array
+		iterator end() { return iterator(*this, _logSize); }
+		
+		
+		//Swaps elements
+		template<class T>
+		void swap(iterator& i, iterator& j) {
+			T temp = *i;
+			*i = *j;
+			*j = temp;
+		}
+		//Sorts the array according to given function
+		template<class T, class Func>
+		void sort(iterator& first, iterator& last, const Func& func) {
+			iteratr temp = first;
+			for (iterator i = first; i != last; ++i)
+				for (iterator j = first; j._i < last._i - i._da + 1; ++j)
+					if (func(i, j) < 0)
+						swap(*i, *j);
+		}
+		
 	};
 		
+	/*------------------------DynamicArr Functions Implementation------------------------*/
 
 	template<class T>
 	DynamicArr<T>::DynamicArr(T element) : _logSize(1), _phySize(2) {
 		_array = new T[_phySize];
 		_array[0] = element;
-	}
-
-	template<class T>
-	DynamicArr<T>::DynamicArr(istream& in, Election* election) {
-		load(in, election);
-	}
-
-	template<>
-	DynamicArr<Citizen*>::DynamicArr(istream& in, DynamicArr<Citizen*> citizens) {
-		loadById(in, citizens);
 	}
 
 	template<class T>
@@ -287,127 +292,10 @@ namespace Elections
 	}
 
 	template<class T>
-	void DynamicArr<T>::save(ostream& out) const {
-		out.write(rcastcc(&_logSize), sizeof(int));
-		for (int i = 0;i < _logSize;i++) {
-			_array[i]->save(out);
-		}
-		//next ex we will implament try&catch
-		if (!out.good()) {
-			cout << "Save issue" << endl;
-			exit(-1);
-		}
-	}
-
-	template<>
-	void DynamicArr<District*>::load(istream& in) {
-		in.read(rcastc(&_phySize), sizeof(int));
-		_logSize = _phySize;
-		_array = new District*[_phySize];
-
-		for (int i = 0; i < _phySize; i++) {
-			_array[i] = DistrictLoader::load(in);
-		}
-
-		//next ex we will implament try&catch
-		if (!in.good()) {
-			cout << "DistrictArr load issue" << endl;
-			exit(-1);
-		}
-	}
-	
-	template<class T>
-	void DynamicArr<T>::load(istream& in, Election* election) {
-		in.read(rcastc(&_phySize), sizeof(int));
-		_logSize = _phySize;
-		_array = new T[_phySize];
-		for (int i = 0; i < _phySize; i++) {
-			_array[i] = new T(in, election);
-		}
-
-		//next ex we will implament try&catch
-		if (!in.good()) {
-			cout << "Load issue" << endl;
-			exit(-1);
-		}
-	}
-
-	template<class T>
-	void DynamicArr<T>::saveId(ostream& out) const {
-		out.write(rcastcc(&_logSize), sizeof(int));
-		for (int i = 0; i < _logSize; i++) {
-			_array[i]->saveId(out);
-		}
-
-		//next ex we will implament try&catch
-		if (!out.good()) {
-			cout << "Citizen Save issue" << endl;
-			exit(-1);
-		}
-	}
-
-	template<class T>
-	void DynamicArr<T>::loadById(istream& in, DynamicArr<T> citizens) {
-		int tempSize = 0;
-		char* tempCitId;
-
-		in.read(rcastc(&_phySize), sizeof(int));
-		_logSize = _phySize;
-		_array = new T [_phySize];
-
-		for (int i = 0; i < _logSize; i++) {
-			in.read(rcastc(&tempSize), sizeof(int));
-			tempCitId = new char[tempSize + 1];
-			in.read(rcastc(tempCitId), sizeof(char) * tempSize);
-			tempCitId[tempSize] = '\0';
-			_array[i] = citizens->getCit(tempCitId);
-			delete[] tempCitId;
-
-			//next ex we will implament try&catch
-			if (!in.good()) {
-				cout << "Load issue" << endl;
-				exit(-1);
-			}
-		}
-	}
-
-	template<class T>
-	void DynamicArr<T>::saveVotes(ostream& out) const {
-		for (int i = 0; i < _logSize; i++) {
-			_array[i]->saveVote(out);
-		}
-		//next ex we will implament try&catch
-		if (!out.good()) {
-			cout << "Save issue" << endl;
-			exit(-1);
-		}
-	}
-
-	template<class T>
-	void DynamicArr<T>::loadVotes(istream& in, DynamicArr<T> parties) {
-		for (int i = 0; i < _logSize; i++) {
-			_array[i]->loadVote(in, parties);
-		}
-
-		//next ex we will implament try&catch
-		if (!in.good()) {
-			cout << "Citizen load issue" << endl;
-			exit(-1);
-		}
-	}
-
-	template<class T>
-	T DynamicArr<T>::getElectionWinner() {
-		Party* winner = nullptr;
-		int winnerElectors = 0;
-
-		for (int i = 0;i < _logSize;i++) {
-			if (_array[i]->getTotalElectors() > winnerElectors) {
-				winnerElectors = _array[i]->getTotalElectors();
-				winner = _array[i];
-			}
-		}
-		return winner;
+	void DynamicArr<T>::swap(T el1, T el2) {
+		T temp = el1;
+		el1 = el2;
+		el2 = temp;
 	}
 
 	template<class T>
@@ -427,7 +315,6 @@ namespace Elections
 		*p = val;
 		++_logicalSize;
 	}
-
 
 	template<class T>
 	const DynamicArr<T>::iterator& DynamicArr<T>::erase(const iterator& pos) {
@@ -476,7 +363,7 @@ namespace Elections
 		_logSize -= last._i - first._i;
 		return first--;
 	}
-
+				
 }
 
 

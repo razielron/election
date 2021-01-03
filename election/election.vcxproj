@@ -145,7 +145,6 @@
     <ClCompile Include="district.cpp" />
     <ClCompile Include="districtLoader.cpp" />
     <ClCompile Include="districtsArr.cpp" />
-    <ClCompile Include="dynamicArr.cpp" />
     <ClCompile Include="election.cpp" />
     <ClCompile Include="electionLoader.cpp" />
     <ClCompile Include="main.cpp" />
