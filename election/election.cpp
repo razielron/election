@@ -105,8 +105,8 @@ namespace Elections
 		}
 
 		_districts = new DistrictsArr(in);
-		_citizens = new CitizensArr(in, _districts);
-		_parties = new PartiesArr(in, _districts, _citizens);
+		_citizens = new CitizensArr(in, this);
+		_parties = new PartiesArr(in, this);
 	}
 
 	void Election::saveVotes(ostream& out) const {

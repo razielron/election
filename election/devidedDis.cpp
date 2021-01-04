@@ -19,9 +19,9 @@ namespace Elections
 
 	ostream& operator<<(ostream& os, const DevidedDis& devDis) {
 		os << "-------------DISTRICT-START------------" << endl;
-		os << "District ID: " << devDis.getDistrictNumber() << endl;
+		os << "District ID: " << devDis.getId() << endl;
 		os << "District type: Devided" << endl;
-		os << "Name of district: " << devDis.getDistrictNumber() << endl;
+		os << "Name of district: " << devDis.getId() << endl;
 		os << "Number of representetive: " << devDis.getNumOfRepresentatives() << endl;
 		os << "--------------DISTRICT-END-------------" << endl;
 		return os;

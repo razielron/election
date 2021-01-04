@@ -5,7 +5,7 @@ using namespace std;
 
 namespace Elections
 {
-
+	class Election;
 	class PartyCandidates;
 	class CitizensArr;
 	class Party
@@ -24,7 +24,7 @@ namespace Elections
 		//Constructors + Distructors
 		public:
 			Party():_name(nullptr), _partyId(0), _totalElectors(0), _candidate(nullptr), _partyCandidates(nullptr) {}
-			Party(istream& in, DistrictsArr* districts, CitizensArr* citArr);
+			Party(istream& in, Election* election);
 			Party(char* name, Citizen* cit);
 			~Party();
 			friend ostream& operator<<(ostream& os, const Party& party);
@@ -66,7 +66,7 @@ namespace Elections
 			//Load and Save
 		public:
 			void save(ostream& out) const;
-			void load(istream& in, DistrictsArr* districts, CitizensArr* citArr);
+			void load(istream& in, Election* election);
 			
 	};
 }

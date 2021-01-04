@@ -24,7 +24,7 @@ namespace Elections {
 		public:
 			CitizensArr();
 			CitizensArr(Citizen* cit);
-			CitizensArr(istream& in, DistrictsArr* districts);
+			CitizensArr(istream& in, Election* election);
 			CitizensArr(istream& in, CitizensArr* citizens);
 			~CitizensArr();
 			CitizensArr(const Citizen& cit) = delete;
@@ -43,6 +43,8 @@ namespace Elections {
 			//returns the number of zitizens in the array
 			int getLogSize() const { return _logSize; }
 
+			
+
 		public:
 			//adding citizen to the arr
 			void appendCitizen(Citizen* cit);
@@ -53,7 +55,7 @@ namespace Elections {
 			void saveId(ostream& out) const;
 			void loadById(istream& in, CitizensArr* citizens);
 			void save(ostream& out) const;
-			void load(istream& in, DistrictsArr* districts);
+			void load(istream& in, Election* election);
 			void saveVotes(ostream& out) const;
 			void loadVotes(istream& in, PartiesArr* parties);
 	};

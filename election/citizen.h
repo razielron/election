@@ -5,6 +5,7 @@ using namespace std;
 
 namespace Elections
 {
+	class Election;
 	class District;
 	class DistrictsArr;
 	class Party;
@@ -22,7 +23,7 @@ namespace Elections
 		public:
 			Citizen() : _name(nullptr), _id(nullptr), _yearOfBirth(0), _dis(nullptr), _vote(nullptr) {}
 			Citizen(char* id, int yearOfBirth, char* name, District* dis);
-			Citizen(istream& in, DistrictsArr* districts);
+			Citizen(istream& in, Election* election);
 			~Citizen();
 			friend ostream& operator<<(ostream& os, const Citizen& cit);
 			
@@ -44,7 +45,7 @@ namespace Elections
 		public:
 			void saveId(ostream& out) const;
 			void save(ostream& out) const;
-			void load(istream& in, DistrictsArr* districts);
+			void load(istream& in, Election* election);
 			void saveVote(ostream& out) const;
 			void loadVote(istream& in, PartiesArr* parties);
 	};

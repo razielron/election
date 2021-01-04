@@ -65,7 +65,7 @@ namespace Elections
 	{
 		ListItem* temp = _head;
 		while (temp) {
-			if (dis->getDistrictNumber() == temp->dis->getDistrictNumber())
+			if (dis->getId() == temp->dis->getId())
 				return temp;
 			temp = temp->next;
 		}
@@ -209,7 +209,7 @@ namespace Elections
 		out.write(rcastcc(&tempInt), sizeof(int));
 		ListItem* temp = _head;
 		while (temp) {
-			tempInt = temp->dis->getDistrictNumber();
+			tempInt = temp->dis->getId();
 			out.write(rcastcc(&tempInt), sizeof(int));
 			temp->partyCandidates->saveId(out);
 			out.write(rcastcc(&(temp->numOfVotes)), sizeof(int));

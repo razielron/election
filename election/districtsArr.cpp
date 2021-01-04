@@ -73,7 +73,7 @@ namespace Elections
 
 	District* DistrictsArr::getDistrict(int districtId) const {
 		for (int i = 0;i < _logSize;i++) {
-			if (_districts[i]->getDistrictNumber() == districtId)
+			if (_districts[i]->getId() == districtId)
 				return _districts[i];
 		}
 		return nullptr;

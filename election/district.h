@@ -33,7 +33,7 @@ namespace Elections
 		public:
 			
 			inline const char* getName() const { return _name; }
-			inline const int getDistrictNumber() const { return _districtId; }
+			inline const int getId() const { return _districtId; }
 			inline const int getNumOfRepresentatives() const { return _numOfRepresentatives; }
 			inline const int getTotalVotes() const { return _totalVotes; }
 			inline const int getWinnerVotes() const { return _winnerVotes; }

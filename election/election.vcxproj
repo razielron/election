@@ -162,6 +162,7 @@
     <ClInclude Include="district.h" />
     <ClInclude Include="districtLoader.h" />
     <ClInclude Include="districtsArr.h" />
+    <ClInclude Include="dynamicArr.h" />
     <ClInclude Include="election.h" />
     <ClInclude Include="electionLoader.h" />
     <ClInclude Include="normalElection.h" />
