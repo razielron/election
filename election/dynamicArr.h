@@ -261,17 +261,6 @@ namespace Elections
 		}
 		return os;
 	}
-	
-	template<>
-	ostream& operator<<(ostream& os, const DynamicArr<District*>& disArr) {
-		for (int i = 0; i < disArr.size() ; i++) {
-			if (typeid(*(disArr[i])) == typeid(UniformDis))
-				os << *(static_cast<UniformDis*>(disArr[i])) << endl;
-			else
-				os << *(static_cast<DevidedDis*>(disArr[i])) << endl;
-		}
-		return os;
-	}
 
 	template<class T>
 	T DynamicArr<T>::find(string id) {
