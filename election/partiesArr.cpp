@@ -14,7 +14,7 @@ namespace Elections
 	}
 
 	bool PartiesArr::setDistrictWinner() {
-		for (int i = 0;i < _logSize;i++) {
+		for (int i = 0; i < _logSize; i++) {
 			_array[i]->setDistrictWinner();
 		}
 
@@ -25,7 +25,7 @@ namespace Elections
 		Party* winner = nullptr;
 		int winnerElectors = 0;
 
-		for (int i = 0;i < _logSize;i++) {
+		for (int i = 0; i < _logSize; i++) {
 			if (_array[i]->getTotalElectors() > winnerElectors) {
 				winnerElectors = _array[i]->getTotalElectors();
 				winner = _array[i];
@@ -42,7 +42,7 @@ namespace Elections
 	}
 
 	void PartiesArr::appendElectedRep() {
-		for (int i = 0;i < _logSize;i++) {
+		for (int i = 0; i < _logSize; i++) {
 			_array[i]->getPartyCandidates()->addRepresentetives();
 		}
 	}
@@ -89,18 +89,22 @@ namespace Elections
 		}
 	}
 
-	void PartiesArr::sortByTotalVotes() {
-		Party* temp;
-		for (int i = 0; i < _logSize; i++) {
-			for (int j = i + 1; j < _logSize; j++) {
-				if (_array[i]->getPartyCandidates()->getPartyNumOfVotes() <
-					_array[j]->getPartyCandidates()->getPartyNumOfVotes()) {
-					temp = _array[i];
-					_array[i] = _array[j];
-					_array[j] = temp;
-				}
-			}
+	int totalVotesCompare(Party* p1, Party* p2) {
+		if (p1->getPartyCandidates()->getPartyNumOfVotes() <
+			p2->getPartyCandidates()->getPartyNumOfVotes()) {
+			return -1;
 		}
+
+		if (p1->getPartyCandidates()->getPartyNumOfVotes() >
+			p2->getPartyCandidates()->getPartyNumOfVotes()) {
+			return 1;
+		}
+
+		return 0;
+	}
+
+	void PartiesArr::sortByTotalVotes() {
+		this->sort(this->begin(), this->end(), totalVotesCompare);
 	}
 
 	void PartiesArr::addRepresentetives() {
