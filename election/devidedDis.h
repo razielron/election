@@ -1,10 +1,8 @@
 #pragma once 
-#include <iostream>
 #include "district.h"
 
 namespace Elections
 {
-	class PartiesArr;
 	class DevidedDis : public District
 	{
 

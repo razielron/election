@@ -4,21 +4,9 @@ ID:		308483437
 Name2:  Raziel Alron
 ID:		316061415
 */
-
-#pragma once 
-#include "party.h"
-#include "district.h"
-#include "devidedDis.h"
-#include "UniformDis.h"
-#include "simpleElection.h"
-#include "normalElection.h"
-#include "citizen.h"
 #include "electionLoader.h"
-#include <string>
-#include <iostream>
+#include "districtLoader.h"
 #include <fstream>
-#include <typeinfo>
-using namespace std;
 using namespace Elections;
 
 enum class Menu {
@@ -101,7 +89,7 @@ namespace Elections {
 		char id[256];
 		District* dis;
 
-		if (!(election->getDistricts()->getLogSize())) {
+		if (!(election->getDistricts()->size())) {
 			cout << "There are no distrits " << endl;
 			return;
 		}
@@ -122,7 +110,7 @@ namespace Elections {
 		if (typeid(*election) == typeid(NormalElection)) {
 			cout << "Enter district ID: ";
 			cin >> districtId;
-			while (!(dis = election->getDistricts()->getDistrict(districtId))) {
+			while (!(dis = election->getDistricts()->find(districtId))) {
 				cout << "Enter valid district ID" << endl;
 				cin >> districtId;
 			}
@@ -141,7 +129,7 @@ namespace Elections {
 		char id[256];
 		Citizen* temp = nullptr;
 		
-		if (!(election->getCitizens()->getLogSize())) {
+		if (!(election->getCitizens()->size())) {
 			cout << "There are no citizens " << endl;
 			return;
 		}
@@ -151,7 +139,7 @@ namespace Elections {
 
 		cout << "Enter ID of prime minister candidate: " << endl;
 		cin >> id;
-		while (!(temp = election->getCitizens()->getCit(id))) {
+		while (!(temp = election->getCitizens()->find(id))) {
 			cout << "There is no citizen with this ID" << endl;
 			cin >> id;
 		}
@@ -170,7 +158,7 @@ namespace Elections {
 
 		cout << "Enter citizen ID: ";
 		cin >> id;
-		while (!(citTemp = election->getCitizens()->getCit(id))) {
+		while (!(citTemp = election->getCitizens()->find(id))) {
 			cout << "There is no citizen with this ID" << endl;
 			cin >> id;
 		}
@@ -178,7 +166,7 @@ namespace Elections {
 
 		cout << "Enter Party ID: ";
 		cin >> partyId;
-		while (!(partyTemp = election->getParties()->getParty(partyId))) {
+		while (!(partyTemp = election->getParties()->find(partyId))) {
 			cout << "Enter valid Party ID: ";
 			cin >> partyId;
 		}
@@ -186,7 +174,7 @@ namespace Elections {
 		if (typeid(*election) == typeid(NormalElection)) {
 			cout << "Enter district ID: ";
 			cin >> districtId;
-			while (!(disTemp = election->getDistricts()->getDistrict(districtId))) {
+			while (!(disTemp = election->getDistricts()->find(districtId))) {
 				cout << "Enter valid district ID" << endl;
 				cin >> districtId;
 			}
@@ -207,7 +195,7 @@ namespace Elections {
 
 		cout << "Enter citizen ID: ";
 		cin >> id;
-		while (!(citTemp = election->getCitizens()->getCit(id))) {
+		while (!(citTemp = election->getCitizens()->find(id))) {
 			cout << "Enter correct ID / There is no citizen with this ID" << endl;
 			cin >> id;
 		}
@@ -220,7 +208,7 @@ namespace Elections {
 
 		cout << "Enter Party ID: ";
 		cin >> partyId;
-		while (!(partyTemp = election->getParties()->getParty(partyId))) {
+		while (!(partyTemp = election->getParties()->find(partyId))) {
 			cout << "Enter valid Party ID: ";
 			cin >> partyId;
 		}

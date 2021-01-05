@@ -1,13 +1,17 @@
 #pragma once
 #include <istream>
 #include <ostream>
+#include <string>
+#include "dynamicArr.h"
+#define rcastcc reinterpret_cast<const char*>
+#define rcastc reinterpret_cast<char*>
 using namespace std;
 
 namespace Elections
 {
 	class Election;
 	class District;
-	class DistrictsArr;
+	/*class DistrictsArr;*/
 	class Party;
 	class PartiesArr;
 	class Citizen

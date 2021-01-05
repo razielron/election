@@ -1,17 +1,6 @@
 #include "partyCandidates.h"
-#include "uniformDis.h"
-#include "devidedDis.h"
-#include "district.h"
+#include "districtLoader.h"
 #include "districtsArr.h"
-#include "citizensArr.h"
-#include <string.h>
-#include <iostream>
-#include <cmath>
-#include <typeinfo>
-using namespace std;
-
-#define rcastcc reinterpret_cast<const char*>
-#define rcastc reinterpret_cast<char*>
 
 namespace Elections
 {
@@ -23,7 +12,7 @@ namespace Elections
 	PartyCandidates::~PartyCandidates() {
 		ListItem* temp = _head;
 		while (temp) {
-			temp->partyCandidates->deleteArrPointer();
+			delete[] temp->partyCandidates->getArr();
 			temp = temp->next;
 			delete _head;
 			_head = temp;
@@ -85,11 +74,11 @@ namespace Elections
 	void PartyCandidates::appendPartyCandidate(District* dis, Citizen* cit) {
 		ListItem* temp = searchDistrict(dis);
 		if (temp) {
-			temp->partyCandidates->appendCitizen(cit);
+			temp->partyCandidates->push_back(cit);
 		}
 		else {
 			addTail(dis);
-			_tail->partyCandidates->appendCitizen(cit);
+			_tail->partyCandidates->push_back(cit);
 		}
 	}
 
@@ -132,7 +121,7 @@ namespace Elections
 		while (temp) {
 			numOfRep = setNumOfElectors(temp);
 			for (int i = 0;i < numOfRep;i++) {
-				temp->dis->appendToRepresentetives(temp->partyCandidates->getCit(i));
+				temp->dis->appendToRepresentetives(temp->partyCandidates->at(i));
 			}
 			temp = temp->next;
 		}
@@ -225,7 +214,7 @@ namespace Elections
 		in.read(rcastc(&numOfNodes), sizeof(int));
 		for (int i = 0;i < numOfNodes; i++) {
 			in.read(rcastc(&temp), sizeof(int));
-			dis = districts->getDistrict(temp);
+			dis = districts->find(temp);
 			addTail(dis);
 			delete _tail->partyCandidates;
 			_tail->partyCandidates = new CitizensArr(in, citizens);

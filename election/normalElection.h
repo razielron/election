@@ -1,7 +1,6 @@
 #pragma once
 #include "election.h"
-#include <iostream>
-using namespace std;
+
 
 namespace Elections
 {

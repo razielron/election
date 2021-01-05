@@ -1,43 +1,19 @@
 #pragma once
-#include <iostream>
-using namespace std;
+#include "party.h"
 
 namespace Elections {
 
-	class Election;
-	class CitizensArr;
-	class District;
-	class DistrictsArr;
-	class Party;
-	class PartiesArr
+	class PartiesArr: public DynamicArr<Party*>
 	{
-		private:
-			Party** _parties;
-			int _logSize;
-			int _phySize;
-
-		private:
-			//doubles the pyhsical size of the array
-			void increasePartiesArr();
-
 		//Constructors + Distructors
 		public:
-			PartiesArr();
-			PartiesArr(Party* party);
+			PartiesArr(): DynamicArr() {};
+			PartiesArr(Party* party): DynamicArr(party) {};
 			PartiesArr(istream& in, Election* election);
-			~PartiesArr();
-			PartiesArr(const Party& party) = delete;
-			void operator=(const PartiesArr& partyArr);
-			Party* operator[](int idx) { return _parties[idx]; }
-			Party* operator[](int idx) const { return _parties[idx]; }
-			friend ostream& operator<<(ostream& os, const PartiesArr& partyArr);
-
+			~PartiesArr() {}
+			
 		//GETTERS
 		public:
-			Party** getParties() const { return _parties; }
-			int getLogSize() const { return _logSize; }
-			//get party from array by given id
-			Party* getParty(int id);
 			//returns the party with most electors
 			Party* getElectionWinner();
 
@@ -70,8 +46,6 @@ namespace Elections {
 		public:
 			void save(ostream& out) const;
 			void load(istream& in, Election* election);
-			void saveResults(ostream& out) const;
-			void loadResults(istream& in);
 	};
 
 }

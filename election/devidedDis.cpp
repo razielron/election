@@ -1,9 +1,6 @@
 #include "devidedDis.h"
 #include "partiesArr.h"
-#include "partyCandidates.h"
-#include "party.h"
-#include <string.h>
-#include <iostream>
+
 using namespace std;
 
 #define rcastcc reinterpret_cast<const char*>
@@ -35,7 +32,7 @@ namespace Elections
 		cout << "District voters Percentage: " << getVotersPresentage() << "%" << endl;
 		partiesArr->sortByNumOfElectorsInDistrict(this);
 		cout << "-------------Votes Summery------------" << endl << endl;
-		for (int i = 0;i < partiesArr->getLogSize() &&
+		for (int i = 0;i < partiesArr->size() &&
 			((*partiesArr)[i]->getPartyCandidates()->getPartyNumOfElectors(this) > 0);i++) {
 			partiesArr->printDistrictPartyDetails(i, this);
 		}

@@ -1,85 +1,21 @@
-#include "citizensArr.h"
-#include "district.h"
-#include "districtsArr.h"
 #include "partiesArr.h"
-#include "PartyCandidates.h"
-#include "party.h"
-#include "election.h"
-#include <string>
-#include <iostream>
-using namespace std;
-
-#define rcastcc reinterpret_cast<const char*>
-#define rcastc reinterpret_cast<char*>
-
 namespace Elections
 {
-	PartiesArr::PartiesArr() : _logSize(0), _phySize(1) {
-		_parties = new Party*[_phySize];
-	}
 
 	PartiesArr::PartiesArr(istream& in, Election* election) {
 		load(in, election);
 	}
 
-	PartiesArr::PartiesArr(Party* party) : _logSize(1), _phySize(2) {
-		_parties = new Party*[_phySize];
-		_parties[0] = party;
-	}
-
-	PartiesArr::~PartiesArr() {
-		for (int i = 0; i < _logSize; i++) {
-			delete _parties[i];
-		}
-		delete[] _parties;
-	}
-
-	void PartiesArr::operator=(const PartiesArr& partyArr) {
-		if (&partyArr != this) {
-			delete[] _parties;
-			_logSize = _phySize = partyArr.getLogSize();
-			_parties = new Party * [_logSize];
-			for (int i = 0; i < _logSize; i++) {
-				_parties[i] = partyArr[i];
-			}
-		}
-	}
-
-	ostream& operator<<(ostream& os, const PartiesArr& partyArr) {
-		for (int i = 0; i < partyArr.getLogSize(); i++) {
-			cout << partyArr[i];
-		}
-		return os;
-	}
-
-	void PartiesArr::increasePartiesArr() {
-		_phySize *= 2;
-		Party** temp = new Party*[_phySize];
-		memcpy(temp, _parties, sizeof(Party*)*_logSize);
-		delete[] _parties;
-		_parties = new Party*[_phySize];
-		memcpy(_parties, temp, sizeof(Party*)*_logSize);
-		delete[] temp;
-	}
-
-	Party* PartiesArr::getParty(int id) {
-		for (int i = 0; i < _logSize; i++) {
-			if (_parties[i]->getId() == id)
-				return _parties[i];
-		}
-		return nullptr;
-	}
-
 	bool PartiesArr::setPartyTotalElectors() {
 		for (int i = 0; i < _logSize; i++) {
-			_parties[i]->setPartyTotalElectors();
+			_array[i]->setPartyTotalElectors();
 		}
 		return true;
 	}
 
 	bool PartiesArr::setDistrictWinner() {
 		for (int i = 0;i < _logSize;i++) {
-			_parties[i]->setDistrictWinner();
+			_array[i]->setDistrictWinner();
 		}
 
 		return true;
@@ -90,9 +26,9 @@ namespace Elections
 		int winnerElectors = 0;
 
 		for (int i = 0;i < _logSize;i++) {
-			if (_parties[i]->getTotalElectors() > winnerElectors) {
-				winnerElectors = _parties[i]->getTotalElectors();
-				winner = _parties[i];
+			if (_array[i]->getTotalElectors() > winnerElectors) {
+				winnerElectors = _array[i]->getTotalElectors();
+				winner = _array[i];
 			}
 		}
 		return winner;
@@ -100,28 +36,28 @@ namespace Elections
 
 	void PartiesArr::appendParty(Party* party) {
 		if (_phySize >= _logSize) {
-			PartiesArr::increasePartiesArr();
+			resize();
 		}
-		_parties[_logSize++] = party;
+		_array[_logSize++] = party;
 	}
 
 	void PartiesArr::appendElectedRep() {
 		for (int i = 0;i < _logSize;i++) {
-			_parties[i]->getPartyCandidates()->addRepresentetives();
+			_array[i]->getPartyCandidates()->addRepresentetives();
 		}
 	}
 
 	void PartiesArr::printDistrictPartyDetails(int& i, District* dis) {
-		_parties[i]->printDistrictPartyDetails(dis);
+		_array[i]->printDistrictPartyDetails(dis);
 	}
 
 	void PartiesArr::printResults() const {
 		cout << "------------PARTIES-RESULTS-START---------" << endl;
 		for (int i = 0; i < _logSize; i++) {
-			cout << "Name of Party: " << _parties[i]->getName() << endl;
-			cout << "Party candidate " << _parties[i]->getCandidate()->getName() << endl;
-			cout << "Number of Electors: " << _parties[i]->getTotalElectors() << endl;
-			cout << "Number of Votes: " << _parties[i]->getPartyNumOfVotes() << endl << endl;;
+			cout << "Name of Party: " << _array[i]->getName() << endl;
+			cout << "Party candidate " << _array[i]->getCandidate()->getName() << endl;
+			cout << "Number of Electors: " << _array[i]->getTotalElectors() << endl;
+			cout << "Number of Votes: " << _array[i]->getPartyNumOfVotes() << endl << endl;;
 		}
 		cout << "-------------PARTIES-RESULTS-END---------" << endl;
 	}
@@ -130,10 +66,10 @@ namespace Elections
 		Party* temp;
 		for (int i = 0; i < _logSize; i++) {
 			for (int j = i + 1; j < _logSize; j++) {
-				if (_parties[i]->getTotalElectors() < _parties[j]->getTotalElectors()) {
-					temp = _parties[i];
-					_parties[i] = _parties[j];
-					_parties[j] = temp;
+				if (_array[i]->getTotalElectors() < _array[j]->getTotalElectors()) {
+					temp = _array[i];
+					_array[i] = _array[j];
+					_array[j] = temp;
 				}
 			}
 		}
@@ -143,11 +79,11 @@ namespace Elections
 		Party* temp;
 		for (int i = 0; i < _logSize; i++) {
 			for (int j = i + 1; j < _logSize; j++) {
-				if (_parties[i]->getPartyCandidates()->getPartyNumOfElectors(dis) <
-					_parties[j]->getPartyCandidates()->getPartyNumOfElectors(dis)) {
-					temp = _parties[i];
-					_parties[i] = _parties[j];
-					_parties[j] = temp;
+				if (_array[i]->getPartyCandidates()->getPartyNumOfElectors(dis) <
+					_array[j]->getPartyCandidates()->getPartyNumOfElectors(dis)) {
+					temp = _array[i];
+					_array[i] = _array[j];
+					_array[j] = temp;
 				}
 			}
 		}
@@ -157,11 +93,11 @@ namespace Elections
 		Party* temp;
 		for (int i = 0; i < _logSize; i++) {
 			for (int j = i + 1; j < _logSize; j++) {
-				if (_parties[i]->getPartyCandidates()->getPartyNumOfVotes() <
-					_parties[j]->getPartyCandidates()->getPartyNumOfVotes()) {
-					temp = _parties[i];
-					_parties[i] = _parties[j];
-					_parties[j] = temp;
+				if (_array[i]->getPartyCandidates()->getPartyNumOfVotes() <
+					_array[j]->getPartyCandidates()->getPartyNumOfVotes()) {
+					temp = _array[i];
+					_array[i] = _array[j];
+					_array[j] = temp;
 				}
 			}
 		}
@@ -169,18 +105,18 @@ namespace Elections
 
 	void PartiesArr::addRepresentetives() {
 		for (int i = 0; i < _logSize; i++) {
-			_parties[i]->addRepresentetives();
+			_array[i]->addRepresentetives();
 		}
 	}
 
 	void PartiesArr::save(ostream& out) const {
 		out.write(rcastcc(&_logSize), sizeof(int));
 		for (int i = 0;i < _logSize;i++) {
-			_parties[i]->save(out);
+			_array[i]->save(out);
 		}
 		//next ex we will implament try&catch
 		if (!out.good()) {
-			cout << "DistrictArr Save issue" << endl;
+			cout << "PartyArr Save issue" << endl;
 			exit(-1);
 		}
 	}
@@ -188,14 +124,14 @@ namespace Elections
 	void PartiesArr::load(istream& in, Election* election) {
 		in.read(rcastc(&_phySize), sizeof(int));
 		_logSize = _phySize;
-		_parties = new Party* [_phySize];
+		_array = new Party* [_phySize];
 		for (int i = 0; i < _phySize; i++) {
-			_parties[i] = new Party(in, election);
+			_array[i] = new Party(in, election);
 		}
 
 		//next ex we will implament try&catch
 		if (!in.good()) {
-			cout << "DistrictArr load issue" << endl;
+			cout << "PartyArr load issue" << endl;
 			exit(-1);
 		}
 	}

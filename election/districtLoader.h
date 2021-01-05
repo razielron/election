@@ -1,6 +1,6 @@
 #pragma once 
-#include <iostream>
-#include "district.h"
+#include "devidedDis.h"
+#include "uniformDis.h"
 
 namespace Elections
 {
