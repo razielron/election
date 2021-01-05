@@ -60,21 +60,15 @@ namespace Elections
 		}
 	}
 
-	void CitizensArr::loadById(istream& in, CitizensArr* citizens) {
-		int tempSize = 0;
-		char* tempCitId;
-		
+	void CitizensArr::loadById(istream& in, CitizensArr* citizens) {	
+		string tempCitId;
 		in.read(rcastc(&_phySize), sizeof(int));
 		_logSize = _phySize;
 		_array = new Citizen * [_phySize];
 
 		for (int i = 0; i < _logSize; i++) {
-			in.read(rcastc(&tempSize), sizeof(int));
-			tempCitId = new char[tempSize + 1];
-			in.read(rcastc(tempCitId), sizeof(char) * tempSize);
-			tempCitId[tempSize] = '\0';
+			in.read(rcastc(tempCitId), sizeof(string));
 			_array[i] = citizens->find(tempCitId);
-			delete[] tempCitId;
 
 			//next ex we will implament try&catch
 			if (!in.good()) {

@@ -6,7 +6,7 @@ namespace Elections
 {
 	int Party::_partySerialNumber = 0;
 
-	Party::Party(char* name, Citizen* cit) : _totalElectors(0) {
+	Party::Party(string name, Citizen* cit) : _totalElectors(0) {
 		_name = new char[strlen(name) + 1];
 		memcpy(_name, name, strlen(name) + 1);
 		_partyId = _partySerialNumber++;
@@ -82,7 +82,7 @@ namespace Elections
 
 	void Party::save(ostream& out) const {
 		int temp;
-		const char* tempId;
+		const string tempId;
 
 		out.write(rcastcc(&_partySerialNumber), sizeof(int));
 		temp = strlen(_name);
@@ -104,7 +104,7 @@ namespace Elections
 
 	void Party::load(istream& in, Election* election) {
 		int temp = 0;
-		char* canId;
+		string canId;
 		CitizensArr* citArr = election->getCitizens();
 		DistrictsArr* districts = election->getDistricts();
 

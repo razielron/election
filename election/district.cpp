@@ -4,7 +4,7 @@ namespace Elections
 {
 	int District::_districtSerialNumber = 0;
 
-	District::District(char* name, int numOfRepresentatives):
+	District::District(string name, int numOfRepresentatives):
 		_numOfRepresentatives(numOfRepresentatives), _winnerVotes(0),
 		_totalVotes(0){
 		_name = new char[strlen(name) + 1];

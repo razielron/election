@@ -4,8 +4,8 @@
 #include <typeinfo>
 using namespace std;
 
-#define rcastcc reinterpret_cast<const char*>
-#define rcastc reinterpret_cast<char*>
+#define rcastcc reinterpret_cast<const string>
+#define rcastc reinterpret_cast<string>
 
 
 namespace Elections
@@ -64,7 +64,7 @@ namespace Elections
 		//returns an element by given parameter
 		T find(string id);
 		//returns an element by given parameter
-		T find(char* id);
+		T find(string id);
 		//returns an element by given parameter
 		T find(int id);
 		//Swaps elements
@@ -329,7 +329,7 @@ namespace Elections
 	}
 
 	template<class T>
-	T DynamicArr<T>::find(char* id) {
+	T DynamicArr<T>::find(string id) {
 		for (int i = 0;i < _logSize;i++) {
 			if (strcmp(_array[i]->getId(), id)==0)
 				return _array[i];

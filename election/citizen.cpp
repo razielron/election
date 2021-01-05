@@ -10,20 +10,13 @@ namespace Elections
 		load(in, election);
 	}
 
-	Citizen::Citizen(char* id, int yearOfBirth, char* name, District* dis)
+	Citizen::Citizen(string id, int yearOfBirth, string name, District* dis)
 		: _yearOfBirth(yearOfBirth) {
-		_id = new char[strlen(id) + 1];
-		memcpy(_id, id, strlen(id) + 1);
-		_name = new char[strlen(name) + 1];
-		memcpy(_name, name, strlen(name)+1);
+		_id = id;
+		_name = name;
 		_dis = dis;
 		_dis->appendToVoters(this);
 		_vote = nullptr;
-	}
-
-	Citizen::~Citizen(){
-		delete[] _id;
-		delete[] _name;
 	}
 
 	ostream& operator<<(ostream& os, const Citizen& cit) {
@@ -48,9 +41,7 @@ namespace Elections
 	}
 	
 	void Citizen::saveId(ostream& out) const {
-		int temp = strlen(_id);
-		out.write(rcastcc(&temp), sizeof(int));
-		out.write(rcastcc(_id), sizeof(char) * temp);
+		out.write(rcastcc(_id), sizeof(string));
 
 		//next ex we will implament try&catch
 		if (!out.good()) {
@@ -60,12 +51,8 @@ namespace Elections
 	}
 
 	void Citizen::save(ostream& out) const {
-		int temp = strlen(_name);
-		out.write(rcastcc(&temp), sizeof(int));
-		out.write(rcastcc(_name), sizeof(char) * temp);
-		temp = strlen(_id);
-		out.write(rcastcc(&temp), sizeof(int));
-		out.write(rcastcc(_id), sizeof(char) * temp);
+		out.write(rcastcc(_name), sizeof(string));
+		out.write(rcastcc(_id), sizeof(string));
 		out.write(rcastcc(&_yearOfBirth), sizeof(int));
 		temp = _dis->getId();
 		out.write(rcastcc(&temp), sizeof(int));
@@ -81,14 +68,8 @@ namespace Elections
 		int idTemp = -1, lengthTemp = 0;
 		DistrictsArr* districts = election->getDistricts();
 
-		in.read(rcastc(&lengthTemp), sizeof(int));
-		_name = new char[lengthTemp + 1];
-		in.read(rcastc(_name), sizeof(char) * lengthTemp);
-		_name[lengthTemp] = '\0';
-		in.read(rcastc(&lengthTemp), sizeof(int));
-		_id = new char[lengthTemp + 1];
-		in.read(rcastc(_id), sizeof(char) * lengthTemp);
-		_id[lengthTemp] = '\0';
+		in.read(rcastc(_name), sizeof(string));
+		in.read(rcastc(_id), sizeof(string));
 		in.read(rcastc(&_yearOfBirth), sizeof(int));
 		in.read(rcastc(&idTemp), sizeof(int));
 		_dis = districts->find(idTemp);

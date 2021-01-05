@@ -3,8 +3,8 @@
 #include <ostream>
 #include <string>
 #include "dynamicArr.h"
-#define rcastcc reinterpret_cast<const char*>
-#define rcastc reinterpret_cast<char*>
+#define rcastcc reinterpret_cast<const string>
+#define rcastc reinterpret_cast<string>
 using namespace std;
 
 namespace Elections
@@ -17,8 +17,8 @@ namespace Elections
 	class Citizen
 	{
 		private:
-			char* _name;
-			char* _id;
+			string _name;
+			string _id;
 			int _yearOfBirth;
 			District* _dis;
 			Party* _vote;
@@ -26,15 +26,15 @@ namespace Elections
 		//Constructors + Distructors
 		public:
 			Citizen() : _name(nullptr), _id(nullptr), _yearOfBirth(0), _dis(nullptr), _vote(nullptr) {}
-			Citizen(char* id, int yearOfBirth, char* name, District* dis);
+			Citizen(string id, int yearOfBirth, string name, District* dis);
 			Citizen(istream& in, Election* election);
-			~Citizen();
+			~Citizen() {};
 			friend ostream& operator<<(ostream& os, const Citizen& cit);
 			
 		//GETTERS
 		public:
-			inline const char* getName() const { return _name; }
-			inline const char* getId() const { return _id; }
+			inline const string getName() const { return _name; }
+			inline const string getId() const { return _id; }
 			inline const int getYearOfBirth() const { return _yearOfBirth; }
 			inline const District* getDistrict() const { return _dis; }
 			inline const Party* getVote() const { return _vote; }
