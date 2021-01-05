@@ -1,11 +1,7 @@
 #pragma once
-#include "citizen.h"
-#include "party.h"
-#include "district.h"
-#include "districtsArr.h"
-#include "partiesArr.h"
 #include "citizensArr.h"
-#include <iostream>
+#include "partiesArr.h"
+#include "districtsArr.h"
 using namespace std;
 
 namespace Elections

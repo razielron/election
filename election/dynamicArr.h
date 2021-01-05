@@ -1,6 +1,4 @@
-#include "districtLoader.h"
-#include "devidedDis.h"
-#include "uniformDis.h"
+#pragma once
 #include <iostream>
 #include <string>
 #include <typeinfo>
@@ -12,18 +10,17 @@ using namespace std;
 
 namespace Elections
 {
-	class Election;
-	class District;
 	template<class T>
 	class DynamicArr {
-	private:
+
+	protected:
 		T* _array;
 		const int GROTH_FACTOR = 2;
 		int _logSize;
 		int _phySize;
 
 	public:
-		DynamicArr() :_logSize(0), _phySize(1), _array(new T[_phySize]) {};
+		DynamicArr();
 		DynamicArr(T);
 		~DynamicArr();
 
@@ -44,7 +41,12 @@ namespace Elections
 	public:
 		T operator[](int idx) { return _array[idx]; }
 		T operator[](int idx) const { return _array[idx]; }
-		friend ostream& operator<<(ostream& os, const DynamicArr<T>& element);
+		friend ostream& operator<<(ostream& os, const DynamicArr<T>& element) {
+			for (int i = 0;i < element.size(); i++) {
+				os << element[i];
+			}
+			return os;
+		}
 
 	public:
 		// append at the end
@@ -62,6 +64,8 @@ namespace Elections
 		//returns an element by given parameter
 		T find(string id);
 		//returns an element by given parameter
+		T find(char* id);
+		//returns an element by given parameter
 		T find(int id);
 		//Swaps elements
 		void swap(T al1, T el2);
@@ -73,12 +77,8 @@ namespace Elections
 		template <bool is_const>
 		class base_iterator
 		{
-		private:
-			ds_type* _da;
-			int	_i;
-
 		public:
-			using ds_type = std::conditional_t<is_const, const DynamicArray, DynamicArray>;
+			using ds_type = std::conditional_t<is_const, const DynamicArr, DynamicArr>;
 
 			using iterator_category = std::bidirectional_iterator_tag;
 			using different_type = std::ptrdiff_t;
@@ -113,24 +113,28 @@ namespace Elections
 			}
 
 			// increment-decrement iterator methods
-			base_iterator& operator++() {
+			virtual base_iterator& operator++() {
 				++_i;
 				return *this;
 			}
-			base_iterator operator++(int) {
+			virtual base_iterator operator++(int) {
 				base_iterator temp(*this);
 				++_i;
 				return temp;
 			}
-			base_iterator& operator--() {
+			virtual base_iterator& operator--() {
 				--_i;
 				return *this;
 			}
-			base_iterator operator--(int) {
+			virtual base_iterator operator--(int) {
 				base_iterator temp(*this);
 				--_i;
 				return temp;
 			}
+
+		protected:
+			ds_type* _da;
+			int	_i;
 
 		};
 
@@ -141,11 +145,68 @@ namespace Elections
 
 	public:
 		//inserts a value in a given position
-		void insert(const iterator& pos, const T& val);
+		void insert(const iterator& pos, const T& val) {
+			if (_logSize == _phySize)
+				resize();
+
+			iterator itrEnd = end();
+			iterator itrCurrent = itrEnd, itrPrev = --itrEnd;
+			while (itrCurrent != pos)
+			{
+				*itrCurrent = *itrPrev;
+				itrCurrent = itrPrev--;
+			}
+
+			iterator p = pos;
+			*p = val;
+			++_logSize;
+		}
 		//earases the values in a given pos
-		const iterator& erase(const iterator& pos);
+		const iterator& erase(const iterator& pos) {
+			if (pos._i > _logSize) {
+				cout << "Error" << endl;
+				return nullptr;
+			}
+
+			delete* pos;
+			_logSize--;
+			iterator itrCurrent = pos, itrEndCurrent = pos++;
+
+
+			while (itrEndCurrent != end()) {
+				*itrCurrent = *itrEndCurrent;
+				delete* itrEndCurrent;
+				itrCurrent++;
+				itrEndCurrent++;
+			}
+
+			return pos--;
+		}
 		//earases the values in a given range and returns iterator the one step before
-		const iterator& erase(const iterator& first, const iterator& last);
+		const iterator& erase(const iterator& first, const iterator& last) {
+			if (first._i > _logSize || last._i > _logSize) {
+				cout << "Error" << endl;
+				return nullptr;
+			}
+
+			iterator itrCurrent = first, itrEndCurrent = last;
+			while (itrCurrent != last)
+			{
+				delete* itrCurrent;
+				itrCurrent++;
+			}
+
+			itrCurrent = first;
+			while (itrEndCurrent != end()) {
+				*itrCurrent = *itrEndCurrent;
+				delete* itrEndCurrent;
+				itrCurrent++;
+				itrEndCurrent++;
+			}
+
+			_logSize -= last._i - first._i;
+			return first--;
+		}
 		//returns iterator at the beginning of the array
 		iterator begin() { return iterator(*this, 0); }
 		//returns iterator at the end of the array
@@ -162,7 +223,7 @@ namespace Elections
 		//Sorts the array according to given function
 		template<class T, class Func>
 		void sort(iterator& first, iterator& last, const Func& func) {
-			iteratr temp = first;
+			iterator temp = first;
 			for (iterator i = first; i != last; ++i)
 				for (iterator j = first; j._i < last._i - i._da + 1; ++j)
 					if (func(i, j) < 0)
@@ -172,7 +233,11 @@ namespace Elections
 	};
 		
 	/*------------------------DynamicArr Functions Implementation------------------------*/
-
+	template<class T>
+	DynamicArr<T>::DynamicArr() :_logSize(0), _phySize(1) {
+		_array = new T[_phySize];
+	};
+	
 	template<class T>
 	DynamicArr<T>::DynamicArr(T element) : _logSize(1), _phySize(2) {
 		_array = new T[_phySize];
@@ -235,7 +300,7 @@ namespace Elections
 		T* temp = new T[_phySize];
 		copy(temp);
 		delete[] _array;
-		_array = temp; //!!!!!!
+		_array = temp;
 	} 
 
 	template<class T>
@@ -255,14 +320,6 @@ namespace Elections
 	}
 
 	template<class T>
-	ostream& operator<<(ostream& os, const DynamicArr<T>& element) {
-		for (int i = 0;i < element.size(); i++) {
-			os << element[i];
-		}
-		return os;
-	}
-
-	template<class T>
 	T DynamicArr<T>::find(string id) {
 		for (int i = 0;i < _logSize;i++) {
 			if (!(_array[i]->getId().compare(id)))
@@ -272,9 +329,18 @@ namespace Elections
 	}
 
 	template<class T>
+	T DynamicArr<T>::find(char* id) {
+		for (int i = 0;i < _logSize;i++) {
+			if (strcmp(_array[i]->getId(), id)==0)
+				return _array[i];
+		}
+		return nullptr;
+	}
+
+	template<class T>
 	T DynamicArr<T>::find(int id) {
 		for (int i = 0;i < _logSize;i++) {
-			if (!(_array[i]->getId() == id))
+			if (_array[i]->getId() == id)
 				return _array[i];
 		}
 		return nullptr;
@@ -287,9 +353,9 @@ namespace Elections
 		el2 = temp;
 	}
 
-	template<class T>
+	/*template<class T>
 	void DynamicArr<T>::insert(const iterator& pos, const T& val) {
-		if (_logicalSize == _physicalSize)
+		if (_logSize == _phySize)
 			resize();
 
 		iterator itrEnd = end();
@@ -302,10 +368,10 @@ namespace Elections
 
 		iterator p = pos;
 		*p = val;
-		++_logicalSize;
-	}
+		++_logSize;
+	}*/
 
-	template<class T>
+	/*template<class T>
 	const DynamicArr<T>::iterator& DynamicArr<T>::erase(const iterator& pos) {
 		if (pos._i > _logSize) {
 			cout << "Error" << endl;
@@ -325,10 +391,9 @@ namespace Elections
 		}
 
 		return pos--;
-	}
+	}*/
 
-	template<class T>
-	const DynamicArr<T>::iterator& DynamicArr<T>::erase(const iterator& first, const iterator& last) {
+	/*const iterator& erase(const iterator& first, const iterator& last) {
 		if (pos._i > _logSize) {
 			cout << "Error" << endl;
 			return nullptr;
@@ -351,7 +416,7 @@ namespace Elections
 
 		_logSize -= last._i - first._i;
 		return first--;
-	}
+	}*/
 				
 }
 

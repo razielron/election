@@ -1,13 +1,6 @@
 #include "normalElection.h"
-#include "district.h"
-#include "devidedDis.h"
-#include "UniformDis.h"
-#include "districtsArr.h"
-#include "Party.h"
-#include "partiesArr.h"
-#include "partyCandidates.h"
-#include <typeinfo>
-#include <string>
+#include "districtLoader.h"
+
 
 namespace Elections
 {
@@ -19,7 +12,7 @@ namespace Elections
 
 		os << static_cast<const Election&>(election);
 
-		for (int i = 0; i < districts->getLogSize(); i++) {
+		for (int i = 0; i < districts->size(); i++) {
 			dis = (*districts)[i];
 
 			if ((typeid(*dis)) == (typeid(UniformDis)))
@@ -27,7 +20,7 @@ namespace Elections
 			else
 				static_cast<DevidedDis*>(dis)->printResults(parties);
 
-			for (int j = 0; j < parties->getLogSize(); j++) {
+			for (int j = 0; j < parties->size(); j++) {
 				os << "----------PARTIES-in-district-RESULTS-START----------" << endl;
 				os << "Party: " << (*parties)[j]->getName() << endl;
 				partyRep = (*parties)[j]->getPartyCandidates()->getPartyNumOfElectors(dis);
@@ -36,7 +29,7 @@ namespace Elections
 				if (partyRep) {
 					os << "Party elected representetives: " << endl;
 					for (int k = 0; k < partyRep; k++)
-						os << *((*parties)[j]->getPartyCandidates()->getDistrictPartyCandidates(i)->getCit(k));
+						os << *((*parties)[j]->getPartyCandidates()->getDistrictPartyCandidates(i)->at(k));
 				}
 				else {
 					os << "Party elected representetives: NO REPRESENTETIVES" << endl;

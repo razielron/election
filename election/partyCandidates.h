@@ -1,11 +1,10 @@
 #pragma once
-#include "citizen.h"
-#include "district.h"
 #include "citizensArr.h"
 
 namespace Elections
 {
-	class DistrictArr;
+	class District;
+	class DistrictsArr;
 	class PartyCandidates
 	{
 		private:

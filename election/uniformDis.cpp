@@ -1,10 +1,4 @@
 #include "uniformDis.h"
-#include "party.h"
-#include <string.h>
-#include <cmath>
-#include <iostream>
-using namespace std;
-
 namespace Elections
 {
 	UniformDis::UniformDis() : District() {}

@@ -1,14 +1,4 @@
 #include "district.h"
-#include "party.h"
-#include "partiesArr.h"
-#include <string.h>
-#include <cmath>
-#include <iostream>
-using namespace std;
-
-#define rcastcc reinterpret_cast<const char*>
-#define rcastc reinterpret_cast<char*>
-
 
 namespace Elections
 {
@@ -33,13 +23,13 @@ namespace Elections
 
 	District::~District() {
 		delete[] _name;
-		_representatives->deleteArrPointer();
-		_voters->deleteArrPointer();
+		delete[] _representatives->getArr();
+		delete[] _voters->getArr();
 	}
 
 	int District::getPartyRepNumber(int partyVote) {
 		int repNum = round(((float)(partyVote) / (float)(_totalVotes) * (float)(_numOfRepresentatives)));
-		int occupiedRep = _representatives->getLogSize();
+		int occupiedRep = _representatives->size();
 		if ((repNum + occupiedRep) > _numOfRepresentatives)
 			return --repNum;
 		return repNum;
@@ -63,11 +53,11 @@ namespace Elections
 	}
 
 	void District::appendToVoters(Citizen* cit) {
-		_voters->appendCitizen(cit);
+		_voters->push_back(cit);
 	}
 
 	void District::appendToRepresentetives(Citizen* cit) {
-		_representatives->appendCitizen(cit);
+		_representatives->push_back(cit);
 	}
 
 	ostream& operator<<(ostream& os, const District& dis) {

@@ -1,13 +1,9 @@
 #pragma once
 #include "citizen.h"
-#include <iostream>
-using namespace std;
+#include "partyCandidates.h"
 
 namespace Elections
 {
-	class Election;
-	class PartyCandidates;
-	class CitizensArr;
 	class Party
 	{
 		private:
@@ -55,8 +51,6 @@ namespace Elections
 			void addVote(District* dis);
 			//fill district's representetives by PartyCandidates list of candidater
 			void addRepresentetives();
-			//prints party's data
-			void printParty() const;
 			//prints party's data in a specific district
 			void printDistrictPartyDetails(District* dis) const;
 			//prints the election's results of the party

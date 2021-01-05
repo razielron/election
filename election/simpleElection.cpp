@@ -1,15 +1,5 @@
 #include "simpleElection.h"
-#include "district.h"
-#include "devidedDis.h"
-#include "UniformDis.h"
-#include "districtsArr.h"
-#include "Party.h"
-#include "partiesArr.h"
-#include "partyCandidates.h"
-#include <typeinfo>
-#include <string>
-using namespace std;
-
+#include "districtLoader.h"
 namespace Elections
 {
 	ostream& operator<<(ostream& os, const SimpleElection& election) {
@@ -21,7 +11,7 @@ namespace Elections
 		os << "Voters Percentage: " << dis->getVotersPresentage() << "%" << endl;
 		os << "Number of representetives: " << dis->getNumOfRepresentatives() << endl << endl;
 		os << "--------------PARTIES-RESULTS-START--------------" << endl;
-		for (int j = 0; j < parties->getLogSize(); j++) {
+		for (int j = 0; j < parties->size(); j++) {
 			os << "----------PARTY-RESULTS-START----------" << endl;
 			os << "Party: " << (*parties)[j]->getName() << endl;
 			partyRep = (*parties)[j]->getPartyCandidates()->getPartyNumOfElectors(dis);
@@ -32,7 +22,7 @@ namespace Elections
 			if (partyRep) {
 				os << "Party elected representetives: " << endl;
 				for (int k = 0; k < partyRep; k++)
-					os << *((*parties)[j]->getPartyCandidates()->getDistrictPartyCandidates(dis)->getCit(k));
+					os << *((*parties)[j]->getPartyCandidates()->getDistrictPartyCandidates(dis)->at(k));
 			}
 			else {
 				os << "Party elected representetives: NO REPRESENTETIVES" << endl;

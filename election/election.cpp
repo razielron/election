@@ -1,16 +1,5 @@
-#include <string>
-#include <typeinfo>
 #include "election.h"
-#include "district.h"
-#include "devidedDis.h"
-#include "UniformDis.h"
-#include "districtsArr.h"
-#include "Party.h"
-#include "partiesArr.h"
-#include "partyCandidates.h"
-using namespace std;
-#define rcastcc reinterpret_cast<const char*>
-#define rcastc reinterpret_cast<char*>
+
 
 namespace Elections
 {
@@ -40,15 +29,15 @@ namespace Elections
 	}
 
 	void Election::appendParty(Party* party) {
-		_parties->appendParty(party);
+		_parties->push_back(party);
 	}
 
 	void Election::appendDistrict(District* dis) {
-		_districts->appendDistrict(dis);
+		_districts->push_back(dis);
 	}
 
 	void Election::appendCitizen(Citizen* cit) {
-		_citizens->appendCitizen(cit);
+		_citizens->push_back(cit);
 	}
 
 	void Election::appendCandidateToList(Party* party, District* dis, Citizen* cit) {

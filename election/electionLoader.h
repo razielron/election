@@ -1,8 +1,7 @@
 #pragma once
 #include "normalElection.h"
 #include "simpleElection.h"
-#include <iostream>
-using namespace std;
+
 
 namespace Elections
 {

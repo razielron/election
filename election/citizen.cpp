@@ -1,13 +1,8 @@
 #include "citizen.h"
 #include "election.h"
-#include "district.h"
-#include "districtsArr.h"
-#include "partiesArr.h"
-#include <string>
-#include <iostream>
-using namespace std;
-#define rcastcc reinterpret_cast<const char*>
-#define rcastc reinterpret_cast<char*>
+//#include "district.h"
+//#include "districtsArr.h"
+//#include "partiesArr.h"
 
 namespace Elections
 {
@@ -96,7 +91,7 @@ namespace Elections
 		_id[lengthTemp] = '\0';
 		in.read(rcastc(&_yearOfBirth), sizeof(int));
 		in.read(rcastc(&idTemp), sizeof(int));
-		_dis = districts->getDistrict(idTemp);
+		_dis = districts->find(idTemp);
 		_dis->appendToVoters(this);
 
 		//next ex we will implament try&catch
@@ -121,12 +116,12 @@ namespace Elections
 		}
 	}
 
-	void Citizen::loadVote(istream& in, PartiesArr* parties) {
+	void Citizen::loadVote(istream& in,PartiesArr* parties) {
 		int idTemp = -1;
 
 		in.read(rcastc(&idTemp), sizeof(int));
 		if (idTemp != -1) {
-			_vote = parties->getParty(idTemp);
+			_vote = parties->find(idTemp);
 		}
 
 		//next ex we will implament try&catch

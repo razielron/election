@@ -1,13 +1,6 @@
 #include "party.h"
-#include "district.h"
-#include "election.h"
-#include "citizen.h"
-#include "citizensArr.h"
 #include "partyCandidates.h"
-#include <string.h>
-
-#define rcastcc reinterpret_cast<const char*>
-#define rcastc reinterpret_cast<char*>
+#include "election.h"
 
 namespace Elections
 {
@@ -129,7 +122,7 @@ namespace Elections
 		canId = new char[temp + 1];
 		in.read(rcastc(canId), sizeof(char) * temp);
 		canId[temp] = '\0';
-		_candidate = citArr->getCit(canId);
+		_candidate = citArr->find(canId);
 		_partyCandidates = new PartyCandidates(in, districts, citArr);
 
 		//next ex we will implament try&catch
