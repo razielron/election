@@ -6,9 +6,7 @@ namespace Elections
 {
 	int Party::_partySerialNumber = 0;
 
-	Party::Party(string name, Citizen* cit) : _totalElectors(0) {
-		_name = new char[strlen(name) + 1];
-		memcpy(_name, name, strlen(name) + 1);
+	Party::Party(string name, Citizen* cit) : _name(name), _totalElectors(0) {
 		_partyId = _partySerialNumber++;
 		_candidate = cit;
 		_partyCandidates = new PartyCandidates;
@@ -19,7 +17,6 @@ namespace Elections
 	}
 
 	Party::~Party() {
-		delete[] _name;
 		_partyCandidates->~PartyCandidates();
 	}
 
@@ -85,14 +82,10 @@ namespace Elections
 		const string tempId;
 
 		out.write(rcastcc(&_partySerialNumber), sizeof(int));
-		temp = strlen(_name);
-		out.write(rcastcc(&temp), sizeof(int));
-		out.write(rcastcc(_name), sizeof(char) * temp);
+		out.write(rcastcc(_name), sizeof(string));
 		out.write(rcastcc(&_partyId), sizeof(int));
 		tempId = _candidate->getId();
-		temp = strlen(tempId);
-		out.write(rcastcc(&temp), sizeof(int));
-		out.write(rcastcc(tempId), sizeof(char) * temp);
+		out.write(rcastcc(tempId), sizeof(string));
 		_partyCandidates->save(out);
 
 		//next ex we will implament try&catch
@@ -113,15 +106,9 @@ namespace Elections
 		if (temp > _partySerialNumber)
 			_partySerialNumber = temp;
 
-		in.read(rcastc(&temp), sizeof(int));
-		_name = new char[temp + 1];
-		in.read(rcastc(_name), sizeof(char) * temp);
-		_name[temp] = '\0';
+		in.read(rcastc(_name), sizeof(string));
 		in.read(rcastc(&_partyId), sizeof(int));
-		in.read(rcastc(&temp), sizeof(int));
-		canId = new char[temp + 1];
-		in.read(rcastc(canId), sizeof(char) * temp);
-		canId[temp] = '\0';
+		in.read(rcastc(canId), sizeof(string));
 		_candidate = citArr->find(canId);
 		_partyCandidates = new PartyCandidates(in, districts, citArr);
 

@@ -19,7 +19,7 @@ namespace Elections
 
 		//Constructors + Distructors
 		public:
-			Party():_name(nullptr), _partyId(0), _totalElectors(0), _candidate(nullptr), _partyCandidates(nullptr) {}
+			Party():_name(""), _partyId(0), _totalElectors(0), _candidate(nullptr), _partyCandidates(nullptr) {}
 			Party(istream& in, Election* election);
 			Party(string name, Citizen* cit);
 			~Party();

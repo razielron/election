@@ -226,7 +226,7 @@ namespace Elections
 			iterator temp = first;
 			for (iterator i = first; i != last; ++i)
 				for (iterator j = first; j._i < last._i - i._da + 1; ++j)
-					if (func(i, j) < 0)
+					if (func(i, j))
 						swap(*i, *j);
 		}
 		
@@ -331,7 +331,7 @@ namespace Elections
 	template<class T>
 	T DynamicArr<T>::find(string id) {
 		for (int i = 0;i < _logSize;i++) {
-			if (strcmp(_array[i]->getId(), id)==0)
+			if (!(_array[i]->getId().compare(id)))
 				return _array[i];
 		}
 		return nullptr;
@@ -351,73 +351,7 @@ namespace Elections
 		T temp = el1;
 		el1 = el2;
 		el2 = temp;
-	}
-
-	/*template<class T>
-	void DynamicArr<T>::insert(const iterator& pos, const T& val) {
-		if (_logSize == _phySize)
-			resize();
-
-		iterator itrEnd = end();
-		iterator itrCurrent = itrEnd, itrPrev = --itrEnd;
-		while (itrCurrent != pos)
-		{
-			*itrCurrent = *itrPrev;
-			itrCurrent = itrPrev--;
-		}
-
-		iterator p = pos;
-		*p = val;
-		++_logSize;
-	}*/
-
-	/*template<class T>
-	const DynamicArr<T>::iterator& DynamicArr<T>::erase(const iterator& pos) {
-		if (pos._i > _logSize) {
-			cout << "Error" << endl;
-			return nullptr;
-		}
-		
-		delete* pos;
-		_logSize--;
-		iterator itrCurrent = pos, itrEndCurrent = pos++;
-
-
-		while (itrEndCurrent != end()) {
-			*itrCurrent = *itrEndCurrent;
-			delete *itrEndCurrent;
-			itrCurrent++;
-			itrEndCurrent++;
-		}
-
-		return pos--;
-	}*/
-
-	/*const iterator& erase(const iterator& first, const iterator& last) {
-		if (pos._i > _logSize) {
-			cout << "Error" << endl;
-			return nullptr;
-		}
-
-		iterator itrCurrent = first, itrEndCurrent = last;
-		while (itrCurrent != last)
-		{
-			delete* itrCurrent;
-			itrCurrent++;
-		}
-
-		itrCurrent = first;
-		while (itrEndCurrent != end()) {
-			*itrCurrent = *itrEndCurrent;
-			delete* itrEndCurrent;
-			itrCurrent++;
-			itrEndCurrent++;
-		}
-
-		_logSize -= last._i - first._i;
-		return first--;
-	}*/
-				
+	}			
 }
 
 

@@ -5,11 +5,9 @@ namespace Elections
 	int District::_districtSerialNumber = 0;
 
 	District::District(string name, int numOfRepresentatives):
-		_numOfRepresentatives(numOfRepresentatives), _winnerVotes(0),
+		_name(name), _numOfRepresentatives(numOfRepresentatives), _winnerVotes(0),
 		_totalVotes(0){
-		_name = new char[strlen(name) + 1];
 		_winner = nullptr;
-		memcpy(_name, name, strlen(name) + 1);
 		_representatives = new CitizensArr;
 		_voters = new CitizensArr;
 		_districtId = _districtSerialNumber++;
@@ -22,7 +20,6 @@ namespace Elections
 	}
 
 	District::~District() {
-		delete[] _name;
 		delete[] _representatives->getArr();
 		delete[] _voters->getArr();
 	}
@@ -71,9 +68,7 @@ namespace Elections
 
 	void District::save(ostream& out) const {
 		out.write(rcastcc(&_districtSerialNumber), sizeof(int));
-		int temp = strlen(_name);
-		out.write(rcastcc(&temp), sizeof(int));
-		out.write(rcastcc(_name), sizeof(char) * temp);
+		out.write(rcastcc(_name), sizeof(string));
 		out.write(rcastcc(&_districtId), sizeof(int));		
 		out.write(rcastcc(&_numOfRepresentatives), sizeof(int));
 		out.write(rcastcc(&_totalVotes), sizeof(int));
@@ -90,11 +85,7 @@ namespace Elections
 		in.read(rcastc(&tempSerial), sizeof(int));
 		if (tempSerial > _districtSerialNumber)
 			_districtSerialNumber = tempSerial;
-	
-		in.read(rcastc(&tempSize), sizeof(int));
-		_name = new char[tempSize + 1];
-		in.read(rcastc(_name), sizeof(char) * tempSize);
-		_name[tempSize] = '\0';
+		in.read(rcastc(_name), sizeof(string));
 		in.read(rcastc(&_districtId), sizeof(int));
 		in.read(rcastc(&_numOfRepresentatives), sizeof(int));
 		in.read(rcastc(&_totalVotes), sizeof(int));

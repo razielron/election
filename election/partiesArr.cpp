@@ -62,8 +62,17 @@ namespace Elections
 		cout << "-------------PARTIES-RESULTS-END---------" << endl;
 	}
 
-	void PartiesArr::sortByNumOfElectors() const {
-		Party* temp;
+	bool PartiesArr::sortByNumOfElectors(iterator& it1, iterator& it2) const {
+		if ((*it1)->getTotalElectors() < (*it2)->getTotalElectors()) {
+			return true;
+		else
+			return false;
+		}
+		
+
+
+		
+		/*Party* temp;
 		for (int i = 0; i < _logSize; i++) {
 			for (int j = i + 1; j < _logSize; j++) {
 				if (_array[i]->getTotalElectors() < _array[j]->getTotalElectors()) {
@@ -72,7 +81,7 @@ namespace Elections
 					_array[j] = temp;
 				}
 			}
-		}
+		}*/
 	}
 
 	void PartiesArr::sortByNumOfElectorsInDistrict(District* dis) {

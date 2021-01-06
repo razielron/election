@@ -26,7 +26,7 @@ namespace Elections
 		//Constructors + Distructors
 		public:
 			District() :_totalVotes(0), _winnerVotes(0), _representatives(nullptr), _voters(nullptr),
-				_name(nullptr),_districtId(0), _numOfRepresentatives(0), _winner(nullptr) {}
+				_name(""),_districtId(0), _numOfRepresentatives(0), _winner(nullptr) {}
 			District(string name, int numOfRepresentatives);
 			District(istream& in);
 			virtual ~District();

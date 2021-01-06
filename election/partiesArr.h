@@ -32,6 +32,7 @@ namespace Elections {
 			//go over all parties in the array and fills the representetives by candidates
 			void addRepresentetives();
 			//sorts the parites from the most electors to few
+			//bool sortByNumOfElectors() const;
 			void sortByNumOfElectors() const;
 			//sorts the parites from the most electors to few in specific district
 			void sortByNumOfElectorsInDistrict(District* dis);
