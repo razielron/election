@@ -8,7 +8,7 @@ namespace Elections
 	{
 		private:
 			static int _partySerialNumber;
-			char* _name;
+			string _name;
 			int _partyId;
 			int _totalElectors;
 			Citizen* _candidate;
@@ -19,15 +19,15 @@ namespace Elections
 
 		//Constructors + Distructors
 		public:
-			Party():_name(nullptr), _partyId(0), _totalElectors(0), _candidate(nullptr), _partyCandidates(nullptr) {}
+			Party():_name(""), _partyId(0), _totalElectors(0), _candidate(nullptr), _partyCandidates(nullptr) {}
 			Party(istream& in, Election* election);
-			Party(char* name, Citizen* cit);
+			Party(string name, Citizen* cit);
 			~Party();
 			friend ostream& operator<<(ostream& os, const Party& party);
 
 		//GETTERS
 		public:
-			inline const char* getName() const { return _name; }
+			inline const string getName() const { return _name; }
 			inline const int getId() const { return _partyId; }
 			inline const int getTotalElectors() const { return _totalElectors; }
 			inline const Citizen* getCandidate() const { return _candidate; }

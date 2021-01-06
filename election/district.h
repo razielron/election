@@ -18,7 +18,7 @@ namespace Elections
 			CitizensArr* _voters;
 
 		protected:
-			char* _name;
+			string _name;
 			int _districtId;
 			int _numOfRepresentatives;
 			Party* _winner;
@@ -26,15 +26,15 @@ namespace Elections
 		//Constructors + Distructors
 		public:
 			District() :_totalVotes(0), _winnerVotes(0), _representatives(nullptr), _voters(nullptr),
-				_name(nullptr),_districtId(0), _numOfRepresentatives(0), _winner(nullptr) {}
-			District(char* name, int numOfRepresentatives);
+				_name(""),_districtId(0), _numOfRepresentatives(0), _winner(nullptr) {}
+			District(string name, int numOfRepresentatives);
 			District(istream& in);
 			virtual ~District();
 			
 		//GETTERS
 		public:
 			
-			inline const char* getName() const { return _name; }
+			inline const string getName() const { return _name; }
 			inline const int getId() const { return _districtId; }
 			inline const int getNumOfRepresentatives() const { return _numOfRepresentatives; }
 			inline const int getTotalVotes() const { return _totalVotes; }

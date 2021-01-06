@@ -8,7 +8,7 @@ namespace Elections
 
 	public:
 		DevidedDis();
-		DevidedDis(char* name, int numOfRepresentatives);
+		DevidedDis(string name, int numOfRepresentatives);
 		DevidedDis(istream& in);
 
 

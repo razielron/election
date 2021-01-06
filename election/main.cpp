@@ -7,6 +7,7 @@ ID:		316061415
 #include "electionLoader.h"
 #include "districtLoader.h"
 #include <fstream>
+#include <string>
 using namespace Elections;
 
 enum class Menu {
@@ -49,7 +50,7 @@ namespace Elections {
 	//get input from user to add new sitrict
 	void addNewDistrict(Election* election) {
 		District* dis;
-		char name[256];
+		string name;
 		int numOfRep = 0;
 		int type;
 
@@ -85,8 +86,8 @@ namespace Elections {
 	//get input from user to add new citizen
 	void addNewCitizen(Election* election) {
 		int yearOfBirth, districtId;
-		char name[256];
-		char id[256];
+		string name;
+		string id;
 		District* dis;
 
 		if (!(election->getDistricts()->size())) {
@@ -125,8 +126,8 @@ namespace Elections {
 
 	//get input from user to add new party
 	void addNewParty(Election* election) {
-		char name[256];
-		char id[256];
+		string name;
+		string id;
 		Citizen* temp = nullptr;
 		
 		if (!(election->getCitizens()->size())) {
@@ -150,7 +151,7 @@ namespace Elections {
 
 	//get input from user to add new party's candidate
 	void addNewCandidate(Election* election) {
-		char id[10];
+		string id;
 		Citizen* citTemp = nullptr;
 		Party* partyTemp = nullptr;
 		District* disTemp = nullptr;
@@ -162,7 +163,6 @@ namespace Elections {
 			cout << "There is no citizen with this ID" << endl;
 			cin >> id;
 		}
-		id[9] = '\0';
 
 		cout << "Enter Party ID: ";
 		cin >> partyId;
@@ -188,7 +188,7 @@ namespace Elections {
 
 	//get input from user to add new Vote
 	void vote(Election* election) {
-		char id[10];
+		string id;
 		int partyId;
 		Citizen* citTemp = nullptr;
 		Party* partyTemp = nullptr;
@@ -199,7 +199,6 @@ namespace Elections {
 			cout << "Enter correct ID / There is no citizen with this ID" << endl;
 			cin >> id;
 		}
-		id[9] = '\0';
 
 		if (citTemp->getVote()) {
 			cout << "This citizen has already voted" << endl;
@@ -253,7 +252,7 @@ namespace Elections {
 		Election* election=nullptr;
 		int day = 1, month = 1, year = 2020, numOfRep = 0, type = -1;
 		District* dis;
-		char name[256] = "DISTRICT ONE";
+		string name = "DISTRICT ONE";
 
 		cout << "Enter election date:" << endl << "Day: ";
 		cin >> day;
@@ -289,7 +288,7 @@ namespace Elections {
 
 	//save an existing election round into binary file
 	void saveElection(Election* election) {
-		char name[256];
+		string name;
 
 		cout << "Enter File Name: ";
 		cin >> name;
@@ -306,7 +305,7 @@ namespace Elections {
 
 	//load election round from binary file
 	Election* loadElection() {
-		char name[256];
+		string name;
 		Election* election;
 
 		cout << "Enter File Name: ";

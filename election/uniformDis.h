@@ -9,7 +9,7 @@ namespace Elections
 	//getters
 	public:
 		UniformDis();
-		UniformDis(char* name, int numOfRepresentatives);
+		UniformDis(string name, int numOfRepresentatives);
 		UniformDis(istream& in);
 	
 

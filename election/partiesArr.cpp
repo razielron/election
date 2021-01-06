@@ -62,7 +62,7 @@ namespace Elections
 		cout << "-------------PARTIES-RESULTS-END---------" << endl;
 	}
 
-	void PartiesArr::sortByNumOfElectors() const {
+	void  PartiesArr::sortByNumOfElectors() const {
 		Party* temp;
 		for (int i = 0; i < _logSize; i++) {
 			for (int j = i + 1; j < _logSize; j++) {

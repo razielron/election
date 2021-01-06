@@ -11,30 +11,29 @@ namespace Elections
 {
 	class Election;
 	class District;
-	/*class DistrictsArr;*/
 	class Party;
 	class PartiesArr;
 	class Citizen
 	{
 		private:
-			char* _name;
-			char* _id;
+			string _name;
+			string _id;
 			int _yearOfBirth;
 			District* _dis;
 			Party* _vote;
 
 		//Constructors + Distructors
 		public:
-			Citizen() : _name(nullptr), _id(nullptr), _yearOfBirth(0), _dis(nullptr), _vote(nullptr) {}
-			Citizen(char* id, int yearOfBirth, char* name, District* dis);
+			Citizen() : _yearOfBirth(0), _name(""), _id(""), _dis(nullptr), _vote(nullptr) {}
+			Citizen(string id, int yearOfBirth, string name, District* dis);
 			Citizen(istream& in, Election* election);
-			~Citizen();
+			~Citizen() {};
 			friend ostream& operator<<(ostream& os, const Citizen& cit);
 			
 		//GETTERS
 		public:
-			inline const char* getName() const { return _name; }
-			inline const char* getId() const { return _id; }
+			inline const string getName() const { return _name; }
+			inline const string getId() const { return _id; }
 			inline const int getYearOfBirth() const { return _yearOfBirth; }
 			inline const District* getDistrict() const { return _dis; }
 			inline const Party* getVote() const { return _vote; }
