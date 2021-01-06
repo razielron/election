@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <typeinfo>
+#include <algorithm>
 using namespace std;
 
 #define rcastcc reinterpret_cast<const char*>
@@ -141,6 +142,11 @@ namespace Elections
 		using const_iterator = base_iterator<true>;
 
 	public:
+		//returns iterator at the beginning of the array
+		iterator begin() { return iterator(*this, 0); }
+		//returns iterator at the end of the array
+		iterator end() { return iterator(*this, _logSize); }
+
 		//inserts a value in a given position
 		void insert(const iterator& pos, const T& val) {
 			if (_logSize == _phySize)
@@ -204,11 +210,6 @@ namespace Elections
 			_logSize -= last._i - first._i;
 			return first--;
 		}
-		//returns iterator at the beginning of the array
-		iterator begin() { return iterator(*this, 0); }
-		//returns iterator at the end of the array
-		iterator end() { return iterator(*this, _logSize); }
-		
 		
 		//Swaps elements
 		template<class T>
@@ -216,15 +217,6 @@ namespace Elections
 			T temp = *i;
 			*i = *j;
 			*j = temp;
-		}
-		//Sorts the array according to given function
-		template<class T, class Func>
-		void sort(iterator& first, iterator& last, const Func& func) {
-			iterator temp = first;
-			for (iterator i = first; i != last; ++i)
-				for (iterator j = first; j._i < last._i - i._da + 1; ++j)
-					if (func(i, j))
-						swap(*i, *j);
 		}
 		
 	};

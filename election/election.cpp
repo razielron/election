@@ -1,6 +1,5 @@
 #include "election.h"
 
-
 namespace Elections
 {
 	Election::Election(int day, int month, int year)

@@ -1,7 +1,8 @@
 #include "partiesArr.h"
+#include <algorithm>
+
 namespace Elections
 {
-
 	PartiesArr::PartiesArr(istream& in, Election* election) {
 		load(in, election);
 	}
@@ -62,49 +63,28 @@ namespace Elections
 		cout << "-------------PARTIES-RESULTS-END---------" << endl;
 	}
 
-	void  PartiesArr::sortByNumOfElectors() const {
-		Party* temp;
-		for (int i = 0; i < _logSize; i++) {
-			for (int j = i + 1; j < _logSize; j++) {
-				if (_array[i]->getTotalElectors() < _array[j]->getTotalElectors()) {
-					temp = _array[i];
-					_array[i] = _array[j];
-					_array[j] = temp;
-				}
-			}
-		}
+	void  PartiesArr::sortByNumOfElectors() {
+		sort(this->begin(), this->end(),
+			[](auto p1, auto p2)->bool {
+				return (p1->getTotalElectors() < p2->getTotalElectors());
+			});
 	}
 
 	void PartiesArr::sortByNumOfElectorsInDistrict(District* dis) {
-		Party* temp;
-		for (int i = 0; i < _logSize; i++) {
-			for (int j = i + 1; j < _logSize; j++) {
-				if (_array[i]->getPartyCandidates()->getPartyNumOfElectors(dis) <
-					_array[j]->getPartyCandidates()->getPartyNumOfElectors(dis)) {
-					temp = _array[i];
-					_array[i] = _array[j];
-					_array[j] = temp;
-				}
-			}
-		}
-	}
+		auto lambda = [dis](auto p1, auto p2)->bool {
+			return (p1->getPartyCandidates()->getPartyNumOfElectors(dis) <
+				p2->getPartyCandidates()->getPartyNumOfElectors(dis));
+		};
 
-	int totalVotesCompare(Party* p1, Party* p2) {
-		if (p1->getPartyCandidates()->getPartyNumOfVotes() <
-			p2->getPartyCandidates()->getPartyNumOfVotes()) {
-			return -1;
-		}
-
-		if (p1->getPartyCandidates()->getPartyNumOfVotes() >
-			p2->getPartyCandidates()->getPartyNumOfVotes()) {
-			return 1;
-		}
-
-		return 0;
+		sort(this->begin(), this->end(), lambda);
 	}
 
 	void PartiesArr::sortByTotalVotes() {
-		this->sort(this->begin(), this->end(), totalVotesCompare);
+		sort(this->begin(), this->end(),
+			[](auto p1, auto p2)->bool {
+				return (p1->getPartyCandidates()->getPartyNumOfVotes() <
+					p2->getPartyCandidates()->getPartyNumOfVotes());
+			});
 	}
 
 	void PartiesArr::addRepresentetives() {
