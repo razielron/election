@@ -1,8 +1,5 @@
 #include "citizen.h"
 #include "election.h"
-//#include "district.h"
-//#include "districtsArr.h"
-//#include "partiesArr.h"
 
 namespace Elections
 {
@@ -41,7 +38,7 @@ namespace Elections
 	}
 	
 	void Citizen::saveId(ostream& out) const {
-		out.write(rcastcc(_id), sizeof(string));
+		out.write(rcastcc(&_id), sizeof(_id));
 
 		//next ex we will implament try&catch
 		if (!out.good()) {
@@ -51,8 +48,10 @@ namespace Elections
 	}
 
 	void Citizen::save(ostream& out) const {
-		out.write(rcastcc(_name), sizeof(string));
-		out.write(rcastcc(_id), sizeof(string));
+		int temp;
+
+		out.write(rcastcc(&_name), sizeof(_name));
+		out.write(rcastcc(&_id), sizeof(_id));
 		out.write(rcastcc(&_yearOfBirth), sizeof(int));
 		temp = _dis->getId();
 		out.write(rcastcc(&temp), sizeof(int));
@@ -68,8 +67,8 @@ namespace Elections
 		int idTemp = -1, lengthTemp = 0;
 		DistrictsArr* districts = election->getDistricts();
 
-		in.read(rcastc(_name), sizeof(string));
-		in.read(rcastc(_id), sizeof(string));
+		in.read(rcastc(&_name), sizeof(_name));
+		in.read(rcastc(&_id), sizeof(_id));
 		in.read(rcastc(&_yearOfBirth), sizeof(int));
 		in.read(rcastc(&idTemp), sizeof(int));
 		_dis = districts->find(idTemp);

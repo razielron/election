@@ -1,5 +1,8 @@
 #include "citizensArr.h"
 
+#define rcastcc reinterpret_cast<const char*>
+#define rcastc reinterpret_cast<char*>
+
 namespace Elections
 {
 
@@ -10,14 +13,6 @@ namespace Elections
 	CitizensArr::CitizensArr(istream& in, CitizensArr* citizens) {
 		loadById(in, citizens);
 	}
-
-	
-	/*ostream& operator<<(ostream& os,const DynamicArr<Citizen*> citArr) {
-		for (int i = 0; i < citArr.size(); i++) {
-			os << citArr[i];
-		}
-		return os;
-	}*/
 
 	void CitizensArr::save(ostream& out) const {
 		out.write(rcastcc(&_logSize), sizeof(int));
@@ -64,10 +59,11 @@ namespace Elections
 		string tempCitId;
 		in.read(rcastc(&_phySize), sizeof(int));
 		_logSize = _phySize;
+		delete[] _array;
 		_array = new Citizen * [_phySize];
 
 		for (int i = 0; i < _logSize; i++) {
-			in.read(rcastc(tempCitId), sizeof(string));
+			in.read(rcastc(&tempCitId), sizeof(tempCitId));
 			_array[i] = citizens->find(tempCitId);
 
 			//next ex we will implament try&catch

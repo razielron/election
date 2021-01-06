@@ -68,7 +68,7 @@ namespace Elections
 
 	void District::save(ostream& out) const {
 		out.write(rcastcc(&_districtSerialNumber), sizeof(int));
-		out.write(rcastcc(_name), sizeof(string));
+		out.write(rcastcc(&_name), sizeof(_name));
 		out.write(rcastcc(&_districtId), sizeof(int));		
 		out.write(rcastcc(&_numOfRepresentatives), sizeof(int));
 		out.write(rcastcc(&_totalVotes), sizeof(int));
@@ -85,7 +85,7 @@ namespace Elections
 		in.read(rcastc(&tempSerial), sizeof(int));
 		if (tempSerial > _districtSerialNumber)
 			_districtSerialNumber = tempSerial;
-		in.read(rcastc(_name), sizeof(string));
+		in.read(rcastc(&_name), sizeof(_name));
 		in.read(rcastc(&_districtId), sizeof(int));
 		in.read(rcastc(&_numOfRepresentatives), sizeof(int));
 		in.read(rcastc(&_totalVotes), sizeof(int));

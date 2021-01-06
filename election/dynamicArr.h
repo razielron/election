@@ -4,9 +4,8 @@
 #include <typeinfo>
 using namespace std;
 
-#define rcastcc reinterpret_cast<const string>
-#define rcastc reinterpret_cast<string>
-
+#define rcastcc reinterpret_cast<const char*>
+#define rcastc reinterpret_cast<char*>
 
 namespace Elections
 {
@@ -43,7 +42,7 @@ namespace Elections
 		T operator[](int idx) const { return _array[idx]; }
 		friend ostream& operator<<(ostream& os, const DynamicArr<T>& element) {
 			for (int i = 0;i < element.size(); i++) {
-				os << element[i];
+				os << *(element[i]);
 			}
 			return os;
 		}
@@ -61,8 +60,6 @@ namespace Elections
 		void copy(T* element);
 		// returns element in a given position
 		T at(int pos);
-		//returns an element by given parameter
-		T find(string id);
 		//returns an element by given parameter
 		T find(string id);
 		//returns an element by given parameter
@@ -326,15 +323,6 @@ namespace Elections
 				return _array[i];
 		}
 		return nullptr;	
-	}
-
-	template<class T>
-	T DynamicArr<T>::find(string id) {
-		for (int i = 0;i < _logSize;i++) {
-			if (!(_array[i]->getId().compare(id)))
-				return _array[i];
-		}
-		return nullptr;
 	}
 
 	template<class T>

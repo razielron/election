@@ -79,13 +79,13 @@ namespace Elections
 
 	void Party::save(ostream& out) const {
 		int temp;
-		const string tempId;
+		string tempId;
 
 		out.write(rcastcc(&_partySerialNumber), sizeof(int));
-		out.write(rcastcc(_name), sizeof(string));
+		out.write(rcastcc(&_name), sizeof(_name));
 		out.write(rcastcc(&_partyId), sizeof(int));
 		tempId = _candidate->getId();
-		out.write(rcastcc(tempId), sizeof(string));
+		out.write(rcastcc(&tempId), sizeof(tempId));
 		_partyCandidates->save(out);
 
 		//next ex we will implament try&catch
@@ -106,9 +106,9 @@ namespace Elections
 		if (temp > _partySerialNumber)
 			_partySerialNumber = temp;
 
-		in.read(rcastc(_name), sizeof(string));
+		in.read(rcastc(&_name), sizeof(_name));
 		in.read(rcastc(&_partyId), sizeof(int));
-		in.read(rcastc(canId), sizeof(string));
+		in.read(rcastc(&canId), sizeof(canId));
 		_candidate = citArr->find(canId);
 		_partyCandidates = new PartyCandidates(in, districts, citArr);
 
