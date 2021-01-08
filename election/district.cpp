@@ -30,12 +30,6 @@ namespace Elections
 
 		try {
 			_representatives = new CitizensArr;
-		}
-		catch (bad_alloc& err) {
-			cout << err.what() << endl;
-			exit(1);
-		}
-		try {
 			_voters = new CitizensArr;
 		}
 		catch (bad_alloc& err) {
@@ -48,8 +42,8 @@ namespace Elections
 	}
 
 	District::~District() {
-			delete[] _representatives->getArr();
-			delete[] _voters->getArr();
+		delete[] _representatives->getArr();
+		delete[] _voters->getArr();
 	}
 
 	int District::getPartyRepNumber(int partyVote) {
