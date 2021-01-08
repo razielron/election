@@ -44,26 +44,14 @@ namespace Elections
 	}
 
 	void Election::appendParty(Party* party) {
-		if (!_parties) {
-			throw invalid_argument("Election, appendParty, missing party");
-		}
-
 		_parties->push_back(party);
 	}
 
 	void Election::appendDistrict(District* dis) {
-		if (!_districts) {
-			throw invalid_argument("Election, appendDistrict, missing district");
-		}
-
 		_districts->push_back(dis);
 	}
 
 	void Election::appendCitizen(Citizen* cit) {
-		if (!_citizens) {
-			throw invalid_argument("Election, appendCitizen, missing citizen");
-		}
-
 		_citizens->push_back(cit);
 	}
 
@@ -84,41 +72,25 @@ namespace Elections
 	}
 
 	void Election::printCitizens() const {
-		if (!_citizens) {
-			throw invalid_argument("Election, printCitizens, missing citizens");
-		}
-
 		cout << (*_citizens);
 	}
 
 	void Election::printDistricts() const {
-		if (!_districts) {
-			throw invalid_argument("Election, printDistricts, missing districts");
-		}
-
 		cout << (*_districts);
 	}
 
 	void Election::printParties() const {
-		if (!_parties) {
-			throw invalid_argument("Election, printParties, missing parties");
-		}
-
 		cout << (*_parties);
 	}
 
 	void Election::electionSummery() const {
-		if (!_parties) {
-			throw invalid_argument("Election, electionSummery, missing parties");
-		}
-
 		_parties->addRepresentetives();
 		_parties->setDistrictWinner();
 		_parties->setPartyTotalElectors();
 	}
 
 	void Election::save(ostream& out) const {
-		if (!out || !out.good() || !_districts || !_parties || !_citizens) {
+		if (!out || !out.good()) {
 			throw invalid_argument("Election, save, parameters issue");
 		}
 
@@ -162,18 +134,10 @@ namespace Elections
 	}
 
 	void Election::saveVotes(ostream& out) const {
-		if (!_citizens) {
-			throw invalid_argument("Elecetion, saveVote, missing citizens");
-		}
-
 		_citizens->saveVotes(out);
 	}
 
 	void Election::loadVotes(istream& in) {
-		if (!_citizens) {
-			throw invalid_argument("Election, loadVotes, missing citizens");
-		}
-
 		_citizens->loadVotes(in, _parties);
 	}
 
