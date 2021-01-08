@@ -44,7 +44,6 @@ namespace Elections
 			}
 		}
 		catch (bad_alloc& err) {
-			delete[] _array;
 			cout << err.what() << endl;
 			exit(1);
 		}
@@ -91,7 +90,6 @@ namespace Elections
 			}
 		}
 		catch (bad_alloc& err) {
-			delete[] _array;
 			cout << err.what() << endl;
 			exit(1);
 		}
