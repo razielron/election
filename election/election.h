@@ -2,11 +2,11 @@
 #include "citizensArr.h"
 #include "partiesArr.h"
 #include "districtsArr.h"
+#include "electionException.h"
 using namespace std;
 
 namespace Elections
 {
-
 	class Election
 	{
 		private:
@@ -33,7 +33,8 @@ namespace Elections
 			inline CitizensArr* getCitizens() const { return _citizens; }
 			inline PartiesArr* getParties() const { return _parties; }
 			inline DistrictsArr* getDistricts() const { return _districts; }
-			friend std::ostream& operator<<(std::ostream& os, const Election& election);
+			bool operator!() const { return this == nullptr; }
+			friend ostream& operator<<(std::ostream& os, const Election& election);
 
 		public:
 			//adds a party to party array

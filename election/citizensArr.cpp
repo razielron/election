@@ -7,23 +7,11 @@ namespace Elections
 {
 
 	CitizensArr::CitizensArr(istream& in, Election* election) : DynamicArr(0) {
-		try {
-			load(in, election);
-		}
-		catch (...) {
-			delete[] _array;
-			throw;
-		}
+		load(in, election);
 	}
 
 	CitizensArr::CitizensArr(istream& in, CitizensArr* citizens) : DynamicArr(0) {
-		try {
-			loadById(in, citizens);
-		}
-		catch (...) {
-			delete[] _array;
-			throw;
-		}
+		loadById(in, citizens);
 	}
 
 	void CitizensArr::save(ostream& out) const {
@@ -48,10 +36,17 @@ namespace Elections
 
 		in.read(rcastc(&_phySize), sizeof(int));
 		_logSize = _phySize;
-		_array = new Citizen* [_phySize];
+		try {
+			_array = new Citizen * [_phySize];
 
-		for (int i = 0; i < _phySize; i++) {
-			_array[i] = new Citizen(in, election);
+			for (int i = 0; i < _phySize; i++) {
+				_array[i] = new Citizen(in, election);
+			}
+		}
+		catch (bad_alloc& err) {
+			delete[] _array;
+			cout << err.what() << endl;
+			exit(1);
 		}
 
 		if (!in.good()) {
@@ -83,15 +78,22 @@ namespace Elections
 		in.read(rcastc(&_phySize), sizeof(int));
 		_logSize = _phySize;
 		delete[] _array;
-		_array = new Citizen * [_phySize];
+		try {
+			_array = new Citizen * [_phySize];
 
-		for (int i = 0; i < _logSize; i++) {
-			in.read(rcastc(&tempCitId), sizeof(tempCitId));
-			_array[i] = citizens->find(tempCitId);
+			for (int i = 0; i < _logSize; i++) {
+				in.read(rcastc(&tempCitId), sizeof(tempCitId));
+				_array[i] = citizens->find(tempCitId);
 
-			if (!in.good()) {
-				throw iostream::failure("CitizensArr, loadById, load by id didn't work");
+				if (!in.good()) {
+					throw iostream::failure("CitizensArr, loadById, load by id didn't work");
+				}
 			}
+		}
+		catch (bad_alloc& err) {
+			delete[] _array;
+			cout << err.what() << endl;
+			exit(1);
 		}
 	}
 
