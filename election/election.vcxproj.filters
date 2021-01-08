@@ -34,5 +34,7 @@
     <ClInclude Include="uniformDis.h" />
     <ClInclude Include="dynamicArr.h" />
     <ClInclude Include="citizenException.h" />
+    <ClInclude Include="districtException.h" />
+    <ClInclude Include="partyException.h" />
   </ItemGroup>
 </Project>

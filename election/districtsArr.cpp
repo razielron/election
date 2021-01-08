@@ -8,6 +8,10 @@ namespace Elections
 	}
 
 	ostream& operator<<(ostream& os, const DistrictsArr& disArr) {
+		if (!os || !disArr) {
+			throw invalid_argument("DistrictsArr, ostream& operator<<");
+		}
+
 		for (int i = 0; i < disArr.size(); i++) {
 			if (typeid(*(disArr[i])) == typeid(UniformDis))
 				cout << *(static_cast<UniformDis*>(disArr[i])) << endl;
@@ -19,31 +23,39 @@ namespace Elections
 
 
 	void DistrictsArr::save(ostream& out) const{
+		if (!out || !out.good())
+			throw invalid_argument("DistrictsArr, save(ostream& out), parameter issues");
+
 		out.write(rcastcc(&_logSize), sizeof(int));
 		for (int i = 0;i < _logSize;i++) {
 			DistrictLoader::save(out, _array[i]);
 		}
 	
-		//next ex we will implament try&catch
 		if (!out.good()) {
-			cout << "DistrictArr Save issue" << endl;
-			exit(-1);
+			throw iostream::failure("DistrictsArr, save(out)");
 		}
 	}
 
 	void DistrictsArr::load(istream& in){
+
+		if (!in || !in.good())
+			throw invalid_argument("DistrictsArr, load(istream& in)");
+		
 		in.read(rcastc(&_phySize), sizeof(int));
 		_logSize = _phySize;
+		try {
 		_array = new District*[_phySize];
-
-		for (int i = 0; i < _phySize; i++) {
-			_array[i] = DistrictLoader::load(in);
+			for (int i = 0; i < _phySize; i++) {
+				_array[i] = DistrictLoader::load(in);
+			}
+		}
+		catch (bad_alloc& err) {
+			cout << err.what() << endl;
+			exit(1);
 		}
 
-		//next ex we will implament try&catch
 		if (!in.good()) {
-			cout << "DistrictArr load issue" << endl;
-			exit(-1);
+			throw iostream::failure("District, load(in)");
 		}
 	}
 }

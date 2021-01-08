@@ -1,5 +1,6 @@
 #pragma once
 #include "citizen.h"
+#include "partyException.h"
 #include "partyCandidates.h"
 
 namespace Elections
@@ -32,6 +33,7 @@ namespace Elections
 			inline const int getTotalElectors() const { return _totalElectors; }
 			inline const Citizen* getCandidate() const { return _candidate; }
 			inline PartyCandidates* getPartyCandidates() const { return _partyCandidates; }
+			bool operator !() const { return this == nullptr; };;
 		
 		//SETTERS
 		public:

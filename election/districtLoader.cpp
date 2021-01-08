@@ -3,6 +3,9 @@
 namespace Elections
 {
 	void DistrictLoader::save(ostream& out, District* dis){
+		if (!dis || !out) {
+			throw invalid_argument("DistrictLoader, save");
+		}
 		DistrictType type;
 		if ((typeid(*dis)) == (typeid(UniformDis))) {
 			type = DistrictType::UNIFORM;
@@ -11,19 +14,20 @@ namespace Elections
 			type = DistrictType::DEVIDED;
 		}
 		out.write(rcastcc(&type), sizeof(DistrictType));
-		dis->save(out);
+			dis->save(out);
 
-		//next ex we will implament try&catch
 		if (!out.good()) {
-			cout << "DistrictArr Save issue" << endl;
-			exit(-1);
+			throw iostream::failure("DistrictLoader, save issues");
 		}
 	}
 
 	District* DistrictLoader::load(istream& in) {
+		if (!in || !in.good())
+			throw invalid_argument("DistrictLoader, load(istream& in)");
+
 		DistrictType type;
 		in.read(rcastc(&type), sizeof(type));
-		switch (type) {
+			switch (type) {
 			case DistrictType::UNIFORM: {
 				return new UniformDis(in);
 				break;
@@ -34,12 +38,10 @@ namespace Elections
 			}
 			default:
 				return nullptr;
-		}
-
-		//next ex we will implament try&catch
+			}
+		
 		if (!in.good()) {
-			cout << "DistrictArr load issue" << endl;
-			exit(-1);
+			throw iostream::failure("DistrictLoader, load issues");
 		}
 	}
 }	
