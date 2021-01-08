@@ -19,7 +19,7 @@ namespace Elections
 		int _phySize;
 
 	public:
-		DynamicArr();
+		DynamicArr(int size = 1);
 		DynamicArr(T);
 		~DynamicArr();
 
@@ -231,8 +231,8 @@ namespace Elections
 		
 	/*------------------------DynamicArr Functions Implementation------------------------*/
 	template<class T>
-	DynamicArr<T>::DynamicArr() :_logSize(0), _phySize(1) {
-		_array = new T[_phySize];
+	DynamicArr<T>::DynamicArr(int size) :_logSize(0), _phySize(size) {
+		_array = _phySize ? new T[_phySize] : nullptr;
 	};
 	
 	template<class T>

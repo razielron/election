@@ -33,5 +33,6 @@
     <ClInclude Include="simpleElection.h" />
     <ClInclude Include="uniformDis.h" />
     <ClInclude Include="dynamicArr.h" />
+    <ClInclude Include="citizenException.h" />
   </ItemGroup>
 </Project>

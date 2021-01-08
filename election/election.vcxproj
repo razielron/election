@@ -157,6 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="citizen.h" />
+    <ClInclude Include="citizenException.h" />
     <ClInclude Include="citizensArr.h" />
     <ClInclude Include="devidedDis.h" />
     <ClInclude Include="district.h" />

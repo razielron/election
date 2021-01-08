@@ -6,56 +6,79 @@
 namespace Elections
 {
 
-	CitizensArr::CitizensArr(istream& in, Election* election) {
-		load(in, election);
+	CitizensArr::CitizensArr(istream& in, Election* election) : DynamicArr(0) {
+		try {
+			load(in, election);
+		}
+		catch (...) {
+			delete[] _array;
+			throw;
+		}
 	}
 
-	CitizensArr::CitizensArr(istream& in, CitizensArr* citizens) {
-		loadById(in, citizens);
+	CitizensArr::CitizensArr(istream& in, CitizensArr* citizens) : DynamicArr(0) {
+		try {
+			loadById(in, citizens);
+		}
+		catch (...) {
+			delete[] _array;
+			throw;
+		}
 	}
 
 	void CitizensArr::save(ostream& out) const {
+		if (!out || !out.good()) {
+			throw invalid_argument("CitizensArr, save, parameters issue");
+		}
+
 		out.write(rcastcc(&_logSize), sizeof(int));
 		for (int i = 0; i < _logSize; i++) {
 			_array[i]->save(out);
 		}
 
-		//next ex we will implament try&catch
 		if (!out.good()) {
-			cout << "Citizen Save issue" << endl;
-			exit(-1);
+			throw iostream::failure("CitizensArr, save, save issue");
 		}
 	}
 
 	void CitizensArr::load(istream& in, Election* election) {
+		if (!in || !in.good()) {
+			throw invalid_argument("CitizensArr, load, parametrs issue");
+		}
+
 		in.read(rcastc(&_phySize), sizeof(int));
 		_logSize = _phySize;
 		_array = new Citizen* [_phySize];
+
 		for (int i = 0; i < _phySize; i++) {
 			_array[i] = new Citizen(in, election);
 		}
 
-		//next ex we will implament try&catch
 		if (!in.good()) {
-			cout << "Citizen load issue" << endl;
-			exit(-1);
+			throw iostream::failure("CitizensArr, load, load didn't work");
 		}
 	}
 
 	void CitizensArr::saveId(ostream& out) const {
+		if (!out || !out.good()) {
+			throw invalid_argument("CitizensArr, saveId, parametrs issue");
+		}
+
 		out.write(rcastcc(&_logSize), sizeof(int));
 		for (int i = 0; i < _logSize; i++) {
 			_array[i]->saveId(out);
 		}
 
-		//next ex we will implament try&catch
 		if (!out.good()) {
-			cout << "Citizen Save issue" << endl;
-			exit(-1);
+			throw iostream::failure("CitizensArr, saveId, save id didn't work");
 		}
 	}
 
-	void CitizensArr::loadById(istream& in, CitizensArr* citizens) {	
+	void CitizensArr::loadById(istream& in, CitizensArr* citizens) {
+		if (!in || !in.good() || !citizens) {
+			throw invalid_argument("CitizensArr, loadById, parametrs issue");
+		}
+
 		string tempCitId;
 		in.read(rcastc(&_phySize), sizeof(int));
 		_logSize = _phySize;
@@ -66,10 +89,8 @@ namespace Elections
 			in.read(rcastc(&tempCitId), sizeof(tempCitId));
 			_array[i] = citizens->find(tempCitId);
 
-			//next ex we will implament try&catch
 			if (!in.good()) {
-				cout << "Citizen load issue" << endl;
-				exit(-1);
+				throw iostream::failure("CitizensArr, loadById, load by id didn't work");
 			}
 		}
 	}
@@ -78,23 +99,11 @@ namespace Elections
 		for (int i = 0; i < _logSize; i++) {
 			_array[i]->saveVote(out);
 		}
-
-		//next ex we will implament try&catch
-		if (!out.good()) {
-			cout << "Citizen Save issue" << endl;
-			exit(-1);
-		}
 	}
 
 	void CitizensArr::loadVotes(istream& in, PartiesArr* parties) {
 		for (int i = 0; i < _logSize; i++) {
 			_array[i]->loadVote(in, parties);
-		}
-
-		//next ex we will implament try&catch
-		if (!in.good()) {
-			cout << "Citizen load issue" << endl;
-			exit(-1);
 		}
 	}
 }
