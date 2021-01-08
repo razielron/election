@@ -20,9 +20,9 @@ namespace Elections {
 		//SETTERS
 		public:
 			//go over all parties in the array and calculates if they win in any district
-			bool setDistrictWinner();
+			void setDistrictWinner();
 			//go over all parties in the array and calculates their electors by their votes
-			bool setPartyTotalElectors();
+			void setPartyTotalElectors();
 
 		public:
 			//adds party for the array

@@ -13,12 +13,6 @@ namespace Elections
 		_winner = nullptr;
 		try {
 			_representatives = new CitizensArr;
-		}
-		catch (bad_alloc& err) {
-			cout << err.what() << endl;
-			exit(1);
-		}
-		try {
 			_voters = new CitizensArr;
 		}
 		catch (bad_alloc& err) {
@@ -27,8 +21,6 @@ namespace Elections
 			exit(1);
 		}
 		_districtId = _districtSerialNumber++;
-
-		
 	}
 
 	District::District(istream& in) :_totalVotes(0), _winnerVotes(0), _winner(nullptr) {

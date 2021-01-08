@@ -9,9 +9,7 @@ namespace Elections
 		District(name, numOfRepresentatives);
 	}
 
-	UniformDis::UniformDis(istream& in) {
-			District(in);
-	}
+	UniformDis::UniformDis(istream& in): District(in) {}
 
 
 	ostream& operator<<(ostream& os, const UniformDis& uniDis) {

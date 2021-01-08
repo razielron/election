@@ -10,13 +10,9 @@ namespace Elections
 {
 	DevidedDis::DevidedDis() : District(){}
 
-	DevidedDis::DevidedDis(string name, int numOfRepresentatives) {
-		District(name, numOfRepresentatives);
-	}
+	DevidedDis::DevidedDis(string name, int numOfRepresentatives): District(name, numOfRepresentatives) {}
 
-	DevidedDis::DevidedDis(istream& in) {
-		District(in);
-	}
+	DevidedDis::DevidedDis(istream& in): District(in) {}
 
 	ostream& operator<<(ostream& os, const DevidedDis& devDis) {
 		if (!os || !devDis)

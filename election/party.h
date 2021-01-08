@@ -38,11 +38,11 @@ namespace Elections
 		//SETTERS
 		public:
 			//calculated in PartyCandidates class and sets in totalElectors field
-			bool setPartyTotalElectors();
+			void setPartyTotalElectors();
 			//sets the candidate for prime minister
-			bool setCandidate(Citizen* cit);
+			void setCandidate(Citizen* cit);
 			//calculated in PartyCandidates class and sets in each district the party winner
-			bool setDistrictWinner();
+			void setDistrictWinner();
 
 		public:
 			//calculated in PartyCandidates and returns the total votes of this party

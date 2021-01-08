@@ -25,171 +25,114 @@ namespace Elections
 	}
 
 	Party::~Party() {
-		try {
-			_partyCandidates->~PartyCandidates();
-		}
-		catch (const char* err) {
-			cout << err << endl;
-		}
+		_partyCandidates->~PartyCandidates();
 	}
 
 	ostream& operator<<(ostream& os, const Party& party) {
 		if (!os || !party)
-			throw("Party, << , Parametr issue");
+			throw invalid_argument("Party, <<");
 		
-		try {
-			os << "-----------PARTY-START-----------" << endl;
-			os << "Party ID: " << party.getId() << endl;
-			os << "Name of Party: " << party.getName() << endl;
-			os << "Party candidate: " << endl;
-			os << party.getCandidate();
-			os << "Represetetives of district: " << endl;
-			party.getPartyCandidates()->printPartyCandidates();
-			os << "------------PARTY-END-----------" << endl;
-		}
-		catch (const char* err) {
-			cout << err << endl;
-		}
+		os << "-----------PARTY-START-----------" << endl;
+		os << "Party ID: " << party.getId() << endl;
+		os << "Name of Party: " << party.getName() << endl;
+		os << "Party candidate: " << endl;
+		os << party.getCandidate();
+		os << "Represetetives of district: " << endl;
+		party.getPartyCandidates()->printPartyCandidates();
+		os << "------------PARTY-END-----------" << endl;
+
 		return os;
 	}
 
-	bool Party::setCandidate(Citizen* cit) {
+	void Party::setCandidate(Citizen* cit) {
 		_candidate = cit;
-		return true;
 	}
 
-	bool Party::setDistrictWinner() {
-		try {
-			return _partyCandidates->setDistrictWinner(this);
-		}
-		catch (const char* err) {
-			cout << err << endl;
-		}
+	void Party::setDistrictWinner() {
+		_partyCandidates->setDistrictWinner(this);
 	}
 
-
-	bool Party::setPartyTotalElectors() {
-		try {
-			_totalElectors = _partyCandidates->getPartyTotalElectors(this);
-		}
-		catch (const char* err) {
-			cout << err << endl;
-		}
-		return true;
+	void Party::setPartyTotalElectors() {
+		_totalElectors = _partyCandidates->getPartyTotalElectors(this);
 	}
 
 	int Party::getPartyNumOfVotes() const {
-		try {
-			return _partyCandidates->getPartyNumOfVotes();
-		}
-		catch (const char* err) {
-			cout << err << endl;
-		}
+		return _partyCandidates->getPartyNumOfVotes();
 	}
 
 	void Party::appendCandidateToList(District* dis, Citizen* cit) {
-		try {
-			_partyCandidates->appendPartyCandidate(dis, cit);
-		}
-		catch (const char* err) {
-			cout << err << endl;
-		}
+		_partyCandidates->appendPartyCandidate(dis, cit);
 	}
 
 	void Party::addVote(District* dis) {
-		try {
-			_partyCandidates->addVote(dis);
-		}
-		catch (const char* err) {
-			cout << err << endl;
-		}
+		_partyCandidates->addVote(dis);
 	}
 
 	void Party::printDistrictPartyDetails(District* dis) const {
-		try {
-			cout << "Party: " << _name << endl;
-			cout << "Candidate: " << _candidate->getName() << endl;
-			cout << "Electors: " << _partyCandidates->getPartyNumOfElectors(dis) << endl << endl;
-		}
-		catch (const char* err) {
-			cout << err << endl;
-		}
+		cout << "Party: " << _name << endl;
+		cout << "Candidate: " << _candidate->getName() << endl;
+		cout << "Electors: " << _partyCandidates->getPartyNumOfElectors(dis) << endl << endl;
 	}
 
 	void Party::printResults() const {
-		try {
-			cout << "-----------PARTY-RESULTS-START-----------" << endl;
-			cout << "Name of Party: " << _name << endl;
-			cout << "Name of Prime Minister Candidate: " << _candidate << endl;
-			cout << "Total Electors: " << _totalElectors << endl;
-			cout << "Total Votes: " << this->getPartyNumOfVotes() << endl;
-			cout << "------------PARTY-RESULTS-END-----------" << endl;
-		}
-		catch (const char* err) {
-			cout << err << endl;
-		}
+		cout << "-----------PARTY-RESULTS-START-----------" << endl;
+		cout << "Name of Party: " << _name << endl;
+		cout << "Name of Prime Minister Candidate: " << _candidate << endl;
+		cout << "Total Electors: " << _totalElectors << endl;
+		cout << "Total Votes: " << this->getPartyNumOfVotes() << endl;
+		cout << "------------PARTY-RESULTS-END-----------" << endl;
 	}
 
 	void Party::addRepresentetives() {
-		try {
-			_partyCandidates->addRepresentetives();
-		}
-		catch (const char* err) {
-			cout << err << endl;
-		}
+		_partyCandidates->addRepresentetives();
 	}
 
 	void Party::save(ostream& out) const {
 		if (!out || !out.good())
-			throw("Party, save(ostream& out), parameter issues");
+			throw invalid_argument("Party, save(ostream& out)");
 		
 		int temp;
 		string tempId;
-		try {
-			out.write(rcastcc(&_partySerialNumber), sizeof(int));
-			out.write(rcastcc(&_name), sizeof(_name));
-			out.write(rcastcc(&_partyId), sizeof(int));
-			tempId = _candidate->getId();
-			out.write(rcastcc(&tempId), sizeof(tempId));
-			_partyCandidates->save(out);
-		}
-		catch (const char* err) {
-			cout << err << endl;
-		}
+		out.write(rcastcc(&_partySerialNumber), sizeof(int));
+		out.write(rcastcc(&_name), sizeof(_name));
+		out.write(rcastcc(&_partyId), sizeof(int));
+		tempId = _candidate->getId();
+		out.write(rcastcc(&tempId), sizeof(tempId));
+		_partyCandidates->save(out);
 
 		if (!out.good()) {
-			throw("Party, save(out)");
+			throw iostream::failure("Party, save(out)");
 		}
 	}
 
-	void Party::load(istream& in, Election* election) {
-		
+	void Party::load(istream& in, Election* election) {	
 		if (!in || !in.good() || !election )
-			throw("Party, load, Parameter issues");
-		
+			throw invalid_argument("Party, load");
+
+		int temp = 0;
+		string canId;
+		CitizensArr* citArr = election->getCitizens();
+		DistrictsArr* districts = election->getDistricts();
+
+
+		in.read(rcastc(&temp), sizeof(int));
+		if (temp > _partySerialNumber)
+			_partySerialNumber = temp;
+
+		in.read(rcastc(&_name), sizeof(_name));
+		in.read(rcastc(&_partyId), sizeof(int));
+		in.read(rcastc(&canId), sizeof(canId));
+		_candidate = citArr->find(canId);
 		try {
-			int temp = 0;
-			string canId;
-			CitizensArr* citArr = election->getCitizens();
-			DistrictsArr* districts = election->getDistricts();
-
-
-			in.read(rcastc(&temp), sizeof(int));
-			if (temp > _partySerialNumber)
-				_partySerialNumber = temp;
-
-			in.read(rcastc(&_name), sizeof(_name));
-			in.read(rcastc(&_partyId), sizeof(int));
-			in.read(rcastc(&canId), sizeof(canId));
-			_candidate = citArr->find(canId);
 			_partyCandidates = new PartyCandidates(in, districts, citArr);
 		}
-		catch (const char* err) {
-			cout << err << endl;
+		catch (bad_alloc& err) {
+			cout << err.what() << endl;
+			exit(1);
 		}
 
 		if (!in.good()) {
-			throw("Party, load(in, election)");
+			throw iostream::failure("Party, load(in, election)");
 		}
 	}
 }

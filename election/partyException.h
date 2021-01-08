@@ -8,7 +8,7 @@ namespace Elections
 	class PartyException : public invalid_argument
 	{
 	public:
-		PartyException(int partyId) : invalid_argument(_what), _partyId(id) {}
+		PartyException(int partyId) : invalid_argument(_what), _partyId(partyId) {}
 		int getId() const { return _partyId; }
 		virtual const char* what() const throw() {
 			return _what;

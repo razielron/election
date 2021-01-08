@@ -44,7 +44,7 @@ namespace Elections
 		in.read(rcastc(&_phySize), sizeof(int));
 		_logSize = _phySize;
 		try {
-		_array = new District*[_phySize];
+			_array = new District*[_phySize];
 			for (int i = 0; i < _phySize; i++) {
 				_array[i] = DistrictLoader::load(in);
 			}
