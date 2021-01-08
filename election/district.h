@@ -3,6 +3,7 @@
 #include <ostream>
 #include <cmath>
 #include "citizensArr.h"
+#include "districtException.h"
 #include "party.h"
 
 namespace Elections
@@ -46,12 +47,13 @@ namespace Elections
 			inline const float getVotersPresentage() { return ((float)(_totalVotes)/(float)(_voters->size())*(float)(100)); }
 			//returns voters precentage by given votes
 			const float getVotersPresentage(int votes) { return ((float)(votes)/(float)(_totalVotes)*(float)(100)); }
-			
+			bool operator !() const { return this == nullptr; };
+
 		//SETTERS
 		public:
-			bool setWinnerVotes(int winnerVotes);
-			bool setWinnerParty(Party* party);
-			bool setNumOfRepresentatives(int numOfRepresentatives);
+			void setWinnerVotes(int winnerVotes);
+			void setWinnerParty(Party* party);
+			void setNumOfRepresentatives(int numOfRepresentatives);
 
 		public:
 			//returns the representetives number by given party's votes number

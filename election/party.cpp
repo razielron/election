@@ -8,8 +8,16 @@ namespace Elections
 
 	Party::Party(string name, Citizen* cit) : _name(name), _totalElectors(0) {
 		_partyId = _partySerialNumber++;
+		if (!cit)
+			throw PartyException(_partyId);
 		_candidate = cit;
-		_partyCandidates = new PartyCandidates;
+		try {
+			_partyCandidates = new PartyCandidates;
+		}
+		catch (bad_alloc& err) {
+			cout << err.what() << endl;
+			exit(1);
+		}
 	}
 
 	Party::Party(istream& in, Election* election) : _totalElectors(0) {
@@ -21,6 +29,9 @@ namespace Elections
 	}
 
 	ostream& operator<<(ostream& os, const Party& party) {
+		if (!os || !party)
+			throw invalid_argument("Party, <<");
+		
 		os << "-----------PARTY-START-----------" << endl;
 		os << "Party ID: " << party.getId() << endl;
 		os << "Name of Party: " << party.getName() << endl;
@@ -29,21 +40,20 @@ namespace Elections
 		os << "Represetetives of district: " << endl;
 		party.getPartyCandidates()->printPartyCandidates();
 		os << "------------PARTY-END-----------" << endl;
+
 		return os;
 	}
 
-	bool Party::setCandidate(Citizen* cit) {
+	void Party::setCandidate(Citizen* cit) {
 		_candidate = cit;
-		return true;
 	}
 
-	bool Party::setDistrictWinner() {
-		return _partyCandidates->setDistrictWinner(this);
+	void Party::setDistrictWinner() {
+		_partyCandidates->setDistrictWinner(this);
 	}
 
-	bool Party::setPartyTotalElectors() {
+	void Party::setPartyTotalElectors() {
 		_totalElectors = _partyCandidates->getPartyTotalElectors(this);
-		return true;
 	}
 
 	int Party::getPartyNumOfVotes() const {
@@ -78,9 +88,11 @@ namespace Elections
 	}
 
 	void Party::save(ostream& out) const {
+		if (!out || !out.good())
+			throw invalid_argument("Party, save(ostream& out)");
+		
 		int temp;
 		string tempId;
-
 		out.write(rcastcc(&_partySerialNumber), sizeof(int));
 		out.write(rcastcc(&_name), sizeof(_name));
 		out.write(rcastcc(&_partyId), sizeof(int));
@@ -88,14 +100,15 @@ namespace Elections
 		out.write(rcastcc(&tempId), sizeof(tempId));
 		_partyCandidates->save(out);
 
-		//next ex we will implament try&catch
 		if (!out.good()) {
-			cout << "Party Save issue" << endl;
-			exit(-1);
+			throw iostream::failure("Party, save(out)");
 		}
 	}
 
-	void Party::load(istream& in, Election* election) {
+	void Party::load(istream& in, Election* election) {	
+		if (!in || !in.good() || !election )
+			throw invalid_argument("Party, load");
+
 		int temp = 0;
 		string canId;
 		CitizensArr* citArr = election->getCitizens();
@@ -110,12 +123,16 @@ namespace Elections
 		in.read(rcastc(&_partyId), sizeof(int));
 		in.read(rcastc(&canId), sizeof(canId));
 		_candidate = citArr->find(canId);
-		_partyCandidates = new PartyCandidates(in, districts, citArr);
+		try {
+			_partyCandidates = new PartyCandidates(in, districts, citArr);
+		}
+		catch (bad_alloc& err) {
+			cout << err.what() << endl;
+			exit(1);
+		}
 
-		//next ex we will implament try&catch
 		if (!in.good()) {
-			cout << "Citizen load issue" << endl;
-			exit(-1);
+			throw iostream::failure("Party, load(in, election)");
 		}
 	}
 }

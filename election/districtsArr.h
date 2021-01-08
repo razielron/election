@@ -12,6 +12,7 @@ namespace Elections {
 			DistrictsArr(istream& in);
 			~DistrictsArr() {}
 			friend ostream& operator<<(ostream& os, const DynamicArr<District*>& disArr);
+			bool operator !() const { return this == nullptr; };
 
 			//Load and Save
 		public:

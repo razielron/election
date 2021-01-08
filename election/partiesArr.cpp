@@ -6,25 +6,21 @@ namespace Elections
 		load(in, election);
 	}
 
-	bool PartiesArr::setPartyTotalElectors() {
+	void PartiesArr::setPartyTotalElectors() {
 		for (int i = 0; i < _logSize; i++) {
 			_array[i]->setPartyTotalElectors();
 		}
-		return true;
 	}
 
-	bool PartiesArr::setDistrictWinner() {
+	void PartiesArr::setDistrictWinner() {
 		for (int i = 0;i < _logSize;i++) {
 			_array[i]->setDistrictWinner();
 		}
-
-		return true;
 	}
 
 	Party* PartiesArr::getElectionWinner() {
 		Party* winner = nullptr;
 		int winnerElectors = 0;
-
 		for (int i = 0;i < _logSize;i++) {
 			if (_array[i]->getTotalElectors() > winnerElectors) {
 				winnerElectors = _array[i]->getTotalElectors();
@@ -48,6 +44,8 @@ namespace Elections
 	}
 
 	void PartiesArr::printDistrictPartyDetails(int& i, District* dis) {
+		if (i > _logSize)
+			throw out_of_range("PartiesArr, printDistrictPartyDetails");
 		_array[i]->printDistrictPartyDetails(dis);
 	}
 
@@ -62,7 +60,7 @@ namespace Elections
 		cout << "-------------PARTIES-RESULTS-END---------" << endl;
 	}
 
-	void  PartiesArr::sortByNumOfElectors() const {
+	void PartiesArr::sortByNumOfElectors() const {
 		Party* temp;
 		for (int i = 0; i < _logSize; i++) {
 			for (int j = i + 1; j < _logSize; j++) {
@@ -74,6 +72,7 @@ namespace Elections
 			}
 		}
 	}
+	
 
 	void PartiesArr::sortByNumOfElectorsInDistrict(District* dis) {
 		Party* temp;
@@ -110,29 +109,38 @@ namespace Elections
 	}
 
 	void PartiesArr::save(ostream& out) const {
+		if (!out || !out.good())
+			throw invalid_argument("PartiesArr, save(ostream& out)");
+
 		out.write(rcastcc(&_logSize), sizeof(int));
 		for (int i = 0;i < _logSize;i++) {
 			_array[i]->save(out);
 		}
-		//next ex we will implament try&catch
+
 		if (!out.good()) {
-			cout << "PartyArr Save issue" << endl;
-			exit(-1);
+			throw iostream::failure("Party, save(out)");
 		}
 	}
 
 	void PartiesArr::load(istream& in, Election* election) {
+		if (!in || !in.good() || !election)
+			throw invalid_argument("PartiesArr, load, Parameter issues");
+
 		in.read(rcastc(&_phySize), sizeof(int));
 		_logSize = _phySize;
-		_array = new Party* [_phySize];
-		for (int i = 0; i < _phySize; i++) {
-			_array[i] = new Party(in, election);
+		try {
+			_array = new Party * [_phySize];
+			for (int i = 0; i < _phySize; i++) {
+				_array[i] = new Party(in, election);
+			}
+		}
+		catch (bad_alloc& err) {
+			cout << err.what() << endl;
+			exit(1);
 		}
 
-		//next ex we will implament try&catch
 		if (!in.good()) {
-			cout << "PartyArr load issue" << endl;
-			exit(-1);
+			throw iostream::failure("Party, load(in, election)");
 		}
 	}
 

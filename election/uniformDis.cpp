@@ -1,20 +1,28 @@
 #include "uniformDis.h"
 namespace Elections
 {
-	UniformDis::UniformDis() : District() {}
+	UniformDis::UniformDis() {
+		District();
+	}
 
-	UniformDis::UniformDis(string name, int numOfRepresentatives) : District(name, numOfRepresentatives) {}
+	UniformDis::UniformDis(string name, int numOfRepresentatives){
+		District(name, numOfRepresentatives);
+	}
 
 	UniformDis::UniformDis(istream& in): District(in) {}
 
 
 	ostream& operator<<(ostream& os, const UniformDis& uniDis) {
+		if (!os || !uniDis)
+			throw invalid_argument("UniformDis, <<");
+		
 		os << "-------------DISTRICT-START------------" << endl;
 		os << "District ID: " << uniDis.getId() << endl;
 		os << "District type: Uniform" << endl;
 		os << "Name of district: " << uniDis.getId() << endl;
 		os << "Number of representetive: " << uniDis.getNumOfRepresentatives() << endl;
 		os << "--------------DISTRICT-END-------------" << endl;
+		
 		return os;
 	}
 
