@@ -2,6 +2,8 @@
 #include <istream>
 #include <ostream>
 #include <string>
+#include <exception>
+#include "citizenException.h"
 #include "dynamicArr.h"
 #define rcastcc reinterpret_cast<const char*>
 #define rcastc reinterpret_cast<char*>
@@ -28,6 +30,7 @@ namespace Elections
 			Citizen(string id, int yearOfBirth, string name, District* dis);
 			Citizen(istream& in, Election* election);
 			~Citizen() {};
+			bool operator!() const { return this == nullptr; }
 			friend ostream& operator<<(ostream& os, const Citizen& cit);
 			
 		//GETTERS
