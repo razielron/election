@@ -72,16 +72,11 @@ namespace Elections
 				return temp;
 			temp = temp->next;
 		}
-		return nullptr;
+		throw runtime_error("There is no District");
 	}
 
 	void PartyCandidates::addVote(District* dis) {
 		ListItem* temp = searchDistrict(dis);
-		if (!temp) {
-			cout << "NO Candidates FOR THAT DISTRICT" << endl;
-			return;
-		}
-
 		temp->numOfVotes++;
 	}
 

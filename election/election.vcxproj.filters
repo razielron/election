@@ -36,5 +36,7 @@
     <ClInclude Include="citizenException.h" />
     <ClInclude Include="districtException.h" />
     <ClInclude Include="partyException.h" />
+    <ClInclude Include="electionException.h" />
+    <ClInclude Include="partyCandidateException.h" />
   </ItemGroup>
 </Project>
