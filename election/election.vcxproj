@@ -156,6 +156,7 @@
     <ClCompile Include="uniformDis.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="candidatesData.h" />
     <ClInclude Include="citizen.h" />
     <ClInclude Include="citizenException.h" />
     <ClInclude Include="citizensArr.h" />

@@ -3,25 +3,19 @@
 #include <iostream>
 #include "PartyCandidateException.h"
 #include "citizensArr.h"
+#include "candidatesData.h"
 
 namespace Elections
 {
-	struct data {
-		District* dis;
-		CitizensArr* partyCandidates;
-		int numOfVotes;
-		int numOfElectors;
-	};
-
 	class District;
 	class DistrictsArr;
-	class PartyCandidates: public list<data*>
+	class PartyCandidates: public list<CandidatesData*>
 	{
 		
 		private:
 			void addTail(District* dis, bool createPartyCan = true);
 			//returns the ListItem node by given district
-			data* searchDistrict(District*& dis);
+			CandidatesData* searchDistrict(District*& dis);
 
 		//Constructors + Distructors
 		public:
@@ -37,8 +31,8 @@ namespace Elections
 		public:
 			CitizensArr* getDistrictPartyCandidates(int position);
 			CitizensArr* getDistrictPartyCandidates(District* dis);
-			int getNumOfElectors(data* listItem);
-			int setNumOfElectors(data* listItem);
+			int getNumOfElectors(CandidatesData* listItem);
+			int setNumOfElectors(CandidatesData* listItem);
 			int getPartyNumOfVotes() const;
 			int getPartyNumOfElectors(District* dis);
 			int getPartyTotalElectors(Party* party);

@@ -10,79 +10,64 @@ namespace Elections
 	}
 
 	PartyCandidates::~PartyCandidates() {
-		for (data* x : *this) {
-			delete[] x->partyCandidates->getArr();
+		for (CandidatesData* x : *this) {
+			delete[] x->_partyCandidates->getArr();
 			delete x;
 		}
 	}
 
 	void PartyCandidates::addTail(District* dis, bool createPartyCan) {
-		if (!dis)
+		if (!dis) {
 			throw PartyCandidateException();
-		data* temp;
-		try {
-			temp = new data();
-		}
-		catch (bad_alloc& err) {
-			cout << err.what() << endl;
-			exit(1);
 		}
 
-		temp->dis = dis;
-		temp->numOfVotes = 0;
-		temp->numOfElectors = 0;
-		temp->partyCandidates = nullptr;
+		CandidatesData* temp;
+		temp = new CandidatesData(dis, nullptr, 0, 0);
+
 		if (createPartyCan) {
-			try {
-				temp->partyCandidates = new CitizensArr;
-			}
-			catch (bad_alloc& err) {
-				cout << err.what() << endl;
-				exit(1);
-			}
+			temp->_partyCandidates = new CitizensArr;
 		}
 		this->push_back(temp);
-		
 	}
 
 	void PartyCandidates::delHead() {
-		data* temp = *(begin());
+		CandidatesData* temp = *(begin());
 		delete temp;
 		(*this).pop_back();
 	}
 
 	void PartyCandidates::delTail() {
-		data* temp = this->back();
+		CandidatesData* temp = this->back();
 		delete temp;
 		(*this).pop_back();
 	}
 
 
-	data* PartyCandidates::searchDistrict(District*& dis)
+	CandidatesData* PartyCandidates::searchDistrict(District*& dis)
 	{
 		if (!dis)
 			throw invalid_argument("PartyCandidates, searchDistrict");
 
-		for (data* x : *this) {
-			if (dis->getId() == x->dis->getId())
+		for (CandidatesData* x : *this) {
+			if (dis->getId() == x->_dis->getId())
 				return x;
 		}
 		return nullptr;
 	}
 
 	void PartyCandidates::addVote(District* dis) {
-		data* temp = searchDistrict(dis);
-		temp->numOfVotes++;
+		CandidatesData* temp = searchDistrict(dis);
+		temp->_numOfVotes++;
 	}
 
 	void PartyCandidates::appendPartyCandidate(District* dis, Citizen* cit) {
-		data* temp = searchDistrict(dis);
+		CandidatesData* temp = searchDistrict(dis);
 		if (temp) {
-			temp->partyCandidates->push_back(cit);
+			temp->_partyCandidates->push_back(cit);
 		}
 		else {
 			addTail(dis);
-			this->back()->partyCandidates->push_back(cit);
+			this->back()->_partyCandidates->push_back(cit);
 		}
 	}
 
@@ -91,41 +76,41 @@ namespace Elections
 			throw out_of_range("PartyCandidates, getDistrictPartyCandidates");
 
 		int i = 0;
-		for (data* x : (*this))
+		for (CandidatesData* x : (*this))
 			if (i++ == position)
-				return x->partyCandidates;
+				return x->_partyCandidates;
 	}
 
 	CitizensArr* PartyCandidates::getDistrictPartyCandidates(District* dis) {
 		if (!dis)
 			throw invalid_argument("PartyCandidates, searchDistrict");
 
-		for (data* x : (*this))
-			if (x->dis == dis)
-				return x->partyCandidates;
+		for (CandidatesData* x : (*this))
+			if (x->_dis == dis)
+				return x->_partyCandidates;
 	}
 
 
-	int PartyCandidates::getNumOfElectors(data* data) {
+	int PartyCandidates::getNumOfElectors(CandidatesData* data) {
 		if (!data)
 			throw invalid_argument("PartyCandidates, searchDistrict");
 
-		return data->numOfElectors;
+		return data->_numOfElectors;
 	}
 
-	int PartyCandidates::setNumOfElectors(data* data) {
+	int PartyCandidates::setNumOfElectors(CandidatesData* data) {
 		if (!data)
 			throw invalid_argument("PartyCandidates, searchDistrict");
 
-		return data->numOfElectors = data->dis->getPartyRepNumber(data->numOfVotes);
+		return data->_numOfElectors = data->_dis->getPartyRepNumber(data->_numOfVotes);
 	}
 
 	void PartyCandidates::addRepresentetives() {
 		int numOfRep;
-		for (data* x : (*this)) {
+		for (CandidatesData* x : (*this)) {
 			numOfRep = setNumOfElectors(x);
 			for (int i = 0;i < numOfRep;i++) {
-				x->dis->appendToRepresentetives(x->partyCandidates->at(i));
+				x->_dis->appendToRepresentetives(x->_partyCandidates->at(i));
 			}
 		}
 	}
@@ -134,20 +119,20 @@ namespace Elections
 		if (!party)
 			throw invalid_argument("PartyCandidates, setDistrictWinner");
 		
-		for (data* x : (*this)) {
-			if (x->dis->getWinnerVotes() < x->numOfVotes) {
-				x->dis->setWinnerParty(party);
-				x->dis->setWinnerVotes(x->numOfVotes);
+		for (CandidatesData* x : (*this)) {
+			if (x->_dis->getWinnerVotes() < x->_numOfVotes) {
+				x->_dis->setWinnerParty(party);
+				x->_dis->setWinnerVotes(x->_numOfVotes);
 			}
 		}
 	}
 
 	int PartyCandidates::getPartyTotalElectors(Party* party) {
 		int sumOfRep = 0;
-		for (data* x : (*this)) {
-			if (typeid(*(x->dis)) == typeid(UniformDis)) {
-				if (x->dis->getWinnerParty() == party) {
-					sumOfRep += x->dis->getNumOfRepresentatives();
+		for (CandidatesData* x : (*this)) {
+			if (typeid(*(x->_dis)) == typeid(UniformDis)) {
+				if (x->_dis->getWinnerParty() == party) {
+					sumOfRep += x->_dis->getNumOfRepresentatives();
 				}
 			}
 			else {
@@ -159,8 +144,8 @@ namespace Elections
 
 	int PartyCandidates::getPartyNumOfVotes() const {
 		int sumOfVotes = 0;
-		for (data* x : (*this)) {
-			sumOfVotes += x->numOfVotes;
+		for (CandidatesData* x : (*this)) {
+			sumOfVotes += x->_numOfVotes;
 		}
 		return sumOfVotes;
 	}
@@ -169,18 +154,18 @@ namespace Elections
 		if (!dis)
 			throw invalid_argument("PartyCandidates, getPartyNumOfElectors");
 		
-		for (data* x : (*this))
-			if (x->dis == dis) {
-				return x->numOfElectors;
+		for (CandidatesData* x : (*this))
+			if (x->_dis == dis) {
+				return x->_numOfElectors;
 		}
 
 		throw runtime_error("PartyCandidates, getPartyNumOfElectors: There is no such district");
 	}
 
 	void PartyCandidates::printPartyCandidates() const {
-		for (data* x : (*this)){
-			cout << "Name of District:" << x->dis->getName() << endl;
-			cout << x->partyCandidates;
+		for (CandidatesData* x : (*this)){
+			cout << "Name of District:" << x->_dis->getName() << endl;
+			cout << x->_partyCandidates;
 		}
 	}
 
@@ -188,11 +173,11 @@ namespace Elections
 		if (!dis)
 			throw invalid_argument("PartyCandidates, searchDistrict");
 		bool foundDis = false;
-		for (data* x : (*this)) {
-			if (x->dis == dis) {
-				cout << "Party voters percentage in district: " << (float)((x->numOfVotes) /
-					(float)(x->dis->getTotalVotes())) * (float)(100) << "%" << endl;
-				cout << "Number of votes for party: " << x->numOfVotes << endl;
+		for (CandidatesData* x : (*this)) {
+			if (x->_dis == dis) {
+				cout << "Party voters percentage in district: " << (float)((x->_numOfVotes) /
+					(float)(x->_dis->getTotalVotes())) * (float)(100) << "%" << endl;
+				cout << "Number of votes for party: " << x->_numOfVotes << endl;
 				cout << endl;
 				foundDis = true;
 			}
@@ -208,11 +193,11 @@ namespace Elections
 			throw invalid_argument("PartyCandidates, save(ostream& out)");
 
 		out.write(rcastcc(&tempInt), sizeof(int));
-		for (data* x : (*this)) {
-			tempInt = x->dis->getId();
+		for (CandidatesData* x : (*this)) {
+			tempInt = x->_dis->getId();
 			out.write(rcastcc(&tempInt), sizeof(int));
-			x->partyCandidates->saveId(out);
-			out.write(rcastcc(&(x->numOfVotes)), sizeof(int));
+			x->_partyCandidates->saveId(out);
+			out.write(rcastcc(&(x->_numOfVotes)), sizeof(int));
 		}
 
 		if (!out.good()) {
@@ -233,8 +218,8 @@ namespace Elections
 				in.read(rcastc(&temp), sizeof(int));
 				dis = districts->find(temp);
 				addTail(dis, false);
-				(this->back())->partyCandidates = new CitizensArr(in, citizens);
-				in.read(rcastc(&(this->back()->numOfVotes)), sizeof(int));
+				//this->back()->partyCandidates = new CitizensArr(in, citizens);
+				in.read(rcastc(&(this->back()->_numOfVotes)), sizeof(int));
 			}
 		}
 		catch (bad_alloc& err) {
@@ -254,9 +239,9 @@ namespace Elections
 			throw invalid_argument("PartyCandidates, saveResults(ostream& out)");
 
 
-		for (data* x : (*this)) {
-			tempInt = x->numOfVotes;
-			out.write(rcastcc(&(x->numOfVotes)), sizeof(int));
+		for (CandidatesData* x : (*this)) {
+			tempInt = x->_numOfVotes;
+			out.write(rcastcc(&(x->_numOfVotes)), sizeof(int));
 		}
 
 		if (!out.good()) {
@@ -270,9 +255,9 @@ namespace Elections
 		if (!in || !in.good())
 			throw invalid_argument("PartyCandidates, loadResults");
 
-		for (data* x : (*this)) {
-			tempInt = x->numOfVotes;
-			in.read(rcastc(&(x->numOfVotes)), sizeof(int));
+		for (CandidatesData* x : (*this)) {
+			tempInt = x->_numOfVotes;
+			in.read(rcastc(&(x->_numOfVotes)), sizeof(int));
 		}
 
 		if (!in.good()) {

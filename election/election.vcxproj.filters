@@ -38,5 +38,6 @@
     <ClInclude Include="partyException.h" />
     <ClInclude Include="electionException.h" />
     <ClInclude Include="partyCandidateException.h" />
+    <ClInclude Include="candidatesData.h" />
   </ItemGroup>
 </Project>
