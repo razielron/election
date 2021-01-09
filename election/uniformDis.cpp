@@ -1,13 +1,9 @@
 #include "uniformDis.h"
 namespace Elections
 {
-	UniformDis::UniformDis() {
-		District();
-	}
+	UniformDis::UniformDis(): District() {}
 
-	UniformDis::UniformDis(string name, int numOfRepresentatives){
-		District(name, numOfRepresentatives);
-	}
+	UniformDis::UniformDis(string name, int numOfRepresentatives): District(name, numOfRepresentatives) {}
 
 	UniformDis::UniformDis(istream& in): District(in) {}
 

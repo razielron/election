@@ -37,7 +37,7 @@ namespace Elections
 				break;
 			}
 			default:
-				return nullptr;
+				throw runtime_error("There is no suitable type");
 			}
 		
 		if (!in.good()) {

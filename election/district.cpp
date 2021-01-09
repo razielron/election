@@ -70,13 +70,13 @@ namespace Elections
 	}
 
 	void District::setWinnerVotes(int winnerVotes) {
-		if (winnerVotes)
+		if (!winnerVotes)
 			throw invalid_argument("District, setWinnerVotes");
 		_winnerVotes = winnerVotes;
 	}
 
 	void District::setWinnerParty(Party* party) {
-		if (party)
+		if (!party)
 			throw invalid_argument("District, setWinnerParty");
 
 		_winner = party;
