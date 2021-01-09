@@ -1,4 +1,5 @@
 #pragma once
+#include "PartyCandidateException.h"
 #include "citizensArr.h"
 
 namespace Elections
@@ -34,6 +35,7 @@ namespace Elections
 			PartyCandidates(istream& in, DistrictsArr* districts, CitizensArr* citizens);
 			~PartyCandidates();
 			void addVote(District* dis);
+			bool operator !() const { return this == nullptr; };
 
 		//GETTERS
 		public:

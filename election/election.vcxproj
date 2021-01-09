@@ -171,6 +171,7 @@
     <ClInclude Include="normalElection.h" />
     <ClInclude Include="partiesArr.h" />
     <ClInclude Include="party.h" />
+    <ClInclude Include="partyCandidateException.h" />
     <ClInclude Include="partyCandidates.h" />
     <ClInclude Include="partyException.h" />
     <ClInclude Include="simpleElection.h" />

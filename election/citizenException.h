@@ -10,7 +10,6 @@ namespace Elections
 	{
 	public:
 		CitizenException(string id) : invalid_argument(_what), _id(id) {}
-
 		string getId() const { return _id; }
 
 		virtual const char* what() const throw() {

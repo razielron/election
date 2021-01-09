@@ -20,7 +20,18 @@ namespace Elections
 	}
 
 	void PartyCandidates::addTail(District* dis) {
-		ListItem* temp = new ListItem();
+		if (!dis)
+			throw PartyCandidateException();
+		ListItem* temp;
+
+		try {
+			temp = new ListItem();
+		}
+		catch (bad_alloc& err) {
+			cout << err.what() << endl;
+			exit(1);
+		}
+
 		temp->dis = dis;
 		temp->numOfVotes = 0;
 		temp->numOfElectors = 0;
@@ -52,22 +63,20 @@ namespace Elections
 
 	PartyCandidates::ListItem* PartyCandidates::searchDistrict(District*& dis)
 	{
+		if (!dis)
+			throw invalid_argument("PartyCandidates, searchDistrict");
+
 		ListItem* temp = _head;
 		while (temp) {
 			if (dis->getId() == temp->dis->getId())
 				return temp;
 			temp = temp->next;
 		}
-		return nullptr;
+		throw runtime_error("There is no District");
 	}
 
 	void PartyCandidates::addVote(District* dis) {
 		ListItem* temp = searchDistrict(dis);
-		if (!temp) {
-			cout << "NO Candidates FOR THAT DISTRICT" << endl;
-			return;
-		}
-
 		temp->numOfVotes++;
 	}
 
@@ -90,6 +99,9 @@ namespace Elections
 	}
 
 	CitizensArr* PartyCandidates::getDistrictPartyCandidates(District* dis) {
+		if (!dis)
+			throw invalid_argument("PartyCandidates, searchDistrict");
+
 		ListItem* temp = _head;
 		while (temp->dis != dis) {
 			temp = temp->next;
@@ -108,10 +120,16 @@ namespace Elections
 	}
 
 	int PartyCandidates::getNumOfElectors(ListItem* listItem) {
+		if (!listItem)
+			throw invalid_argument("PartyCandidates, searchDistrict");
+
 		return listItem->numOfElectors;
 	}
 
 	int PartyCandidates::setNumOfElectors(ListItem* listItem) {
+		if (!listItem)
+			throw invalid_argument("PartyCandidates, searchDistrict");
+
 		return listItem->numOfElectors = listItem->dis->getPartyRepNumber(listItem->numOfVotes);
 	}
 
@@ -184,6 +202,9 @@ namespace Elections
 	}
 
 	void PartyCandidates::printResults(District* dis) const {
+		if (!dis)
+			throw invalid_argument("PartyCandidates, searchDistrict");
+
 		ListItem* temp = _head;
 		while (temp && (temp->dis != dis))
 			temp = temp->next;
@@ -194,6 +215,9 @@ namespace Elections
 	}
 
 	void PartyCandidates::save(ostream& out) const {
+		if (!out || !out.good())
+			throw invalid_argument("PartyCandidates, save(ostream& out)");
+
 		int tempInt = getNumOfNodes();
 		out.write(rcastcc(&tempInt), sizeof(int));
 		ListItem* temp = _head;
@@ -204,43 +228,75 @@ namespace Elections
 			out.write(rcastcc(&(temp->numOfVotes)), sizeof(int));
 			temp = temp->next;
 		}
+
+		if (!out.good()) {
+			throw iostream::failure("PartyCandidates, save(out)");
+		}
 	}
 
 	void PartyCandidates::load(istream& in, DistrictsArr* districts, CitizensArr* citizens) {
 		int numOfNodes = 0, temp = 0;
 		District* dis;
 		CitizensArr* tempCit;
+		if (!in || !in.good() || !districts)
+			throw invalid_argument("PartyCandidates, load");
 
-		in.read(rcastc(&numOfNodes), sizeof(int));
-		for (int i = 0;i < numOfNodes; i++) {
-			in.read(rcastc(&temp), sizeof(int));
-			dis = districts->find(temp);
-			addTail(dis);
-			delete _tail->partyCandidates;
-			_tail->partyCandidates = new CitizensArr(in, citizens);
-			in.read(rcastc(&(_tail->numOfVotes)), sizeof(int));
+		try {
+			in.read(rcastc(&numOfNodes), sizeof(int));
+			for (int i = 0;i < numOfNodes; i++) {
+				in.read(rcastc(&temp), sizeof(int));
+				dis = districts->find(temp);
+				addTail(dis);
+				delete _tail->partyCandidates;
+				_tail->partyCandidates = new CitizensArr(in, citizens);
+				in.read(rcastc(&(_tail->numOfVotes)), sizeof(int));
+			}
+		}
+		catch (bad_alloc& err) {
+			cout << err.what() << endl;
+			exit(1);
+		}
+
+		if (!in.good()) {
+			throw iostream::failure("PartyCandidates, load(in, districts, citizens)");
 		}
 	}
+
 
 	void PartyCandidates::saveResults(ostream& out) const {
 		ListItem* temp = _head;
 		int tempInt;
+		if (!out || !out.good())
+			throw invalid_argument("PartyCandidates, saveResults(ostream& out)");
+
 
 		while (temp) {
 			tempInt = temp->numOfVotes;
 			out.write(rcastcc(&(temp->numOfVotes)), sizeof(int));
 			temp = temp->next;
 		}
+
+		if (!out.good()) {
+			throw iostream::failure("PartyCandidates, saveResults(out)");
+		}
+
 	}
 
 	void PartyCandidates::loadResults(istream& in) {
 		int tempInt;
 		ListItem* temp = _head;
+		if (!in || !in.good())
+			throw invalid_argument("PartyCandidates, loadResults");
+
 		int numOfNodes = getNumOfNodes();
 		while (temp) {
 			tempInt = temp->numOfVotes;
 			in.read(rcastc(&(temp->numOfVotes)), sizeof(int));
 			temp = temp->next;
+		}
+
+		if (!in.good()) {
+			throw iostream::failure("PartyCandidates, loadResults(in)");
 		}
 	}
 }
