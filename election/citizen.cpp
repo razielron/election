@@ -35,13 +35,8 @@ namespace Elections
 		return os;
 	}
 	
-	bool Citizen::setDistict(District* dis){
-		if (!dis) {
-			throw invalid_argument("Citizen, setDistict, parameter issue");
-		}
-
+	void Citizen::setDistict(District* dis){
 		_dis = dis;
-		return true; 
 	}
 
 	void Citizen::vote(Party* party) {

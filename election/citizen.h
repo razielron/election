@@ -43,7 +43,7 @@ namespace Elections
 
 		public:
 			//set the citizen's district
-			bool setDistict(District* dis);
+			void setDistict(District* dis);
 			//add vote for this citizen by given party
 			void vote(Party* party);
 
