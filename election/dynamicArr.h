@@ -40,7 +40,12 @@ namespace Elections
 	public:
 		T operator[](int idx) { return _array[idx]; }
 		T operator[](int idx) const { return _array[idx]; }
+		bool operator!() const { return this == nullptr; }
 		friend ostream& operator<<(ostream& os, const DynamicArr<T>& element) {
+			if (!os || !element) {
+				throw invalid_argument("DynamicArr, operator<<, parameter issue");
+			}
+
 			for (int i = 0;i < element.size(); i++) {
 				os << *(element[i]);
 			}
@@ -143,6 +148,10 @@ namespace Elections
 	public:
 		//inserts a value in a given position
 		void insert(const iterator& pos, const T& val) {
+			if (!pos || !val) {
+				throw invalid_argument("DynamicArr, insert, parameters issue");
+			}
+
 			if (_logSize == _phySize)
 				resize();
 
@@ -161,8 +170,7 @@ namespace Elections
 		//earases the values in a given pos
 		const iterator& erase(const iterator& pos) {
 			if (pos._i > _logSize) {
-				cout << "Error" << endl;
-				return nullptr;
+				throw invalid_argument("DynamicArr, erase, parameters issue");
 			}
 
 			delete* pos;
@@ -182,8 +190,7 @@ namespace Elections
 		//earases the values in a given range and returns iterator the one step before
 		const iterator& erase(const iterator& first, const iterator& last) {
 			if (first._i > _logSize || last._i > _logSize) {
-				cout << "Error" << endl;
-				return nullptr;
+				throw invalid_argument("DynamicArr, erase, parameters issue");
 			}
 
 			iterator itrCurrent = first, itrEndCurrent = last;
@@ -213,13 +220,22 @@ namespace Elections
 		//Swaps elements
 		template<class T>
 		void swap(iterator& i, iterator& j) {
+			if (!i || !j) {
+				throw invalid_argument("DynamicArr, swap, parameters issue");
+			}
+
 			T temp = *i;
 			*i = *j;
 			*j = temp;
 		}
+
 		//Sorts the array according to given function
 		template<class T, class Func>
 		void sort(iterator& first, iterator& last, const Func& func) {
+			if (!first || !last) {
+				throw invalid_argument("DynamicArr, sort, parameters issue");
+			}
+
 			iterator temp = first;
 			for (iterator i = first; i != last; ++i)
 				for (iterator j = first; j._i < last._i - i._da + 1; ++j)
@@ -232,13 +248,32 @@ namespace Elections
 	/*------------------------DynamicArr Functions Implementation------------------------*/
 	template<class T>
 	DynamicArr<T>::DynamicArr(int size) :_logSize(0), _phySize(size) {
-		_array = _phySize ? new T[_phySize] : nullptr;
+		if (size < 0) {
+			throw invalid_argument("DyncamicArr, constructor(size), size cannot be negative");
+		}
+		try {
+			_array = _phySize ? new T[_phySize] : nullptr;
+		}
+		catch (bad_alloc& err) {
+			cout << err.what() << endl;
+			exit(1);
+		}
 	};
 	
 	template<class T>
 	DynamicArr<T>::DynamicArr(T element) : _logSize(1), _phySize(2) {
-		_array = new T[_phySize];
-		_array[0] = element;
+		if (!element) {
+			throw invalid_argument("DyncamicArr, constructor(element), paramerter issue");
+		}
+
+		try {
+			_array = new T[_phySize];
+			_array[0] = element;
+		}
+		catch (bad_alloc& err) {
+			cout << err.what() << endl;
+			exit(1);
+		}
 	}
 
 	template<class T>
@@ -251,6 +286,10 @@ namespace Elections
 
 	template<class T>
 	void DynamicArr<T>::push_back(T element) {
+		if (!element) {
+			throw invalid_argument("DyncamicArr, pushBack, paramerter issue");
+		}
+
 		if (_logSize == _phySize) {
 			resize();
 		}
@@ -261,8 +300,7 @@ namespace Elections
 	template<class T>
 	void DynamicArr<T>::erase(int pos) {
 		if (pos > _logSize || pos < 0) {
-			cout << "Invalid syntax" << endl;
-			return;
+			throw invalid_argument("DyncamicArr, erase, paramerter issue");
 		}
 		delete _array[pos];
 		for (int i = pos;i < _logSize-1;i++)
@@ -274,9 +312,9 @@ namespace Elections
 	template<class T>
 	void DynamicArr<T>::insertAt(T element, int pos) {
 		if (pos > _logSize || pos < 0) {
-			cout << "Invalid syntax" << endl;
-			return;
+			throw out_of_range("DynamicArr, insertAt, out of range");
 		}
+
 		if (_logSize == _phySize) {
 			resize();
 		}
@@ -293,15 +331,25 @@ namespace Elections
 
 	template<class T>
 	void DynamicArr<T>::resize() {
-		_phySize *= GROTH_FACTOR;
-		T* temp = new T[_phySize];
-		copy(temp);
-		delete[] _array;
-		_array = temp;
+		try {
+			_phySize *= GROTH_FACTOR;
+			T* temp = new T[_phySize];
+			copy(temp);
+			delete[] _array;
+			_array = temp;
+		}
+		catch (bad_alloc& err) {
+			cout << err.what() << endl;
+			exit(1);
+		}
 	} 
 
 	template<class T>
 	void DynamicArr<T>::copy(T* element) {
+		if (!element) {
+			throw invalid_argument("DyncamicArr, copy, paramerter issue");
+		}
+
 		for (int i = 0;i < _logSize;i++) {
 			element[i] = _array[i];
 		}
@@ -310,32 +358,45 @@ namespace Elections
 	template<class T>
 	T DynamicArr<T>::at(int pos) {
 		if (pos > _logSize || pos < 0) {
-			cout << "Invalid syntax" << endl;
-			return nullptr;
+			throw out_of_range("DynamicArr, at, out of range");
 		}
 		return _array[pos];
 	}
 
 	template<class T>
 	T DynamicArr<T>::find(string id) {
+		if (!id) {
+			throw invalid_argument("DyncamicArr, find, paramerter issue");
+		}
+
 		for (int i = 0;i < _logSize;i++) {
 			if (!(_array[i]->getId().compare(id)))
 				return _array[i];
 		}
-		return nullptr;	
+		
+		throw runtime_error("DynamicArr, find, cannot find element by given string id");
 	}
 
 	template<class T>
 	T DynamicArr<T>::find(int id) {
+		if (!id) {
+			throw invalid_argument("DyncamicArr, find, paramerter issue");
+		}
+
 		for (int i = 0;i < _logSize;i++) {
 			if (_array[i]->getId() == id)
 				return _array[i];
 		}
-		return nullptr;
+		
+		throw runtime_error("DynamicArr, find, cannot find element by given int id");
 	}
 
 	template<class T>
 	void DynamicArr<T>::swap(T el1, T el2) {
+		if (!i || !j) {
+			throw invalid_argument("DynamicArr, swap, parameters issue");
+		}
+
 		T temp = el1;
 		el1 = el2;
 		el2 = temp;

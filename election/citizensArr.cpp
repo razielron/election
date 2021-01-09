@@ -76,7 +76,6 @@ namespace Elections
 		string tempCitId;
 		in.read(rcastc(&_phySize), sizeof(int));
 		_logSize = _phySize;
-		delete[] _array;
 		try {
 			_array = new Citizen * [_phySize];
 
