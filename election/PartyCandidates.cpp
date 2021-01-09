@@ -20,14 +20,11 @@ namespace Elections
 		if (!dis) {
 			throw PartyCandidateException();
 		}
-
-		CandidatesData* temp;
-		temp = new CandidatesData(dis, nullptr, 0, 0);
-
+		
+		this->push_back(new CandidatesData(dis, nullptr, 0, 0));
 		if (createPartyCan) {
-			temp->_partyCandidates = new CitizensArr;
+			this->back()->_partyCandidates = new CitizensArr;
 		}
-		this->push_back(temp);
 	}
 
 	void PartyCandidates::delHead() {
@@ -218,7 +215,7 @@ namespace Elections
 				in.read(rcastc(&temp), sizeof(int));
 				dis = districts->find(temp);
 				addTail(dis, false);
-				//this->back()->partyCandidates = new CitizensArr(in, citizens);
+				this->back()->_partyCandidates = new CitizensArr(in, citizens);
 				in.read(rcastc(&(this->back()->_numOfVotes)), sizeof(int));
 			}
 		}
