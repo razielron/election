@@ -246,7 +246,7 @@ namespace Elections
 		for (int i = 0;i < _logSize;i++) {
 			delete _array[i];
 		}
-		delete[] _array;
+	delete[] _array;
 	}
 
 	template<class T>

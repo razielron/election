@@ -25,7 +25,7 @@ namespace Elections
 
 		//Constructors + Distructors
 		public:
-			PartyCandidates(): list() {}
+			PartyCandidates() {}
 			PartyCandidates(istream& in, DistrictsArr* districts, CitizensArr* citizens);
 			~PartyCandidates();
 			void addVote(District* dis);

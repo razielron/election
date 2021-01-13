@@ -25,7 +25,7 @@ namespace Elections
 	}
 
 	Party::~Party() {
-		_partyCandidates->~PartyCandidates();
+		delete _partyCandidates;
 	}
 
 	ostream& operator<<(ostream& os, const Party& party) {

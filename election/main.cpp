@@ -325,7 +325,7 @@ namespace Elections {
 	//main menu
 	void mainMenu(Election* election) {
 		int input = 1;
-
+		
 		while (input) {
 			printMainMenu();
 			cin >> input;

@@ -10,10 +10,15 @@ namespace Elections
 	}
 
 	PartyCandidates::~PartyCandidates() {
-		for (data* x : *this) {
-			delete[] x->partyCandidates->getArr();
-			delete x;
-		}
+		
+		iterator i = begin();
+		while (i!=end()){
+			delete[] (*i)->partyCandidates->getArr();
+			delete (*i);
+			this->erase(i);
+			i=begin();
+		}		
+			
 	}
 
 	void PartyCandidates::addTail(District* dis, bool createPartyCan) {
@@ -41,8 +46,7 @@ namespace Elections
 				exit(1);
 			}
 		}
-		this->push_back(temp);
-		
+		this->push_back(temp);		
 	}
 
 	void PartyCandidates::delHead() {
@@ -232,8 +236,8 @@ namespace Elections
 			for (int i = 0;i < numOfNodes; i++) {
 				in.read(rcastc(&temp), sizeof(int));
 				dis = districts->find(temp);
-				addTail(dis, false);
-				(this->back())->partyCandidates = new CitizensArr(in, citizens);
+				addTail(dis, false); 
+				this->back()->partyCandidates = new CitizensArr(in, citizens);
 				in.read(rcastc(&(this->back()->numOfVotes)), sizeof(int));
 			}
 		}

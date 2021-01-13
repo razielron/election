@@ -27,8 +27,8 @@ namespace Elections
 
 	Election::~Election() {
 		delete _districts;
-		delete _parties;
 		delete _citizens;
+		delete _parties;
 	}
 
 	ostream& operator<<(ostream& os, const Election& election) {
