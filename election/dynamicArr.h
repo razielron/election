@@ -21,6 +21,7 @@ namespace Elections
 	public:
 		DynamicArr(int size = 1);
 		DynamicArr(T);
+		DynamicArr(istream& in);
 		~DynamicArr();
 
 	public:
@@ -71,6 +72,8 @@ namespace Elections
 		T find(int id);
 		//Swaps elements
 		void swap(T al1, T el2);
+		//deletes all values in the array
+		void deleteValues();
 
 
 		/*------------------------Iterator Class------------------------*/
@@ -216,7 +219,6 @@ namespace Elections
 		//returns iterator at the end of the array
 		iterator end() { return iterator(*this, _logSize); }
 		
-		
 		//Swaps elements
 		template<class T>
 		void swap(iterator& i, iterator& j) {
@@ -247,7 +249,7 @@ namespace Elections
 		
 	/*------------------------DynamicArr Functions Implementation------------------------*/
 	template<class T>
-	DynamicArr<T>::DynamicArr(int size) :_logSize(0), _phySize(size) {
+	DynamicArr<T>::DynamicArr(int size) : _logSize(0), _phySize(size) {
 		if (size < 0) {
 			throw invalid_argument("DyncamicArr, constructor(size), size cannot be negative");
 		}
@@ -277,11 +279,36 @@ namespace Elections
 	}
 
 	template<class T>
+	DynamicArr<T>::DynamicArr(istream& in) : _logSize(0) {
+		if (!in) {
+			throw invalid_argument("DyncamicArr, constructor(size), size cannot be negative");
+		}
+
+		in.read(rcastc(&_phySize), sizeof(int));
+		if (!in.good()) {
+			throw iostream::failure("PartyCandidates, load(in, districts, citizens)");
+		}
+
+		try {
+			_array = new T[_phySize];
+		}
+		catch (bad_alloc& err) {
+			cout << err.what() << endl;
+			exit(1);
+		}
+	};
+
+	template<class T>
 	DynamicArr<T>::~DynamicArr() {
-		for (int i = 0;i < _logSize;i++) {
+		delete[] _array;
+	}
+
+	//deletes all values in the array
+	template<class T>
+	void DynamicArr<T>::deleteValues() {
+		for (int i = 0; i < _logSize; i++) {
 			delete _array[i];
 		}
-		delete[] _array;
 	}
 
 	template<class T>
@@ -365,10 +392,6 @@ namespace Elections
 
 	template<class T>
 	T DynamicArr<T>::find(string id) {
-		if (!id) {
-			throw invalid_argument("DyncamicArr, find, paramerter issue");
-		}
-
 		for (int i = 0;i < _logSize;i++) {
 			if (!(_array[i]->getId().compare(id)))
 				return _array[i];
@@ -379,10 +402,6 @@ namespace Elections
 
 	template<class T>
 	T DynamicArr<T>::find(int id) {
-		if (!id) {
-			throw invalid_argument("DyncamicArr, find, paramerter issue");
-		}
-
 		for (int i = 0;i < _logSize;i++) {
 			if (_array[i]->getId() == id)
 				return _array[i];
@@ -393,10 +412,6 @@ namespace Elections
 
 	template<class T>
 	void DynamicArr<T>::swap(T el1, T el2) {
-		if (!i || !j) {
-			throw invalid_argument("DynamicArr, swap, parameters issue");
-		}
-
 		T temp = el1;
 		el1 = el2;
 		el2 = temp;

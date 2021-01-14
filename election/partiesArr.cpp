@@ -2,7 +2,7 @@
 namespace Elections
 {
 
-	PartiesArr::PartiesArr(istream& in, Election* election) {
+	PartiesArr::PartiesArr(istream& in, Election* election) : DynamicArr(in) {
 		load(in, election);
 	}
 
@@ -72,7 +72,6 @@ namespace Elections
 			}
 		}
 	}
-	
 
 	void PartiesArr::sortByNumOfElectorsInDistrict(District* dis) {
 		Party* temp;
@@ -113,12 +112,12 @@ namespace Elections
 			throw invalid_argument("PartiesArr, save(ostream& out)");
 
 		out.write(rcastcc(&_logSize), sizeof(int));
-		for (int i = 0;i < _logSize;i++) {
-			_array[i]->save(out);
-		}
-
 		if (!out.good()) {
 			throw iostream::failure("Party, save(out)");
+		}
+
+		for (int i = 0;i < _logSize;i++) {
+			_array[i]->save(out);
 		}
 	}
 
@@ -126,21 +125,14 @@ namespace Elections
 		if (!in || !in.good() || !election)
 			throw invalid_argument("PartiesArr, load, Parameter issues");
 
-		in.read(rcastc(&_phySize), sizeof(int));
-		_logSize = _phySize;
 		try {
-			_array = new Party * [_phySize];
-			for (int i = 0; i < _phySize; i++) {
-				_array[i] = new Party(in, election);
+			for (int i = 0; i < this->capacity(); i++) {
+				push_back(new Party(in, election));
 			}
 		}
 		catch (bad_alloc& err) {
 			cout << err.what() << endl;
 			exit(1);
-		}
-
-		if (!in.good()) {
-			throw iostream::failure("Party, load(in, election)");
 		}
 	}
 

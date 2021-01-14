@@ -6,11 +6,11 @@
 namespace Elections
 {
 
-	CitizensArr::CitizensArr(istream& in, Election* election) : DynamicArr(0) {
+	CitizensArr::CitizensArr(istream& in, Election* election) : DynamicArr(in) {
 		load(in, election);
 	}
 
-	CitizensArr::CitizensArr(istream& in, CitizensArr* citizens) : DynamicArr(0) {
+	CitizensArr::CitizensArr(istream& in, CitizensArr* citizens) : DynamicArr(in) {
 		loadById(in, citizens);
 	}
 
@@ -20,12 +20,12 @@ namespace Elections
 		}
 
 		out.write(rcastcc(&_logSize), sizeof(int));
-		for (int i = 0; i < _logSize; i++) {
-			_array[i]->save(out);
-		}
-
 		if (!out.good()) {
 			throw iostream::failure("CitizensArr, save, save issue");
+		}
+
+		for (int i = 0; i < _logSize; i++) {
+			_array[i]->save(out);
 		}
 	}
 
@@ -34,22 +34,14 @@ namespace Elections
 			throw invalid_argument("CitizensArr, load, parametrs issue");
 		}
 
-		in.read(rcastc(&_phySize), sizeof(int));
-		_logSize = _phySize;
 		try {
-			_array = new Citizen * [_phySize];
-
-			for (int i = 0; i < _phySize; i++) {
-				_array[i] = new Citizen(in, election);
+			for (int i = 0; i < this->capacity(); i++) {
+				push_back(new Citizen(in, election));
 			}
 		}
 		catch (bad_alloc& err) {
 			cout << err.what() << endl;
 			exit(1);
-		}
-
-		if (!in.good()) {
-			throw iostream::failure("CitizensArr, load, load didn't work");
 		}
 	}
 
@@ -74,14 +66,18 @@ namespace Elections
 		}
 
 		string tempCitId;
-		in.read(rcastc(&_phySize), sizeof(int));
-		_logSize = _phySize;
-		try {
-			_array = new Citizen * [_phySize];
+		int tempSize, len;
+		char* buff;
 
-			for (int i = 0; i < _logSize; i++) {
-				in.read(rcastc(&tempCitId), sizeof(tempCitId));
-				_array[i] = citizens->find(tempCitId);
+		try {
+			for (int i = 0; i < this->capacity(); i++) {
+				in.read(rcastc(&len), sizeof(int));
+				buff = new char[len + 1];
+				in.read(buff, len);
+				buff[len] = '\0';
+				tempCitId = buff;
+				delete[] buff;
+				push_back(citizens->find(tempCitId));
 
 				if (!in.good()) {
 					throw iostream::failure("CitizensArr, loadById, load by id didn't work");

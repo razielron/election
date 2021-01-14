@@ -13,7 +13,6 @@ namespace Elections {
 			CitizensArr(istream& in, CitizensArr* citizens);
 			~CitizensArr() {}
 
-
 		//Load and Save
 		public:
 			void saveId(ostream& out) const;

@@ -23,7 +23,7 @@ namespace Elections
 		_districtId = _districtSerialNumber++;
 	}
 
-	District::District(istream& in) :_totalVotes(0), _winnerVotes(0), _winner(nullptr) {
+	District::District(istream& in) : _winnerVotes(0), _winner(nullptr) {
 		if (!in || !in.good()) {
 			throw invalid_argument("District, Constractor(in)");
 		}
@@ -42,8 +42,8 @@ namespace Elections
 	}
 
 	District::~District() {
-		delete[] _representatives->getArr();
-		delete[] _voters->getArr();
+		delete _representatives;
+		delete _voters;
 	}
 
 	int District::getPartyRepNumber(int partyVote) {
@@ -70,13 +70,13 @@ namespace Elections
 	}
 
 	void District::setWinnerVotes(int winnerVotes) {
-		if (winnerVotes)
+		if (!winnerVotes)
 			throw invalid_argument("District, setWinnerVotes");
 		_winnerVotes = winnerVotes;
 	}
 
 	void District::setWinnerParty(Party* party) {
-		if (party)
+		if (!party)
 			throw invalid_argument("District, setWinnerParty");
 
 		_winner = party;
@@ -110,7 +110,9 @@ namespace Elections
 
 
 		out.write(rcastcc(&_districtSerialNumber), sizeof(int));
-		out.write(rcastcc(&_name), sizeof(_name));
+		int len = _name.size();
+		out.write(rcastcc(&len), sizeof(int));
+		out.write(rcastcc(_name.c_str()), len * sizeof(char));
 		out.write(rcastcc(&_districtId), sizeof(int));		
 		out.write(rcastcc(&_numOfRepresentatives), sizeof(int));
 		out.write(rcastcc(&_totalVotes), sizeof(int));
@@ -124,18 +126,29 @@ namespace Elections
 		if (!in || !in.good())
 			throw invalid_argument("District, load(istream& in)");
 		
-		int tempSize = 0, tempSerial=0;
-		
-		in.read(rcastc(&tempSerial), sizeof(int));
-		if (tempSerial > _districtSerialNumber)
-			_districtSerialNumber = tempSerial;
-		in.read(rcastc(&_name), sizeof(_name));
-		in.read(rcastc(&_districtId), sizeof(int));
-		in.read(rcastc(&_numOfRepresentatives), sizeof(int));
-		in.read(rcastc(&_totalVotes), sizeof(int));
+		int tempSize = 0, tempSerial=0, len;
+		char* buff;
 
-		if (!in.good()) {
-			throw iostream::failure("District, load(in)");
+		try {
+			in.read(rcastc(&tempSerial), sizeof(int));
+			if (tempSerial > _districtSerialNumber)
+				_districtSerialNumber = tempSerial;
+			in.read(rcastc(&len), sizeof(int));
+			buff = new char[len + 1];
+			in.read(buff, len);
+			buff[len] = '\0';
+			_name = buff;
+			delete[] buff;
+			in.read(rcastc(&_districtId), sizeof(int));
+			in.read(rcastc(&_numOfRepresentatives), sizeof(int));
+			in.read(rcastc(&_totalVotes), sizeof(int));
+
+			if (!in.good()) {
+				throw iostream::failure("District, load(in)");
+			}
+		}
+		catch (const bad_alloc&) {
+			throw("bad allocate");
 		}
 	}
 }

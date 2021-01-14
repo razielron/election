@@ -23,7 +23,7 @@ namespace Elections
 
 		//linked list functions
 		private:
-			void addTail(District* dis);
+			void addTail(District* dis, bool allocPartyCan = true);
 			void delHead(void);
 			void delTail(void);
 			//returns the ListItem node by given district

@@ -54,7 +54,9 @@ namespace Elections
 			throw invalid_argument("Citizen, saveId, parameter issue");
 		}
 
-		out.write(rcastcc(&_id), sizeof(_id));
+		int len = _id.size();
+		out.write(rcastcc(&len), sizeof(int));
+		out.write(rcastcc(_id.c_str()), len * sizeof(char));
 
 		if (!out.good()) {
 			throw iostream::failure("Citizen, saveId, save didn't work");
@@ -67,8 +69,12 @@ namespace Elections
 			throw invalid_argument("Citizen, save, parameter issue");
 		}
 
-		out.write(rcastcc(&_name), sizeof(_name));
-		out.write(rcastcc(&_id), sizeof(_id));
+		int len = _name.size();
+		out.write(rcastcc(&len), sizeof(int));
+		out.write(rcastcc(_name.c_str()), len * sizeof(char));
+		len = _id.size();
+		out.write(rcastcc(&len), sizeof(int));
+		out.write(rcastcc(_id.c_str()), len * sizeof(char));
 		out.write(rcastcc(&_yearOfBirth), sizeof(int));
 
 		temp = _dis->getId();
@@ -82,6 +88,8 @@ namespace Elections
 
 	void Citizen::load(istream& in, Election* election) {
 		int idTemp = -1, lengthTemp = 0;
+		int len;
+		char* buff;
 
 		if (!in || !in.good() || !election) {
 			throw invalid_argument("Citizen, load, parameter issue");
@@ -89,13 +97,28 @@ namespace Elections
 
 		DistrictsArr* districts = election->getDistricts();
 
-		in.read(rcastc(&_name), sizeof(_name));
-		in.read(rcastc(&_id), sizeof(_id));
-		in.read(rcastc(&_yearOfBirth), sizeof(int));
-		in.read(rcastc(&idTemp), sizeof(int));
+		try {
+			in.read(rcastc(&len), sizeof(int));
+			buff = new char[len + 1];
+			in.read(buff, len);
+			buff[len] = '\0';
+			_name = buff;
+			delete[] buff;
+			in.read(rcastc(&len), sizeof(int));
+			buff = new char[len + 1];
+			in.read(buff, len);
+			buff[len] = '\0';
+			_id = buff;
+			delete[] buff;
+			in.read(rcastc(&_yearOfBirth), sizeof(int));
+			in.read(rcastc(&idTemp), sizeof(int));
 
-		if (!in.good()) {
-			throw iostream::failure("Citizen, load, load didn't work");
+			if (!in.good()) {
+				throw iostream::failure("Citizen, load, load didn't work");
+			}
+		}
+		catch (const bad_alloc&) {
+			throw("bad allocate");
 		}
 
 		_dis = districts->find(idTemp);

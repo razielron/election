@@ -49,21 +49,19 @@ namespace Elections {
 
 	//get input from user to add new sitrict
 	void addNewDistrict(Election* election) {
-		District* dis;
+		District* dis = nullptr;
 		string name;
 		int numOfRep = 0;
 		int type;
 
 		if ((typeid(*election)) == (typeid(SimpleElection))) {
-			cout << "can't create district for simple election" << endl;
-			return;
+			throw invalid_argument("can't create district for simple election");
 		}
 
 		cout << "Enter type of district: for Uniform press 0, for Devided press 1 (0/1): ";
 		cin >> type;
-		while (type != 0 && type != 1) {
-			cout << "Enter valid type of district (0/1): ";
-			cin >> type;
+		if (type != 0 && type != 1) {
+			throw invalid_argument("invalid type of district (0/1)");
 		}
 
 		cout << "Enter name of district: ";
@@ -71,16 +69,32 @@ namespace Elections {
 		cout << "Enter Number of representetives: ";
 		cin >> numOfRep;
 
-		while (numOfRep <= 0) {
-			cout << "Enter Valid number Of Rep" << endl;
-			cin >> numOfRep;
+		if (numOfRep <= 0) {
+			throw invalid_argument("Enter Valid number Of Rep");
 		}
 
-		if (!type)
-			dis = new UniformDis(name, numOfRep);
-		else
-			dis = new DevidedDis(name, numOfRep);
-		election->appendDistrict(dis);
+		try {
+			if (!type)
+				dis = new UniformDis(name, numOfRep);
+			else
+				dis = new DevidedDis(name, numOfRep);
+
+			election->appendDistrict(dis);
+		}
+		catch (DistrictException& err) {
+			cout << "District Exception: " << err.getId() << ", " << err.what() << endl;
+			delete dis;
+			cout << "District cannot be created, Exit to main menu" << endl;
+		}
+		catch (invalid_argument& err) {
+			cout << "Invalid Argument: " << err.what() << endl;
+			delete dis;
+			cout << "District cannot be created, Exit to main menu" << endl;
+		}
+		catch (...) {
+			delete dis;
+			cout << "District cannot be created, Exit to main menu" << endl;
+		}
 	}
 
 	//get input from user to add new citizen
@@ -89,10 +103,10 @@ namespace Elections {
 		string name;
 		string id;
 		District* dis;
+		Citizen* cit = nullptr;
 
 		if (!(election->getDistricts()->size())) {
-			cout << "There are no distrits " << endl;
-			return;
+			throw invalid_argument("can't create Citizen before creating a District");
 		}
 
 		cout << "Enter name of citizen: ";
@@ -103,25 +117,38 @@ namespace Elections {
 
 		cout << "Enter year of birth: ";
 		cin >> yearOfBirth;
-		while (yearOfBirth <= 1900 || yearOfBirth >= 2020) {
-			cout << "Enter Valid year of birth" << endl;
-			cin >> yearOfBirth;
+		if (yearOfBirth < 1) {
+			throw invalid_argument("Invalid year of birth, should be positive number");
 		}
-
-		if (typeid(*election) == typeid(NormalElection)) {
-			cout << "Enter district ID: ";
-			cin >> districtId;
-			while (!(dis = election->getDistricts()->find(districtId))) {
-				cout << "Enter valid district ID" << endl;
+		try {
+			if (typeid(*election) == typeid(NormalElection)) {
+				cout << "Enter district ID: ";
 				cin >> districtId;
+				if (!(dis = election->getDistricts()->find(districtId))) {
+					throw invalid_argument("No District matches the given ID");
+				}
 			}
-		}
-		else {
-			dis = (*(election->getDistricts()))[0];
-		}
+			else {
+				dis = (*(election->getDistricts()))[0];
+			}
 
-		Citizen* cit = new Citizen(id, yearOfBirth, name, dis);
-		election->appendCitizen(cit);
+			cit = new Citizen(id, yearOfBirth, name, dis);
+			election->appendCitizen(cit);
+		}
+		catch (CitizenException& err) {
+			delete cit;
+			cout << "Citizen Exception: " << err.getId() << ", " << err.what() << endl;
+			cout << "Citizen cannot be created, Exit to main menu" << endl;
+		}
+		catch (invalid_argument& err) {
+			delete cit;
+			cout << "Invalid Argument: " << err.what() << endl;
+			cout << "Citizen cannot be created, Exit to main menu" << endl;
+		}
+		catch (...) {
+			delete cit;
+			cout << "Citizen cannot be created, Exit to main menu" << endl;
+		}
 	}
 
 	//get input from user to add new party
@@ -129,10 +156,10 @@ namespace Elections {
 		string name;
 		string id;
 		Citizen* temp = nullptr;
+		Party* party = nullptr;
 		
 		if (!(election->getCitizens()->size())) {
-			cout << "There are no citizens " << endl;
-			return;
+			throw invalid_argument("can't create Party before creating a Citizen");
 		}
 
 		cout << "Enter name of Party: ";
@@ -140,13 +167,27 @@ namespace Elections {
 
 		cout << "Enter ID of prime minister candidate: " << endl;
 		cin >> id;
-		while (!(temp = election->getCitizens()->find(id))) {
-			cout << "There is no citizen with this ID" << endl;
-			cin >> id;
+		if (!(temp = election->getCitizens()->find(id))) {
+			throw invalid_argument("No Citizen matches the given ID");
 		}
-
-		Party* party = new Party(name, temp);
-		election->appendParty(party);
+		try {
+			party = new Party(name, temp);
+			election->appendParty(party);
+		}
+		catch (PartyException& err) {
+			cout << "PArty Exception: " << err.getId() << ", " << err.what() << endl;
+			delete party;
+			cout << "Party cannot be created, Exit to main menu" << endl;
+		}
+		catch (invalid_argument& err) {
+			cout << "Invalid Argument: " << err.what() << endl;
+			delete party;
+			cout << "Party cannot be created, Exit to main menu" << endl;
+		}
+		catch (...) {
+			delete party;
+			cout << "Party cannot be created, Exit to main menu" << endl;
+		}
 	}
 
 	//get input from user to add new party's candidate
@@ -157,33 +198,46 @@ namespace Elections {
 		District* disTemp = nullptr;
 		int partyId, districtId;
 
+		if (!(election->getParties()->size())) {
+			throw invalid_argument("can't add Candidate before creating a Party");
+		}
+
 		cout << "Enter citizen ID: ";
 		cin >> id;
-		while (!(citTemp = election->getCitizens()->find(id))) {
-			cout << "There is no citizen with this ID" << endl;
-			cin >> id;
+		if (!(citTemp = election->getCitizens()->find(id))) {
+			throw invalid_argument("No Citizen matches the given ID");
 		}
 
 		cout << "Enter Party ID: ";
 		cin >> partyId;
 		while (!(partyTemp = election->getParties()->find(partyId))) {
-			cout << "Enter valid Party ID: ";
-			cin >> partyId;
+			throw invalid_argument("No Party matches the given ID");
 		}
 
 		if (typeid(*election) == typeid(NormalElection)) {
 			cout << "Enter district ID: ";
 			cin >> districtId;
-			while (!(disTemp = election->getDistricts()->find(districtId))) {
-				cout << "Enter valid district ID" << endl;
-				cin >> districtId;
+			if (!(disTemp = election->getDistricts()->find(districtId))) {
+				throw invalid_argument("No District matches the given ID");
 			}
 		}
 		else {
 			disTemp = (*(election->getDistricts()))[0];
 		}
-
-		partyTemp->appendCandidateToList(disTemp, citTemp);
+		try {
+			partyTemp->appendCandidateToList(disTemp, citTemp);
+		}
+		catch (PartyException& err) {
+			cout << "PArty Exception: " << err.getId() << ", " << err.what() << endl;
+			cout << "Cannot add Party Candidate, Exit to main menu" << endl;
+		}
+		catch (invalid_argument& err) {
+			cout << "Invalid Argument: " << err.what() << endl;
+			cout << "Cannot add Party Candidate, Exit to main menu" << endl;
+		}
+		catch (...) {
+			cout << "Cannot add Party Candidate, Exit to main menu" << endl;
+		}
 	}
 
 	//get input from user to add new Vote
@@ -195,56 +249,97 @@ namespace Elections {
 
 		cout << "Enter citizen ID: ";
 		cin >> id;
-		while (!(citTemp = election->getCitizens()->find(id))) {
-			cout << "Enter correct ID / There is no citizen with this ID" << endl;
-			cin >> id;
+		if (!(citTemp = election->getCitizens()->find(id))) {
+			throw invalid_argument("No Citizen matches the given ID");
 		}
 
 		if (citTemp->getVote()) {
-			cout << "This citizen has already voted" << endl;
-			return;
+			throw invalid_argument("The current Citizenhas already voted");
 		}
 
 		cout << "Enter Party ID: ";
 		cin >> partyId;
-		while (!(partyTemp = election->getParties()->find(partyId))) {
-			cout << "Enter valid Party ID: ";
-			cin >> partyId;
+		if (!(partyTemp = election->getParties()->find(partyId))) {
+			throw invalid_argument("No Party matches the given ID");
 		}
-
-		citTemp->vote(partyTemp);
+		try {
+			citTemp->vote(partyTemp);
+		}
+		catch (invalid_argument& err) {
+			cout << "Invalid Argument: " << err.what() << endl;
+			cout << "Cannot vote, Exit to main menu" << endl;
+		}
+		catch (...) {
+			cout << "Cannot vote, Exit to main menu" << endl;
+		}
 	}
 
 	//Prints all created districts
 	void printDistricts(Election* election) {
-		election->printDistricts();
+		try {
+			election->printDistricts();
+		}
+		catch (invalid_argument& err) {
+			cout << "Invalid Argument: " << err.what() << endl;
+			cout << "Cannot print Districts, Exit to main menu" << endl;
+		}
+		catch (...) {
+			cout << "Cannot print Districts, Exit to main menu" << endl;
+		}
 	}
 
 	//Prints all created citizens
 	void printCitizens(Election* election) {
-		election->printCitizens();
+		try {
+			election->printCitizens();
+		}
+		catch (invalid_argument& err) {
+			cout << "Invalid Argument: " << err.what() << endl;
+			cout << "Cannot print Citizens, Exit to main menu" << endl;
+		}
+		catch (...) {
+			cout << "Cannot print Citizens, Exit to main menu" << endl;
+		}
 	}
 	
 	//Prints all created parties
 	void printParties(Election* election) {
-		election->printParties();
+		try {
+			election->printParties();
+		}
+		catch (invalid_argument& err) {
+			cout << "Invalid Argument: " << err.what() << endl;
+			cout << "Cannot print Parties, Exit to main menu" << endl;
+		}
+		catch (...) {
+			cout << "Cannot print Parties, Exit to main menu" << endl;
+		}
 	}
 
 	//Prints all election's results
 	void printElectionResults(Election* election) {
-		cout << "------------------ELECTION-RESULTS-START----------------" << endl;
-		election->electionSummery();
-		
-		if (typeid(*election) == typeid(NormalElection)) {
-			election->sortPartiesByElectors();
-			cout << *static_cast<NormalElection*>(election);
-			election->getParties()->printResults();
+		try {
+			cout << "------------------ELECTION-RESULTS-START----------------" << endl;
+			election->electionSummery();
+
+			if (typeid(*election) == typeid(NormalElection)) {
+				election->sortPartiesByElectors();
+				cout << *static_cast<NormalElection*>(election);
+				election->getParties()->printResults();
+			}
+			else {
+				election->sortPartiesByTotalVotes();
+				cout << *static_cast<SimpleElection*>(election);
+			}
+			cout << "-------------------ELECTION-RESULTS-END----------------" << endl;
 		}
-		else {
-			election->sortPartiesByTotalVotes();
-			cout << *static_cast<SimpleElection*>(election);
+		catch (invalid_argument& err) {
+			cout << "Invalid Argument: " << err.what() << endl;
+			cout << "Cannot Print Election Results, Exit to main menu" << endl;
 		}
-		cout << "-------------------ELECTION-RESULTS-END----------------" << endl;
+		catch (...) {
+			cout << "Cannot Print Election Results, Exit to main menu" << endl;
+		}
 	}
 
 	//creates new election round
@@ -263,27 +358,37 @@ namespace Elections {
 
 		cout << "Election Type (0 - normal, 1 - simple): ";
 		cin >> type;
-		while (type != 0 && type != 1) {
-			cout << "Wrong type selected, please choose again (0 - normal, 1 - simple): ";
-			cin >> type;
+		if (type != 0 && type != 1) {
+			throw invalid_argument("Invalid election type (0/1)");
 		}
-
-		if (type) {
-			cout << "Enter Number of representetives: ";
-			cin >> numOfRep;
-			while (numOfRep <= 0) {
-				cout << "Enter Valid number Of Rep" << endl;
+		try {
+			if (type) {
+				cout << "Enter Number of representetives: ";
 				cin >> numOfRep;
-			}
+				if (numOfRep <= 0) {
+					throw invalid_argument("Enter Valid number Of Rep");
+				}
 
-			election = new SimpleElection(day, month, year);
-			dis = new DevidedDis(name, numOfRep);
-			election->appendDistrict(dis);
+				election = new SimpleElection(day, month, year);
+				dis = new DevidedDis(name, numOfRep);
+				election->appendDistrict(dis);
+			}
+			else {
+				election = new NormalElection(day, month, year);
+			}
+			return election;
 		}
-		else {
-			election = new NormalElection(day, month, year);
+		catch (ElectionException& err) {
+			cout << "Election Exception: " << err.what() << endl;
+			cout << "Cannot create Election, Exit to main menu" << endl;
 		}
-		return election;
+		catch (invalid_argument& err) {
+			cout << "Invalid Argument: " << err.what() << endl;
+			cout << "Cannot create Election, Exit to main menu" << endl;
+		}
+		catch (...) {
+			cout << "Cannot create Election, Exit to main menu" << endl;
+		}
 	}
 
 	//save an existing election round into binary file
@@ -295,12 +400,28 @@ namespace Elections {
 
 		ofstream outfile(name, ios::binary);
 		if (!outfile.good()) {
-			cout << "Error opening file for write" << endl;
-			exit(-1);
+			throw iostream::failure("Error opening file for write");
 		}
-
-		ElectionLoader::save(outfile, election);
-		election->saveVotes(outfile);
+		try {
+			ElectionLoader::save(outfile, election);
+			election->saveVotes(outfile);
+			outfile.close();
+		}
+		catch (iostream::failure& err) {
+			cout << "File Exception: " << err.what() << endl;
+			cout << "Cannot save Election, Exit to main menu" << endl;
+		}
+		catch (ElectionException& err) {
+			cout << "Election Exception: " << err.what() << endl;
+			cout << "Cannot save Election, Exit to main menu" << endl;
+		}
+		catch (invalid_argument& err) {
+			cout << "Invalid Argument: " << err.what() << endl;
+			cout << "Cannot save Election, Exit to main menu" << endl;
+		}
+		catch (...) {
+			cout << "Cannot save Election, Exit to main menu" << endl;
+		}
 	}
 
 	//load election round from binary file
@@ -313,18 +434,48 @@ namespace Elections {
 
 		ifstream infile(name, ios::binary);
 		if (!infile.good()) {
-			cout << "Error opening file for read" << endl;
-			exit(-1);
+			throw iostream::failure("Error opening file for read");
 		}
-
+		try {
 		election = ElectionLoader::load(infile);
 		election->loadVotes(infile);
+		infile.close();
 		return election;
+		}
+		catch (iostream::failure& err) {
+			cout << "File Exception: " << err.what() << endl;
+			cout << "Cannot save Election, Exit to main menu" << endl;
+		}
+		catch (ElectionException& err) {
+			cout << "Election Exception: " << err.what() << endl;
+			cout << "Cannot save Election, Exit to main menu" << endl;
+		}
+		catch (invalid_argument& err) {
+			cout << "Invalid Argument: " << err.what() << endl;
+			cout << "Cannot save Election, Exit to main menu" << endl;
+		}
+		catch (...) {
+			cout << "Cannot save Election, Exit to main menu" << endl;
+		}
+	}
+
+	//delete instance of election
+	void deleteElection(Election* election) {
+		try {
+			if (election) {
+				delete election;
+			}
+		}
+		catch (...) {
+			cout << "Cannot delete Election" << endl;
+			exit(2);
+		}
 	}
 
 	//main menu
 	void mainMenu(Election* election) {
 		int input = 1;
+		Election* election2 = nullptr;
 
 		while (input) {
 			printMainMenu();
@@ -360,9 +511,7 @@ namespace Elections {
 					printElectionResults(election);
 					break;
 				case static_cast<int>(Menu::loadElection) :
-					if (election) {
-						delete election;
-					}
+					deleteElection(election);
 					election = loadElection();
 					break;
 				case static_cast<int>(Menu::saveElection) :

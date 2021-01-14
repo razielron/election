@@ -5,21 +5,22 @@
 namespace Elections
 {
 
-	PartyCandidates::PartyCandidates(istream& in, DistrictsArr* districts, CitizensArr* citizens) : PartyCandidates() {
+	PartyCandidates::PartyCandidates(istream& in, DistrictsArr* districts, CitizensArr* citizens) : 
+		_head(nullptr), _tail(nullptr) {
 		load(in, districts, citizens);
 	}
 
 	PartyCandidates::~PartyCandidates() {
 		ListItem* temp = _head;
 		while (temp) {
-			delete[] temp->partyCandidates->getArr();
+			delete temp->partyCandidates;
 			temp = temp->next;
 			delete _head;
 			_head = temp;
 		}
 	}
 
-	void PartyCandidates::addTail(District* dis) {
+	void PartyCandidates::addTail(District* dis, bool allocPartyCan) {
 		if (!dis)
 			throw PartyCandidateException();
 		ListItem* temp;
@@ -35,7 +36,11 @@ namespace Elections
 		temp->dis = dis;
 		temp->numOfVotes = 0;
 		temp->numOfElectors = 0;
-		temp->partyCandidates = new CitizensArr;
+		temp->partyCandidates = nullptr;
+
+		if (allocPartyCan) {
+			temp->partyCandidates = new CitizensArr;
+		}
 		temp->prev = _tail;
 		temp->next = nullptr;
 		if (!_tail) {
@@ -72,7 +77,8 @@ namespace Elections
 				return temp;
 			temp = temp->next;
 		}
-		throw runtime_error("There is no District");
+
+		return nullptr;
 	}
 
 	void PartyCandidates::addVote(District* dis) {
@@ -195,8 +201,8 @@ namespace Elections
 	void PartyCandidates::printPartyCandidates() const {
 		ListItem* temp = _head;
 		while (temp) {
-			cout << "Name of District:" << temp->dis->getName() << endl;
-			cout << temp->partyCandidates;
+			cout << "Name of District: " << temp->dis->getName() << endl;
+			cout << *(temp->partyCandidates) << endl;
 			temp = temp->next;
 		}
 	}
@@ -237,7 +243,7 @@ namespace Elections
 	void PartyCandidates::load(istream& in, DistrictsArr* districts, CitizensArr* citizens) {
 		int numOfNodes = 0, temp = 0;
 		District* dis;
-		CitizensArr* tempCit;
+		CitizensArr* tempCit = nullptr;
 		if (!in || !in.good() || !districts)
 			throw invalid_argument("PartyCandidates, load");
 
@@ -246,19 +252,19 @@ namespace Elections
 			for (int i = 0;i < numOfNodes; i++) {
 				in.read(rcastc(&temp), sizeof(int));
 				dis = districts->find(temp);
-				addTail(dis);
-				delete _tail->partyCandidates;
-				_tail->partyCandidates = new CitizensArr(in, citizens);
+				addTail(dis, false);
+				tempCit = new CitizensArr(in, citizens);
+				_tail->partyCandidates = tempCit;
 				in.read(rcastc(&(_tail->numOfVotes)), sizeof(int));
+
+				if (!in.good()) {
+					throw iostream::failure("PartyCandidates, load(in, districts, citizens)");
+				}
 			}
 		}
 		catch (bad_alloc& err) {
 			cout << err.what() << endl;
 			exit(1);
-		}
-
-		if (!in.good()) {
-			throw iostream::failure("PartyCandidates, load(in, districts, citizens)");
 		}
 	}
 
