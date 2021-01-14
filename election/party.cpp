@@ -25,7 +25,7 @@ namespace Elections
 	}
 
 	Party::~Party() {
-		_partyCandidates->~PartyCandidates();
+		delete _partyCandidates;
 	}
 
 	ostream& operator<<(ostream& os, const Party& party) {
@@ -36,8 +36,8 @@ namespace Elections
 		os << "Party ID: " << party.getId() << endl;
 		os << "Name of Party: " << party.getName() << endl;
 		os << "Party candidate: " << endl;
-		os << party.getCandidate();
-		os << "Represetetives of district: " << endl;
+		os << *(party.getCandidate());
+		os << "Represetetives of district: " << endl << endl;
 		party.getPartyCandidates()->printPartyCandidates();
 		os << "------------PARTY-END-----------" << endl;
 
@@ -91,13 +91,17 @@ namespace Elections
 		if (!out || !out.good())
 			throw invalid_argument("Party, save(ostream& out)");
 		
-		int temp;
+		int temp, len;
 		string tempId;
 		out.write(rcastcc(&_partySerialNumber), sizeof(int));
-		out.write(rcastcc(&_name), sizeof(_name));
+		len = _name.size();
+		out.write(rcastcc(&len), sizeof(int));
+		out.write(rcastcc(_name.c_str()), len * sizeof(char));
 		out.write(rcastcc(&_partyId), sizeof(int));
 		tempId = _candidate->getId();
-		out.write(rcastcc(&tempId), sizeof(tempId));
+		len = tempId.size();
+		out.write(rcastcc(&len), sizeof(int));
+		out.write(rcastcc(tempId.c_str()), len * sizeof(char));
 		_partyCandidates->save(out);
 
 		if (!out.good()) {
@@ -109,30 +113,41 @@ namespace Elections
 		if (!in || !in.good() || !election )
 			throw invalid_argument("Party, load");
 
-		int temp = 0;
+		int temp = 0, len;
+		char* buff;
 		string canId;
 		CitizensArr* citArr = election->getCitizens();
 		DistrictsArr* districts = election->getDistricts();
 
-
-		in.read(rcastc(&temp), sizeof(int));
-		if (temp > _partySerialNumber)
-			_partySerialNumber = temp;
-
-		in.read(rcastc(&_name), sizeof(_name));
-		in.read(rcastc(&_partyId), sizeof(int));
-		in.read(rcastc(&canId), sizeof(canId));
-		_candidate = citArr->find(canId);
 		try {
+			in.read(rcastc(&temp), sizeof(int));
+			if (temp > _partySerialNumber)
+				_partySerialNumber = temp;
+
+			in.read(rcastc(&len), sizeof(int));
+			buff = new char[len + 1];
+			in.read(buff, len);
+			buff[len] = '\0';
+			_name = buff;
+			delete[] buff;
+			in.read(rcastc(&_partyId), sizeof(int));
+			in.read(rcastc(&len), sizeof(int));
+			buff = new char[len + 1];
+			in.read(buff, len);
+			buff[len] = '\0';
+			canId = buff;
+			delete[] buff;
+
+			if (!in.good()) {
+				throw iostream::failure("Party, load(in, election)");
+			}
+
+			_candidate = citArr->find(canId);
 			_partyCandidates = new PartyCandidates(in, districts, citArr);
 		}
 		catch (bad_alloc& err) {
 			cout << err.what() << endl;
 			exit(1);
-		}
-
-		if (!in.good()) {
-			throw iostream::failure("Party, load(in, election)");
 		}
 	}
 }
