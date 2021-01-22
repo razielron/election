@@ -54,9 +54,7 @@ namespace Elections
 			throw invalid_argument("Citizen, saveId, parameter issue");
 		}
 
-		int len = _id.size();
-		out.write(rcastcc(&len), sizeof(int));
-		out.write(rcastcc(_id.c_str()), len * sizeof(char));
+		StringLoader::saveString(out, _id);
 
 		if (!out.good()) {
 			throw iostream::failure("Citizen, saveId, save didn't work");
@@ -69,16 +67,10 @@ namespace Elections
 			throw invalid_argument("Citizen, save, parameter issue");
 		}
 
-		int len = _name.size();
-		out.write(rcastcc(&len), sizeof(int));
-		out.write(rcastcc(_name.c_str()), len * sizeof(char));
-		len = _id.size();
-		out.write(rcastcc(&len), sizeof(int));
-		out.write(rcastcc(_id.c_str()), len * sizeof(char));
+		StringLoader::saveString(out, _name);
+		StringLoader::saveString(out, _id);
 		out.write(rcastcc(&_yearOfBirth), sizeof(int));
-
 		temp = _dis->getId();
-
 		out.write(rcastcc(&temp), sizeof(int));
 
 		if (!out.good()) {
@@ -89,7 +81,6 @@ namespace Elections
 	void Citizen::load(istream& in, Election* election) {
 		int idTemp = -1, lengthTemp = 0;
 		int len;
-		char* buff;
 
 		if (!in || !in.good() || !election) {
 			throw invalid_argument("Citizen, load, parameter issue");
@@ -98,18 +89,8 @@ namespace Elections
 		DistrictsArr* districts = election->getDistricts();
 
 		try {
-			in.read(rcastc(&len), sizeof(int));
-			buff = new char[len + 1];
-			in.read(buff, len);
-			buff[len] = '\0';
-			_name = buff;
-			delete[] buff;
-			in.read(rcastc(&len), sizeof(int));
-			buff = new char[len + 1];
-			in.read(buff, len);
-			buff[len] = '\0';
-			_id = buff;
-			delete[] buff;
+			_name = StringLoader::loadString(in);
+			_id = StringLoader::loadString(in);
 			in.read(rcastc(&_yearOfBirth), sizeof(int));
 			in.read(rcastc(&idTemp), sizeof(int));
 

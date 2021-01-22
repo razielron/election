@@ -94,14 +94,9 @@ namespace Elections
 		int temp, len;
 		string tempId;
 		out.write(rcastcc(&_partySerialNumber), sizeof(int));
-		len = _name.size();
-		out.write(rcastcc(&len), sizeof(int));
-		out.write(rcastcc(_name.c_str()), len * sizeof(char));
+		StringLoader::saveString(out, _name);
 		out.write(rcastcc(&_partyId), sizeof(int));
-		tempId = _candidate->getId();
-		len = tempId.size();
-		out.write(rcastcc(&len), sizeof(int));
-		out.write(rcastcc(tempId.c_str()), len * sizeof(char));
+		StringLoader::saveString(out, _candidate->getId());
 		_partyCandidates->save(out);
 
 		if (!out.good()) {
@@ -114,7 +109,6 @@ namespace Elections
 			throw invalid_argument("Party, load");
 
 		int temp = 0, len;
-		char* buff;
 		string canId;
 		CitizensArr* citArr = election->getCitizens();
 		DistrictsArr* districts = election->getDistricts();
@@ -124,19 +118,9 @@ namespace Elections
 			if (temp > _partySerialNumber)
 				_partySerialNumber = temp;
 
-			in.read(rcastc(&len), sizeof(int));
-			buff = new char[len + 1];
-			in.read(buff, len);
-			buff[len] = '\0';
-			_name = buff;
-			delete[] buff;
+			_name = StringLoader::loadString(in);
 			in.read(rcastc(&_partyId), sizeof(int));
-			in.read(rcastc(&len), sizeof(int));
-			buff = new char[len + 1];
-			in.read(buff, len);
-			buff[len] = '\0';
-			canId = buff;
-			delete[] buff;
+			canId = StringLoader::loadString(in);
 
 			if (!in.good()) {
 				throw iostream::failure("Party, load(in, election)");

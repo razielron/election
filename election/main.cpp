@@ -444,18 +444,18 @@ namespace Elections {
 		}
 		catch (iostream::failure& err) {
 			cout << "File Exception: " << err.what() << endl;
-			cout << "Cannot save Election, Exit to main menu" << endl;
+			cout << "Cannot load Election, Exit to main menu" << endl;
 		}
 		catch (ElectionException& err) {
 			cout << "Election Exception: " << err.what() << endl;
-			cout << "Cannot save Election, Exit to main menu" << endl;
+			cout << "Cannot load Election, Exit to main menu" << endl;
 		}
 		catch (invalid_argument& err) {
 			cout << "Invalid Argument: " << err.what() << endl;
-			cout << "Cannot save Election, Exit to main menu" << endl;
+			cout << "Cannot load Election, Exit to main menu" << endl;
 		}
 		catch (...) {
-			cout << "Cannot save Election, Exit to main menu" << endl;
+			cout << "Cannot load Election, Exit to main menu" << endl;
 		}
 	}
 
