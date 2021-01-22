@@ -67,16 +67,11 @@ namespace Elections
 
 		string tempCitId;
 		int tempSize, len;
-		char* buff;
 
 		try {
 			for (int i = 0; i < this->capacity(); i++) {
 				in.read(rcastc(&len), sizeof(int));
-				buff = new char[len + 1];
-				in.read(buff, len);
-				buff[len] = '\0';
-				tempCitId = buff;
-				delete[] buff;
+				tempCitId = loadString(in);
 				push_back(citizens->find(tempCitId));
 
 				if (!in.good()) {

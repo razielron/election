@@ -5,6 +5,7 @@
 #include <exception>
 #include "citizenException.h"
 #include "dynamicArr.h"
+#include "stringLoader.h"
 #define rcastcc reinterpret_cast<const char*>
 #define rcastc reinterpret_cast<char*>
 using namespace std;
