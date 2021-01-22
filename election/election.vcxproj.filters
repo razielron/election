@@ -16,7 +16,6 @@
     <ClCompile Include="PartyCandidates.cpp" />
     <ClCompile Include="simpleElection.cpp" />
     <ClCompile Include="uniformDis.cpp" />
-    <ClCompile Include="stringLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="citizen.h" />
