@@ -96,7 +96,7 @@ namespace Elections
 		
 			os << "-------------DISTRICT-START------------" << endl;
 			os << "District ID: " << dis.getId() << endl;
-			os << "Name of district: " << dis.getId() << endl;
+			os << "Name of district: " << dis.getName() << endl;
 			os << "Number of representetive: " << dis.getNumOfRepresentatives() << endl;
 			os << "--------------DISTRICT-END-------------" << endl;
 
@@ -110,7 +110,7 @@ namespace Elections
 
 
 		out.write(rcastcc(&_districtSerialNumber), sizeof(int));
-		saveString(out, _name);
+		StringLoader::saveString(out, _name);
 		out.write(rcastcc(&_districtId), sizeof(int));		
 		out.write(rcastcc(&_numOfRepresentatives), sizeof(int));
 		out.write(rcastcc(&_totalVotes), sizeof(int));
@@ -130,8 +130,7 @@ namespace Elections
 			in.read(rcastc(&tempSerial), sizeof(int));
 			if (tempSerial > _districtSerialNumber)
 				_districtSerialNumber = tempSerial;
-			in.read(rcastc(&len), sizeof(int));
-			_name = loadString(in);
+			_name = StringLoader::loadString(in);
 			in.read(rcastc(&_districtId), sizeof(int));
 			in.read(rcastc(&_numOfRepresentatives), sizeof(int));
 			in.read(rcastc(&_totalVotes), sizeof(int));

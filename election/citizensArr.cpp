@@ -70,8 +70,7 @@ namespace Elections
 
 		try {
 			for (int i = 0; i < this->capacity(); i++) {
-				in.read(rcastc(&len), sizeof(int));
-				tempCitId = loadString(in);
+				tempCitId = StringLoader::loadString(in);
 				push_back(citizens->find(tempCitId));
 
 				if (!in.good()) {

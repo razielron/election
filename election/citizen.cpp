@@ -54,7 +54,7 @@ namespace Elections
 			throw invalid_argument("Citizen, saveId, parameter issue");
 		}
 
-		saveString(out, _id);
+		StringLoader::saveString(out, _id);
 
 		if (!out.good()) {
 			throw iostream::failure("Citizen, saveId, save didn't work");
@@ -67,8 +67,9 @@ namespace Elections
 			throw invalid_argument("Citizen, save, parameter issue");
 		}
 
-		saveString(out, _name);
-		saveString(out, _id);
+		StringLoader::saveString(out, _name);
+		StringLoader::saveString(out, _id);
+		out.write(rcastcc(&_yearOfBirth), sizeof(int));
 		temp = _dis->getId();
 		out.write(rcastcc(&temp), sizeof(int));
 
@@ -88,8 +89,8 @@ namespace Elections
 		DistrictsArr* districts = election->getDistricts();
 
 		try {
-			_name = loadString(in);
-			_id = loadString(in);
+			_name = StringLoader::loadString(in);
+			_id = StringLoader::loadString(in);
 			in.read(rcastc(&_yearOfBirth), sizeof(int));
 			in.read(rcastc(&idTemp), sizeof(int));
 

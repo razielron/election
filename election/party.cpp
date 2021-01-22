@@ -94,9 +94,9 @@ namespace Elections
 		int temp, len;
 		string tempId;
 		out.write(rcastcc(&_partySerialNumber), sizeof(int));
-		saveString(out, _name);
+		StringLoader::saveString(out, _name);
 		out.write(rcastcc(&_partyId), sizeof(int));
-		saveString(out, _candidate->getId());
+		StringLoader::saveString(out, _candidate->getId());
 		_partyCandidates->save(out);
 
 		if (!out.good()) {
@@ -118,10 +118,9 @@ namespace Elections
 			if (temp > _partySerialNumber)
 				_partySerialNumber = temp;
 
-			_name = loadString(in);
+			_name = StringLoader::loadString(in);
 			in.read(rcastc(&_partyId), sizeof(int));
-			in.read(rcastc(&len), sizeof(int));
-			canId = loadString(in);
+			canId = StringLoader::loadString(in);
 
 			if (!in.good()) {
 				throw iostream::failure("Party, load(in, election)");
