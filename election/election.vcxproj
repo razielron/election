@@ -153,7 +153,6 @@
     <ClCompile Include="party.cpp" />
     <ClCompile Include="PartyCandidates.cpp" />
     <ClCompile Include="simpleElection.cpp" />
-    <ClCompile Include="stringLoader.cpp" />
     <ClCompile Include="uniformDis.cpp" />
   </ItemGroup>
   <ItemGroup>
