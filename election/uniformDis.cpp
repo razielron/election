@@ -7,23 +7,8 @@ namespace Elections
 
 	UniformDis::UniformDis(istream& in): District(in) {}
 
-
-	ostream& operator<<(ostream& os, const UniformDis& uniDis) {
-		if (!os || !uniDis)
-			throw invalid_argument("UniformDis, <<");
-		
-		os << "-------------DISTRICT-START------------" << endl;
-		os << "District ID: " << uniDis.getId() << endl;
-		os << "District type: Uniform" << endl;
-		os << "Name of district: " << uniDis.getName() << endl;
-		os << "Number of representetive: " << uniDis.getNumOfRepresentatives() << endl;
-		os << "--------------DISTRICT-END-------------" << endl;
-		
-		return os;
-	}
-
-	void UniformDis::printDis() {
-		cout << *this << endl;
+	string UniformDis::getType() const {
+		return "UNIFORM";
 	}
 
 	void UniformDis::printResults() {

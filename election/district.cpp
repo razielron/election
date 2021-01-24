@@ -57,10 +57,6 @@ namespace Elections
 		_representatives = dis.getRepresentetives();
 	}
 
-	void District::printDis() {
-		cout << *this << endl;
-	}
-
 	int District::getPartyRepNumber(int partyVote) {
 		int occupiedRep;
 		if (partyVote < 0) {
@@ -111,6 +107,7 @@ namespace Elections
 		
 			os << "-------------DISTRICT-START------------" << endl;
 			os << "District ID: " << dis.getId() << endl;
+			os << "District Type: " << dis.getType() << endl;
 			os << "Name of district: " << dis.getName() << endl;
 			os << "Number of representetive: " << dis.getNumOfRepresentatives() << endl;
 			os << "--------------DISTRICT-END-------------" << endl;

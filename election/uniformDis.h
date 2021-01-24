@@ -14,9 +14,8 @@ namespace Elections
 	
 
 	public:
-		virtual void printDis();
-		//prints district's data
-		friend std::ostream& operator<<(std::ostream& os, const UniformDis& uniDis);
+		//returns district's type
+		virtual string getType() const;
 		//prints district's election results
 		void printResults();
 	};
