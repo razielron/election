@@ -46,6 +46,21 @@ namespace Elections
 		delete _voters;
 	}
 
+	void District::operator =(District& dis) {
+		_name = dis.getName();
+		_districtId = dis.getId();
+		_numOfRepresentatives = dis.getNumOfRepresentatives();
+		_totalVotes = dis.getTotalVotes();
+		_winnerVotes = dis.getWinnerVotes();
+		_winner = dis.getWinnerParty();
+		_voters = dis.getVoters();
+		_representatives = dis.getRepresentetives();
+	}
+
+	void District::printDis() {
+		cout << *this << endl;
+	}
+
 	int District::getPartyRepNumber(int partyVote) {
 		int occupiedRep;
 		if (partyVote < 0) {

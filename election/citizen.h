@@ -30,6 +30,7 @@ namespace Elections
 			Citizen() : _yearOfBirth(0), _name(""), _id(""), _dis(nullptr), _vote(nullptr) {}
 			Citizen(string id, int yearOfBirth, string name, District* dis);
 			Citizen(istream& in, Election* election);
+			Citizen(Citizen& cit);
 			~Citizen() {};
 			bool operator!() const { return this == nullptr; }
 			friend ostream& operator<<(ostream& os, const Citizen& cit);
@@ -41,6 +42,11 @@ namespace Elections
 			inline const int getYearOfBirth() const { return _yearOfBirth; }
 			inline const District* getDistrict() const { return _dis; }
 			inline const Party* getVote() const { return _vote; }
+			inline string getName() { return _name; }
+			inline string getId() { return _id; }
+			inline int getYearOfBirth() { return _yearOfBirth; }
+			inline District* getDistrict() { return _dis; }
+			inline Party* getVote() { return _vote; }
 
 		public:
 			//set the citizen's district
