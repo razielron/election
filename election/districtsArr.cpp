@@ -9,7 +9,7 @@ namespace Elections
 
 	void DistrictsArr::printDis() {
 		for (int i = 0; i < this->size(); i++) {
-			at(i)->printDis();
+			cout << *at(i) << endl;
 		}
 	}
 

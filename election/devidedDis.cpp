@@ -14,22 +14,8 @@ namespace Elections
 
 	DevidedDis::DevidedDis(istream& in): District(in) {}
 
-	ostream& operator<<(ostream& os, const DevidedDis& devDis) {
-		if (!os || !devDis)
-			throw invalid_argument("DevidedDis, <<");
-		
-		os << "-------------DISTRICT-START------------" << endl;
-		os << "District ID: " << devDis.getId() << endl;
-		os << "District type: Devided" << endl;
-		os << "Name of district: " << devDis.getName() << endl;
-		os << "Number of representetive: " << devDis.getNumOfRepresentatives() << endl;
-		os << "--------------DISTRICT-END-------------" << endl;
-		
-		return os;
-	}
-
-	void DevidedDis::printDis() {
-		cout << *this << endl;
+	string DevidedDis::getType() const {
+		return "DEVIDED";
 	}
 
 	void DevidedDis::printResults(PartiesArr* partiesArr) {

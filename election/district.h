@@ -68,7 +68,7 @@ namespace Elections
 			void appendToVoters(Citizen* cit);
 			//add a citizen to array of representetives
 			void appendToRepresentetives(Citizen* cit);
-			virtual void printDis();
+			virtual string getType() const { return ""; }
 			friend std::ostream& operator<<(std::ostream& os, const District& dis);
 
 			//Load and Save
