@@ -41,13 +41,17 @@ namespace Elections
 			inline const int getTotalVotes() const { return _totalVotes; }
 			inline const int getWinnerVotes() const { return _winnerVotes; }
 			inline const Party* getWinnerParty() const { return _winner; }
+			inline Party* getWinnerParty() { return _winner; }
 			inline const CitizensArr* getVoters() const { return _voters; }
+			inline CitizensArr* getVoters() { return _voters; }
 			inline const CitizensArr* getRepresentetives() const { return _representatives; }
+			inline CitizensArr* getRepresentetives() { return _representatives; }
 			//returns didtrict's vote precentage
 			inline const float getVotersPresentage() { return ((float)(_totalVotes)/(float)(_voters->size())*(float)(100)); }
 			//returns voters precentage by given votes
 			const float getVotersPresentage(int votes) { return ((float)(votes)/(float)(_totalVotes)*(float)(100)); }
 			bool operator !() const { return this == nullptr; };
+			void operator =(District& dis);
 
 		//SETTERS
 		public:
@@ -64,6 +68,7 @@ namespace Elections
 			void appendToVoters(Citizen* cit);
 			//add a citizen to array of representetives
 			void appendToRepresentetives(Citizen* cit);
+			virtual void printDis();
 			friend std::ostream& operator<<(std::ostream& os, const District& dis);
 
 			//Load and Save

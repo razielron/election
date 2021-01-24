@@ -15,11 +15,15 @@ namespace Elections
 		os << "-------------DISTRICT-START------------" << endl;
 		os << "District ID: " << uniDis.getId() << endl;
 		os << "District type: Uniform" << endl;
-		os << "Name of district: " << uniDis.getId() << endl;
+		os << "Name of district: " << uniDis.getName() << endl;
 		os << "Number of representetive: " << uniDis.getNumOfRepresentatives() << endl;
 		os << "--------------DISTRICT-END-------------" << endl;
 		
 		return os;
+	}
+
+	void UniformDis::printDis() {
+		cout << *this << endl;
 	}
 
 	void UniformDis::printResults() {

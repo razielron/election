@@ -20,6 +20,13 @@ namespace Elections
 		_dis->appendToVoters(this);
 	}
 
+	Citizen::Citizen(Citizen& cit) {
+		_id = cit.getId();
+		_name = cit.getName();
+		_dis = cit.getDistrict();
+		_vote = cit.getVote();
+	}
+
 	ostream& operator<<(ostream& os, const Citizen& cit) {
 		if (!cit) {
 			throw invalid_argument("Citizen, operator<<, parameter issue");

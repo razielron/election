@@ -7,18 +7,10 @@ namespace Elections
 		load(in);
 	}
 
-	ostream& operator<<(ostream& os, const DistrictsArr& disArr) {
-		if (!os || !disArr) {
-			throw invalid_argument("DistrictsArr, ostream& operator<<");
+	void DistrictsArr::printDis() {
+		for (int i = 0; i < this->size(); i++) {
+			at(i)->printDis();
 		}
-
-		for (int i = 0; i < disArr.size(); i++) {
-			if (typeid(*(disArr[i])) == typeid(UniformDis))
-				cout << *(static_cast<UniformDis*>(disArr[i])) << endl;
-			else
-				cout << *(static_cast<DevidedDis*>(disArr[i])) << endl;
-		}
-		return os;
 	}
 
 	void DistrictsArr::save(ostream& out) const{

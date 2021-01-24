@@ -17,5 +17,6 @@ namespace Elections
 		friend std::ostream& operator<<(std::ostream& os, const DevidedDis& devDis);
 		//prints district's election results
 		void printResults(PartiesArr* partiesArr);
+		virtual void printDis();
 	};
 }

@@ -79,7 +79,7 @@ namespace Elections
 	}
 
 	void Election::printDistricts() const {
-		cout << (*_districts);
+		_districts->printDis();
 	}
 
 	void Election::printParties() const {
