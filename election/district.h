@@ -14,7 +14,6 @@ namespace Elections
 			static int _districtSerialNumber;			
 			int _totalVotes;
 			int x;
-			int y;
 			
 			CitizensArr* _representatives;
 			CitizensArr* _voters;
